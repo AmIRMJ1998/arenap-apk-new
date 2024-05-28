@@ -1,0 +1,2 @@
+Application has thrown an uncaught exception and is terminated:
+Error: ENOENT: no such file or directory, open 'C:\inetpub\sites\arenap_test\arenap_1\.next\prerender-manifest.json'

@@ -1,0 +1,8 @@
+{
+  "productionApi": "https://api.arenap.ir/api/v1.0",
+  "developmentApi": "https://api.arenap.ir/api/v1.0",
+
+
+  "productionNobatApi": "https://apinobat.arenap.ir",
+  "developmentNobatApi": "https://apinobat.arenap.ir"
+}

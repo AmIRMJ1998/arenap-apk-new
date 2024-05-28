@@ -1,0 +1,282 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+body {
+  @apply min-h-screen bg-bg_content;
+}
+
+ul,
+li {
+  @apply list-none;
+}
+
+input,
+textarea {
+  @apply bg-transparent outline-none;
+}
+
+
+::-webkit-scrollbar {
+  @apply w-[0.625rem] h-[0.625rem];
+
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 rounded-lg cursor-pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
+}
+
+
+.chat_box::-webkit-scrollbar {
+  @apply w-[5px];
+
+}
+
+/* Track */
+.chat_box::-webkit-scrollbar-track {
+  background: transparent;
+  width: 2px;
+}
+
+/* Handle */
+.chat_box::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 rounded-lg cursor-pointer;
+}
+
+/* Handle on hover */
+.chat_box::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
+}
+
+:focus-visible {
+  outline: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+textarea {
+  resize: none;
+}
+
+html {
+  font-size: 16px;
+}
+
+@screen sm {
+  html {
+    font-size: 16px;
+  }
+}
+
+@screen lg {
+  html {
+    font-size: 16px;
+  }
+}
+
+
+/*--------------------CONTAINER--------------------*/
+.container {
+  max-width: 84rem;
+  padding: 1rem 1rem;
+}
+
+@media (min-width : 1364px) {
+  .container {
+    padding: 1rem 0px;
+  }
+}
+
+/*--------------------CONTAINER--------------------*/
+
+
+/*--------------------BTNS_STYLES--------------------*/
+.btn-lg {
+  @apply min-h-[2rem] max-h-[3rem];
+}
+
+/*--------------------BTNS_STYLES--------------------*/
+
+
+/*----------Start : Swiper Free Mode-----------*/
+.swiper_width_auto {
+  @apply w-auto px-2 !important;
+}
+
+/*----------End : Swiper Free Mode-----------*/
+
+
+/*----------start : short-text-3-----------*/
+
+.short-text-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.short-text-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.short-text-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/*----------End : short-text-3-----------*/
+
+/*----------start : Loader-----------*/
+@keyframes loadingCircleOne {
+  0% {
+    transform: rotateX(40deg) rotateY(-40deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(40deg) rotateY(-40deg) rotateZ(360deg);
+  }
+}
+
+@keyframes loadingCircleTwo {
+  0% {
+    transform: rotateX(50deg) rotateY(15deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(50deg) rotateY(15deg) rotateZ(360deg);
+  }
+}
+
+@keyframes loadingCircleThree {
+  0% {
+    transform: rotateX(15deg) rotateY(50deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(15deg) rotateY(50deg) rotateZ(360deg);
+  }
+}
+
+/*----------End : Loader-----------*/
+
+
+
+/*----------Start :gradient-----------*/
+.gradient_after::after,
+.gradient_after::before {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, #008582 50%, rgba(255, 255, 255, 1) 100%);
+}
+
+.gradient_after_one::after {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(90deg, transparent 0%, #008582 30%, transparent 100%);
+}
+
+.gradient_after_one::before {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(90deg, transparent 0%, #008582 70%, transparent 100%);
+}
+
+/*----------End :gradient-----------*/
+
+/*----------Start : Swiper Vertical-----------*/
+.swiper-vertical {
+  @apply h-[12.5rem] !important;
+}
+
+.swiper-vertical .swiper-slide {
+  @apply max-h-full !important;
+  @apply text-[#444444] text-md;
+}
+
+.swiper-vertical .swiper-slide-active {
+  @apply font-bold;
+}
+
+.swiper-vertical .swiper-slide-prev,
+.swiper-vertical .swiper-slide-next {
+
+  @apply text-lg;
+}
+
+/*----------End : Swiper Vertical-----------*/
+
+
+.perspective {
+  perspective: 48.75rem;
+}
+
+.direction-ltr {
+  direction: ltr;
+}
+
+
+.breadcrumb::-webkit-scrollbar {
+  display: none;
+}
+
+.breadcrumb::-webkit-scrollbar-track {
+  display: none;
+}
+
+.breadcrumb::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.breadcrumb::-webkit-scrollbar-thumb:hover {
+  display: none;
+}
+
+/*----------Start : infinite-scroll-component__outerdiv-----------*/
+.infinite-scroll-component__outerdiv {
+  width: 100%;
+}
+
+.infinite-scroll-component {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-2;
+}
+
+/*----------End : infinite-scroll-component__outerdiv-----------*/
+
+
+.commnet-slider .swiper-slide {
+  @apply rounded-lg bg-red-200;
+}
+
+.commnet-slider .swiper-slide .swiper-slide-shadow-left,
+.commnet-slider .swiper-slide .swiper-slide-shadow-right {
+  @apply rounded-lg opacity-10;
+}
+
+.swiper-wrapper {
+  @apply py-2;
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">arenap</string>
+    <string name="title_activity_main">arenap</string>
+    <string name="package_name">www.arenap.ir</string>
+    <string name="custom_url_scheme">www.arenap.ir</string>
+</resources>

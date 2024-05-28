@@ -1,0 +1,8 @@
+User-agent: *
+disallow: /profile
+disallow: /profile/*
+Allow: /*.jpg?*$
+Allow: /*.jpeg?*$
+
+
+Sitemap: https://arenap.ir/sitemap/sitemap.xml
