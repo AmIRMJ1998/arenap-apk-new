@@ -1,9 +1,7 @@
 import Toastify from '@/components/elements/toasts/Toastify'
 import { deleteAppointment, getMyAppointment } from '@/services/appointments/appointment'
-import { MyAppointmentType } from '@/types/appointment'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 
 
 const useMyAppointments = () => {
