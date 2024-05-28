@@ -34,10 +34,6 @@ import LinkElement from "@elements/LinkElement";
 
 const MyAppointmentsPage = () => {
 
-
-
-
-
   const [activeTab, setActiveTab] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
@@ -187,7 +183,7 @@ const MyAppointmentsPage = () => {
                   <p className="text-md font-bold ">در حال حاضر نوبتی گرفته نشده !!</p>
                   <p className="text-md ">برای گرفتن نوبت به صفحه جستجو وارد شوید </p>
                   <div className="w-[13.75rem]">
-                    <LinkElement link="/search">
+                    <LinkElement link="search">
                       <ButtonElement
                         typeButton="primary"
                         fontWeight="bold"
@@ -227,7 +223,7 @@ const MyAppointmentsPage = () => {
                   <p className="text-md font-bold ">نوبت گذشته ای وجود ندارد</p>
                   <p className="text-md ">برای گرفتن نوبت به صفحه جستجو وارد شوید  </p>
                   <div className="w-[13.75rem]">
-                    <LinkElement link="/search">
+                    <LinkElement link="search">
                       <ButtonElement
                         typeButton="primary"
                         fontSize="md"

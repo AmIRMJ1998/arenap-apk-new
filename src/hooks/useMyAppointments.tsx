@@ -15,7 +15,7 @@ const useMyAppointments = () => {
         const result = await getMyAppointment()
         
         return result
-    } , {cacheTime : 0})
+    } )
 
 
 
@@ -60,8 +60,6 @@ const useMyAppointments = () => {
 
     return {
         myAppointments: data?.value?.items,
-        // futureAppointments,
-        // pastAppointments,
         isLoading,
         cancelMutation
     }

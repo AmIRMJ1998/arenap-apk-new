@@ -5,6 +5,7 @@ import loginReducer from "./features/LoginSlice";
 import userInfoReducer from "./features/userInfoSlice";
 import logoutModalReducer from "./features/logOutModalSlice";
 import appointmentReducer from "./features/appointmentSlice";
+import backReducer from "./features/backSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     userInfo: userInfoReducer,
     modalLogout: logoutModalReducer,
     appointment: appointmentReducer,
+    back: backReducer,
   },
 });
 

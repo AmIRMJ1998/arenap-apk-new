@@ -57,7 +57,7 @@ const MessageCard = (props: ConsultationCardType) => {
 
 
     return (
-        <Link href={`/profile/mymessages/${id}`} className='flex justify-between items-center gap-2 h-[5rem] text-[#5B5F5E] bg-white p-4 rounded-sm  ' >
+        <Link href={`/profile/mymessages?messageid=${id}`} className='flex justify-between items-center gap-2 h-[5rem] text-[#5B5F5E] bg-white p-4 rounded-sm  ' >
             <div className='min-w-[2.8125rem]'>
                 <Image src={"/user.png"} width={500} height={500} alt='Pyhsician_image' className='size-[2.8125rem] min-w-[2.8125rem]' />
             </div>
