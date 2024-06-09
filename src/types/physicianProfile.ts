@@ -30,6 +30,22 @@ export interface PhysicainProfileType {
   relatedPhysicians: RelatedPhysicianType[];
 }
 
+export interface CommentType {
+  approveState: number;
+  createdAt: string;
+  firstName: string;
+  id: string;
+  isSuggested: boolean;
+  lastName: string;
+  message: string;
+  physicianProfileId: string;
+  rate: number;
+  userPhysicianProfileClanedarId: string;
+  userPublicName: string;
+  waitingTime: number;
+  physicianFirstName: string;
+  physicianLastName: string;
+}
 export interface RelatedPhysicianType {
   id: string;
   firstName: string;

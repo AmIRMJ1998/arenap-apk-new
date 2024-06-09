@@ -38,7 +38,7 @@ export type PhysicianProfileCardType = {
   addFavorite: () => void,
   likeLoading: boolean,
   physicianUrl: string,
-  children: ReactNode
+  children?: ReactNode
 }
 
 const PhysicianProfileCard = ({

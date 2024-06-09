@@ -11,7 +11,7 @@ import React from 'react'
 
 const PhysiciansCityNotFound = () => {
   const cityName = useSearchParams().get("name")
-  
+
 
 
 
@@ -37,10 +37,12 @@ const PhysiciansCity = async ({ cityName }: { cityName: string }) => {
   })
 
 
+  console.log(physicians.data)
+
   return (
     <>
       {
-        physicians.isLoading ? <LoadingPage /> : <PhysiciansCityPage data={physicians.data.value} city={cityName} />
+        physicians.isLoading ? <LoadingPage /> : <PhysiciansCityPage data={physicians.data.value.specialties} city={physicians.data.value.city} cityEn={cityName} />
       }
 
     </>

@@ -10,7 +10,7 @@ import ProfileSummaryCard from "@modules/cards/ProfileSummaryCard";
 import Link from "next/link";
 import useModalLogin from "@/hooks/useModalLogin";
 import useFavorite from "@/hooks/useFavorite";
-import { PhysicainProfileType } from "@/types/physicianProfile";
+import { CommentType, PhysicainProfileType } from "@/types/physicianProfile";
 import TitlePagesMobile from "@modules/titles/TitlePagesMobile";
 import TitlePrimary from "@modules/titles/TitlePrimary";
 import ModalLogin from "@layouts/ModalLogin/ModalLogin";
@@ -35,6 +35,7 @@ import Modal from "../modules/modals/Modal";
 import BottomSheetAndCenterContent from "../modules/modals/BottomSheetAndCenterContent";
 import CloseButton from "../elements/CloseButton";
 import priceSplitter from "@/utils/priceSplitter";
+import PhysicianCommentCard from "../modules/cards/PhysicianCommentCard";
 
 
 
@@ -290,18 +291,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             addFavorite={favoritePhysicianHandler}
             physicianUrl={buttonLink as string}
           >
-            {activeConsultation && consultationList.find((item) => item.id === activeConsultation)?.isHandler ? (
-              <ButtonElement typeButton="primary" handler={showConsultationModal}>
-                دریافت {buttonText}
-              </ButtonElement>
-            ) : (
-              <LinkElement link={buttonLink as string} className="w-[12.25rem] hidden md:block">
-                <ButtonElement typeButton="primary">
-                  دریافت {buttonText}
-                </ButtonElement>
-              </LinkElement>
-            )
-            }
+         
           </PhysicianProfileCard>
         </div>
         {/* ----------section------------- */}
@@ -523,16 +513,13 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             </div>
           </div>
           {physician.comments.length > 0 ? (
-            physician.comments.map((item) => (
-              <div key={item.id} className="mb-4">
-                {/* <PhysicianCommentCard
-                  name={`${item.firstName} ${item.lastName}`}
-                  waitingTime={convertWaitingTime(item.waitingTime)}
-                  rate={item.rate}
-                  recommended={item.isSuggested}
+            physician.comments.map((comment: CommentType) => (
+              <div key={comment.id} className="mb-4">
+                <PhysicianCommentCard
+                  {...comment}
                 >
-                  {item.message}
-                </PhysicianCommentCard> */}
+                  {comment.message}
+                </PhysicianCommentCard>
               </div>
             ))
           ) : (
