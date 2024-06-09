@@ -291,7 +291,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             addFavorite={favoritePhysicianHandler}
             physicianUrl={buttonLink as string}
           >
-         
+
           </PhysicianProfileCard>
         </div>
         {/* ----------section------------- */}
@@ -512,21 +512,23 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
               <CreateCommentCom physicianId={physician.id} firstName={physician.firstName} lastName={physician.lastName} showComment={showVisitQuestionModal} setShowComment={showCreateCommentHandler} closeComment={() => setShowVisitQuestionModal(false)} />
             </div>
           </div>
-          {physician.comments.length > 0 ? (
-            physician.comments.map((comment: CommentType) => (
-              <div key={comment.id} className="mb-4">
-                <PhysicianCommentCard
-                  {...comment}
-                >
-                  {comment.message}
-                </PhysicianCommentCard>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500 my-10">
-              تا کنون نظری ثبت نشده!
-            </p>
-          )}
+          <div className="h-[25rem]  overflow-y-auto">
+            {physician.comments.length > 0 ? (
+              physician.comments.map((comment: CommentType) => (
+                <div key={comment.id} className="mb-4">
+                  <PhysicianCommentCard
+                    {...comment}
+                  >
+                    {comment.message}
+                  </PhysicianCommentCard>
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 my-10">
+                تا کنون نظری ثبت نشده!
+              </p>
+            )}
+          </div>
         </div>
         {/* ----------section------------- */}
 
