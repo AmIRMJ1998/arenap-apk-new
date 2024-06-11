@@ -290,6 +290,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             status={physician.immediateConsultation}
             addFavorite={favoritePhysicianHandler}
             physicianUrl={buttonLink as string}
+            linkShare={`https://arenap.ir/Physician/${physician.physicianProfileUrl}`}
           >
 
           </PhysicianProfileCard>

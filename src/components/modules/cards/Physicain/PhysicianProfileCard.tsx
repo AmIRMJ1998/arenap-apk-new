@@ -15,6 +15,7 @@ import Loader from "@/components/elements/Loader";
 import LinkElement from "@/components/elements/LinkElement";
 import ButtonElement from "@/components/elements/ButtonElement";
 import { ReactNode } from "react";
+import { RWebShare } from "react-web-share";
 
 
 export type PhysicianProfileCardType = {
@@ -38,7 +39,8 @@ export type PhysicianProfileCardType = {
   addFavorite: () => void,
   likeLoading: boolean,
   physicianUrl: string,
-  children?: ReactNode
+  children?: ReactNode,
+  linkShare : string
 }
 
 const PhysicianProfileCard = ({
@@ -53,7 +55,8 @@ const PhysicianProfileCard = ({
   status,
   addFavorite,
   likeLoading,
-  children
+  children,
+  linkShare
 }: PhysicianProfileCardType) => {
 
 
@@ -133,12 +136,21 @@ const PhysicianProfileCard = ({
           <div className="flex gap-3 items-center">
             {children}
 
-            <button
-              type="button"
+            <div
               className="flex justify-center items-center rounded-full p-2 bg-gray-100 size-[2.6875rem]"
             >
-              <ShareIcon />
-            </button>
+              <RWebShare
+                data={{
+                  text: "لینک پزشک مورد نظر شما برای ارسال به دیگران",
+                  url: linkShare,
+                  title: "Arenap",
+                }}
+                onClick={() => console.log("shared successfully!")}
+              >
+                <button type="button"><ShareIcon /></button>
+              </RWebShare>
+
+            </div>
             {
               likeLoading ? (
 
