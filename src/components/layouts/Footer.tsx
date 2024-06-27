@@ -120,7 +120,8 @@ const Footer = () => {
             <h4 className='text-primary text-md font-bold text-center'>تماس با ما</h4>
             <div className='mt-4 text-center flex justify-start items-start gap-2 flex-col'>
               {/* <p className='text-md w-full'>آدرس : کرمان -میدان آزادی - ابتدای بلوار جمهوری - ساختمان رویش - طبقه دو   </p> */}
-              <p  className="text-md w-full">شماره تماس : 6760 - 9109 - 021</p>
+              <Link href={"tel:02191096760"} className="text-md w-full">شماره پشتیبانی (ساعات اداری) : 6760 - 9109 - 021</Link>
+              <Link href={"tel:09196546019"} className="text-md w-full">شماره پاسخگویی 24 ساعته :  09196546019</Link>
 
               <div className='flex justify-center items-center gap-2 w-full'>
 

@@ -193,17 +193,17 @@ html {
 .gradient_after::after,
 .gradient_after::before {
   background: rgb(255, 255, 255);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, #008582 50%, rgba(255, 255, 255, 1) 100%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, #00a1af 50%, rgba(255, 255, 255, 1) 100%);
 }
 
 .gradient_after_one::after {
   background: rgb(255, 255, 255);
-  background: linear-gradient(90deg, transparent 0%, #008582 30%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, #00a1af 30%, transparent 100%);
 }
 
 .gradient_after_one::before {
   background: rgb(255, 255, 255);
-  background: linear-gradient(90deg, transparent 0%, #008582 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, #00a1af 70%, transparent 100%);
 }
 
 /*----------End :gradient-----------*/
@@ -264,7 +264,9 @@ html {
 .infinite-scroll-component {
   @apply grid grid-cols-1 lg:grid-cols-2 gap-2;
 }
-
+.infinite-scroll_consultation {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2;
+}
 /*----------End : infinite-scroll-component__outerdiv-----------*/
 
 
@@ -274,9 +276,37 @@ html {
 
 .commnet-slider .swiper-slide .swiper-slide-shadow-left,
 .commnet-slider .swiper-slide .swiper-slide-shadow-right {
-  @apply rounded-lg opacity-10;
+  @apply rounded-lg opacity-5;
+}
+.swiper-3d .swiper-slide-shadow-left ,.swiper-3d .swiper-slide-shadow-right  {
+  background-image : linear-gradient(to left, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0)) !important;
 }
 
 .swiper-wrapper {
   @apply py-2;
+}
+
+.bg-pattern {
+  background: url(/AISearchBackground-2.svg) left no-repeat, url(/AISearchBackground-2-2.svg) right no-repeat, url(/AISearchBackground-1.svg) left no-repeat, url(/AISearchBackground-1-2.svg) right no-repeat;
+  background-color: #fff;
+}
+
+.appointments_scroll::-webkit-scrollbar {
+  @apply w-[7.5px] h-[7.5px];
+
+}
+
+/* Track */
+.appointments_scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.appointments_scroll::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 rounded-lg cursor-pointer;
+}
+
+/* Handle on hover */
+.appointments_scroll::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
 }

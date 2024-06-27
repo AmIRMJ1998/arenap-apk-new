@@ -94,7 +94,7 @@ const CreateCommentCom = ({ firstName, lastName, physicianId, showComment, setSh
                 recommendation,
                 commentText
             );
-            console.log(res)
+            
         } catch (error: any) {
 
         }
@@ -115,6 +115,7 @@ const CreateCommentCom = ({ firstName, lastName, physicianId, showComment, setSh
                 fontWeight="bold"
                 type={"button"}
                 size="sm"
+                customStyle='group'
                 handler={visitQuestionModalHandler}
             >
                 <span className="ml-3">ثبت نظر جدید</span>

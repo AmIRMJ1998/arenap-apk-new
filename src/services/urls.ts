@@ -392,8 +392,22 @@ const urls = {
       },
     },
   },
+  //ai
+  ai: {
+    getSigns: {
+      url: "/Public/ArtificialIntelligence/GetSigns",
+      parametrs: {
+        filter: "string",
+      },
+    },
+    getPhysicians: {
+      url: "/Public/ArtificialIntelligence/AiPhysiciansBasedOnSigns",
+      parametrs: {
+        symptoms: ["specialty", "specialty"],
+      },
+    },
+  },
 };
-
 export const baseUrlSite = "https://arenap.ir";
 
 export default urls;

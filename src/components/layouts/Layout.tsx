@@ -11,6 +11,9 @@ import useUserInfo from '@/hooks/useUserInfo'
 import "react-loading-skeleton/dist/skeleton.css";
 
 
+import 'swiper/css';
+import 'swiper/css/free-mode';
+
 import { CookiesProvider } from 'react-cookie';
 
 const Layout = ({ children }: { children: ReactNode }) => {

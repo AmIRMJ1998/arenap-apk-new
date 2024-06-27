@@ -1,20 +1,27 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
+
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+
   theme: {
     extend: {
       screens: {
         xsOne: "480px",
+        xsTwo: "450px",
         mdSecondary: "920px",
       },
       backgroundImage: {
         white_to_transparent:
           "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 80%)",
+          chat_pattern:
+          "url('/chat_bg.png')",
+          cosultation_pattern:
+          "url('/patternConsultation.png')",
       },
       container: {
         center: true,
@@ -23,7 +30,8 @@ const config: Config = {
         primary: {
           100: "#52FF6E",
           light: "#C7F6F578",
-          DEFAULT: "#008582",
+          DEFAULT: "#00a1af",
+          // 008582
         },
         error: {
           light: "#FFEFEF",

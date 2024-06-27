@@ -10,7 +10,7 @@ const CategoryPrimaryCard = ({ link, title, image }: CategoryPrimaryType) => {
             "hover:font-bold   relative hover:shadow-hover",
             "transition-all duration-500",
             {
-                "flex-col size-[7.25rem]": image,
+                "flex-col size-[7.625rem]": image,
                 "size-[5.625rem]": !image
             })}>
             {image && <Image src={image} width={500} height={500} alt='category_image' className='size-[4.6875rem] group-hover:scale-110 transition-all duration-500 absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/3' />}

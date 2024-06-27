@@ -10,14 +10,14 @@ const BestSpeciality = () => {
 
     return (
         <>
-            <div className="py-4">
+            {/* <div className="py-4">
                 <TitlePrimary
                     title={"پربازدیدترین تخصص ها"}
                     btn={false}
                     textLink={"مشاهده بیشتر"}
                 />
             </div>
-            
+             */}
            
                 <SwiperContainerFreeMode gap={10} data={categories} CardComponent={CategoryPrimaryCard} />
             

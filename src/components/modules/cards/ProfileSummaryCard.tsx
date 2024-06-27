@@ -22,7 +22,7 @@ const ProfileSummaryCard = (props: ProfileSummaryCardType) => {
   return (
     <div
       className={cn(
-        `bg-white  p-5 shadow-shadow_category`,
+        `bg-white  p-5 shadow-shadow_category rounded-sm`,
         {
           "rounded-sm": showMore,
           "rounded-tr-sm rounded-tl-sm": !showMore,
@@ -36,7 +36,7 @@ const ProfileSummaryCard = (props: ProfileSummaryCardType) => {
         className={cn(
           `mt-4  relative flex justify-start items-start gap-2 flex-col`,
           {
-            "after:w-full after:h-[1.5625rem] after:absolute after:bottom-0 after:left-0 after:bg-white/70short-text-3": !showMore
+            // "after:w-full after:h-[1.5625rem] after:absolute after:bottom-0 after:left-0 after:bg-white/70 short-text-3": !showMore
           }
         )}
       >
@@ -50,14 +50,14 @@ const ProfileSummaryCard = (props: ProfileSummaryCardType) => {
         {
           physician.telePhoneNumber ? (
             <p>
-              {`شماره تماس   دکتر ${physician.firstName} ${physician.lastName} : `} <strong className="font-bold">{physician?.telePhoneNumber}</strong>
+              {`شماره تماس مطب  دکتر ${physician.firstName} ${physician.lastName} : `} <strong className="font-bold">{physician?.telePhoneNumber}</strong>
             </p>
           ) : null
         }
 
       </div>
 
-      {showMore && (
+      {/* {showMore && (
         <div className=" animate-opacity">
           <div className="mt-4">
             <div className="text-lg font-bold relative after:absolute after:rtl:-right-[1.25rem] after:rounded-lg after:top-0 after:block after:bg-primary after:w-1.5 after:h-full">
@@ -79,7 +79,7 @@ const ProfileSummaryCard = (props: ProfileSummaryCardType) => {
         >
           {showMore ? "مشاهده کمتر" : "مشاهده بیشتر"}
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

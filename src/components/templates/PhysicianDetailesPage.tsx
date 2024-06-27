@@ -1,10 +1,6 @@
 "use client";
 
-
-
-
 import BaseCard from "@modules/cards/BaseCard"
-
 import { useEffect, useState } from "react";
 import ProfileSummaryCard from "@modules/cards/ProfileSummaryCard";
 import Link from "next/link";
@@ -36,13 +32,16 @@ import BottomSheetAndCenterContent from "../modules/modals/BottomSheetAndCenterC
 import CloseButton from "../elements/CloseButton";
 import priceSplitter from "@/utils/priceSplitter";
 import PhysicianCommentCard from "../modules/cards/PhysicianCommentCard";
+import weekConverted from "@/utils/weekConverter";
+import OkIcon from "../icons/OkIcon";
+import CancelIcon from "../icons/CancelIcon";
 
 
 
 const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }) => {
 
   const router = useRouter()
-  const { price } = usePrice()
+  const { price, textConsultationPrice } = usePrice()
   const { isLogin, getUser, user } = useUserInfo();
   const { isShow, openModalLogin } = useModalLogin();
   const [showVisitQuestionModal, setShowVisitQuestionModal] = useState(false);
@@ -61,8 +60,6 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
 
 
   }
-
-
   //use favorite hook
   const { userFavorite, addFavorite, deleteFavorite, likeLoading } = useFavorite(physician.id)
 
@@ -124,9 +121,9 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
   }[] = [
       {
         id: "appointment",
-        url: `appointment?physician=${physician.physicianProfileUrl}`,
+        url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
         title: " نوبت اینترنتی",
-        price: price ? price / 10 : 10000,
+        price: price ? price / 10 : 15000,
         isHandler: false,
         // firstDescription: waitingTimeAvg ? `میانگین زمان انتظار ${waitingTimeAvg} دقیقه` : null,
         // secondDescription: physician.clinic ? `نوبت در ${physician.clinic}` : null,
@@ -137,7 +134,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         id: "textConsultation",
         url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
         title: " مشاوره متنی",
-        price: physician.textConsultationPrice ? physician.textConsultationPrice / 10 : null,
+        price: physician.textConsultationPrice + textConsultationPrice ? physician.textConsultationPrice / 10 + textConsultationPrice / 10 : null,
         isHandler: true,
         // firstDescription: physician.textConsultationWaitingTimeAvg ? `میانگین زمان انتظار ${physician.textConsultationWaitingTimeAvg} دقیقه` : null,
         // secondDescription: physician.maximumTextConsultationDuration ? `حداکثر مدت زمان مکالمه ${physician.maximumTextConsultationDuration} دقیقه` : null,
@@ -166,6 +163,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         active: physician.voiceConsultation,
         status: null,
       },
+
 
     ];
 
@@ -275,7 +273,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
           <PhysicianProfileCard
             profileURL={physician.hasImage ? getUrlImage(physician.id) : "/noImage.jfif"}
             name={`${spliterName[0] === "مرکز" ? "" : "دکتر"} ${physician.firstName} ${physician.lastName}`}
-            speciality={physician.physicianSpecialities[0]?.specialityTitle}
+            speciality={physician.physicianSpecialities}
             rate={{ rate: physician.rate, count: physician.comments.length }}
             services={{
               appointment: physician.onlineAppointment,
@@ -485,7 +483,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
 
         {/* ----------section------------- */}
         {/* relatedPhysicians Slider */}
-        <div className="w-full mt-4 order-8">
+        {/* <div className="w-full mt-4 order-8">
           <TitlePrimary
             title={"پزشکان مرتبط"}
             textLink={"مشاهده بیشتر"}
@@ -496,42 +494,9 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
           <div className="mt-4 order-9">
             <SwiperContainerFreeMode data={physician.relatedPhysicians} gap={10} CardComponent={PhysicainCardPrimary} />
           </div>
-        </div>
+        </div> */}
         {/* ----------section------------- */}
 
-        {/* ----------section------------- */}
-        {/* Comments */}
-        <div className="w-full mt-4 order-10" id="comment">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-bold rtl:mr-[1.25rem] ltr:ml-[1.25rem] relative after:absolute after:rtl:-right-[1.25rem] after:rounded-lg after:top-0 after:block after:bg-primary after:w-1.5 after:h-full">
-              نظرات کاربران{" "}
-              <span className="text-md text-gray-500 font-normal">
-                ({physician.comments.length}نظر)
-              </span>
-            </h3>
-            <div className="w-[11.25rem]">
-              <CreateCommentCom physicianId={physician.id} firstName={physician.firstName} lastName={physician.lastName} showComment={showVisitQuestionModal} setShowComment={showCreateCommentHandler} closeComment={() => setShowVisitQuestionModal(false)} />
-            </div>
-          </div>
-          <div className="h-[25rem]  overflow-y-auto">
-            {physician.comments.length > 0 ? (
-              physician.comments.map((comment: CommentType) => (
-                <div key={comment.id} className="mb-4">
-                  <PhysicianCommentCard
-                    {...comment}
-                  >
-                    {comment.message}
-                  </PhysicianCommentCard>
-                </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500 my-10">
-                تا کنون نظری ثبت نشده!
-              </p>
-            )}
-          </div>
-        </div>
-        {/* ----------section------------- */}
 
         {/* ----------section------------- */}
         {/* Profile summary */}
@@ -546,12 +511,47 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         </div>
         {/* ----------section------------- */}
 
+        {/* ----------section------------- */}
+        {/* Comments */}
+        <div className="w-full mt-4 order-11" id="comment">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-bold rtl:mr-[1.25rem] ltr:ml-[1.25rem] relative after:absolute after:rtl:-right-[1.25rem] after:rounded-lg after:top-0 after:block after:bg-primary after:w-1.5 after:h-full">
+              نظرات کاربران{" "}
+              <span className="text-md text-gray-500 font-normal">
+                ({physician.comments.length}نظر)
+              </span>
+            </h3>
+            <div className="w-[11.25rem]">
+              <CreateCommentCom physicianId={physician.id} firstName={physician.firstName} lastName={physician.lastName} showComment={showVisitQuestionModal} setShowComment={showCreateCommentHandler} closeComment={() => setShowVisitQuestionModal(false)} />
+            </div>
+          </div>
+
+          {physician.comments.length > 0 ? (
+            physician.comments.map((comment: CommentType) => (
+              <div key={comment.id} className="mb-4">
+                <PhysicianCommentCard
+                  {...comment}
+                >
+                  {comment.message}
+                </PhysicianCommentCard>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 my-10">
+              تا کنون نظری ثبت نشده!
+            </p>
+          )}
+
+
+        </div>
+        {/* ----------section------------- */}
+
+
+
 
 
       </div>
       {/* ----------content------------- */}
-
-
 
       {/* ----------Modal consultation ------------- */}
       <Modal show={modals.textConsultation} closeHandler={() => {
@@ -563,11 +563,59 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
           }} /> </span>
           <p className="font-bold text-primary text-md text-center">دریافت {buttonText}</p>
           <p className="my-4 text-md">
-            برای ثبت مشاوره متنی نیاز به پرداخت هزینه اعلام شده توسط پزشک میباشد، پس از پرداخت مشاوره متنی شما ثبت شده و توسط پزشک پاسخ داده میشود.(حداکثر 10 ساعت)
+            برای ثبت مشاوره متنی نیاز به پرداخت هزینه اعلام شده توسط پزشک میباشد، پس از پرداخت مشاوره متنی شما ثبت شده و توسط پزشک پاسخ داده میشود.(حداکثر 12 ساعت)
           </p>
-          <p className="flex justify-start items-center gap-2 text-md pb-4">مبلغ مشاوره متنی دکتر {physician.firstName} {physician.lastName} : <span className="text-primary font-bold">{priceSplitter(10000)} تومان {physician.textConsultationPrice}</span></p>
+          <p className="text-md my-2 ">موجودی کیف پول شما : <span className="text-primary font-bold">{user.accountBalance / 10 ? priceSplitter(user.accountBalance / 10) : 0} تومان</span></p>
+          <p className="flex justify-start items-center gap-2 text-md pb-4">مبلغ مشاوره متنی دکتر {physician.firstName} {physician.lastName} : <span className="text-primary font-bold">{physician.textConsultationPrice + textConsultationPrice ? ` ${priceSplitter(physician.textConsultationPrice / 10 + textConsultationPrice / 10)} تومان` : "رایگان"}</span></p>
+          {
+            physician.physicianProfileSetting ? (
+              <>
+                <p className="text-sm sm:text-md">جدول روزهای پاسخ گویی پزشک به شکل زیر میباشد : </p>
+                <table className="w-full my-3">
+                  <thead className=" bg-primary w-full text-md text-white ">
+                    <tr>
+                      <th className="p-1">{weekConverted(Object.keys(physician.physicianProfileSetting ? physician.physicianProfileSetting : {})[0])}</th>
+                      <th className="p-1">{weekConverted(Object.keys(physician.physicianProfileSetting ? physician.physicianProfileSetting : {})[1])}</th>
+                      <th className="p-1">{weekConverted(Object.keys(physician.physicianProfileSetting ? physician.physicianProfileSetting : {})[2])}</th>
+                      <th className="p-1">{weekConverted(Object.keys(physician.physicianProfileSetting ? physician.physicianProfileSetting : {})[3])}</th>
+                      <th className="p-1">{weekConverted(Object.keys(physician.physicianProfileSetting ? physician.physicianProfileSetting : {})[4])}</th>
+                      <th className="p-1">{weekConverted(Object.keys(physician.physicianProfileSetting ? physician.physicianProfileSetting : {})[5])}</th>
+                      <th className="p-1">{weekConverted(Object.keys(physician.physicianProfileSetting ? physician.physicianProfileSetting : {})[6])}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="">
+                      <td className="">
+                        <span className="flex justify-center items-center ">{physician.physicianProfileSetting?.saturdayConsultationTextPlan ? <OkIcon disabled={false} /> : <CancelIcon />}</span>
+                      </td>
+                      <td className="">
+                        <span className="flex justify-center items-center ">{physician.physicianProfileSetting?.sundayConsultationTextPlan ? <OkIcon disabled={false} /> : <CancelIcon />}</span>
+                      </td>
+                      <td className="">
+                        <span className="flex justify-center items-center ">{physician.physicianProfileSetting?.mondayConsultationTextPlan ? <OkIcon disabled={false} /> : <CancelIcon />}</span>
+                      </td>
+                      <td className="">
+                        <span className="flex justify-center items-center ">{physician.physicianProfileSetting?.tuesdayConsultationTextPlan ? <OkIcon disabled={false} /> : <CancelIcon />}</span>
+                      </td>
+                      <td className="">
+                        <span className="flex justify-center items-center ">{physician.physicianProfileSetting?.wednesdayConsultationTextPlan ? <OkIcon disabled={false} /> : <CancelIcon />}</span>
+                      </td>
+                      <td className="">
+                        <span className="flex justify-center items-center ">{physician.physicianProfileSetting?.thursdayConsultationTextPlan ? <OkIcon disabled={false} /> : <CancelIcon />}</span>
+                      </td>
+                      <td className="">
+                        <span className="flex justify-center items-center ">{physician.physicianProfileSetting?.fridayConsultationTextPlan ? <OkIcon disabled={false} /> : <CancelIcon />}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </>
+            ) : null
+          }
           <ButtonElement typeButton="primary" handler={getConsultationHandler.mutate} disabled={getConsultationHandler.isLoading} loading={getConsultationHandler.isLoading} >
-            دریافت {buttonText}
+            {
+              user.accountBalance >= +physician.textConsultationPrice + +textConsultationPrice ? `دریافت ${buttonText}` : "پرداخت"
+            }
           </ButtonElement>
         </BottomSheetAndCenterContent>
       </Modal>

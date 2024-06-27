@@ -76,3 +76,11 @@ export type AutohrCardType = {
   hasImage: boolean,
   speciality : string
 }
+
+export type AIPhysicianProfileCardType = {
+  id: string,
+  firstName: string,
+  lastName: string,
+  physicianProfileUrl: string,
+  hasImage: boolean
+}

@@ -28,6 +28,18 @@ export interface PhysicainProfileType {
   physicianSpecialities: PhysicianSpeciality[];
   comments: any[];
   relatedPhysicians: RelatedPhysicianType[];
+  physicianProfileSetting: {
+    fridayConsultationTextPlan: boolean;
+    id: string;
+    mondayConsultationTextPlan: boolean;
+    physicianProfile: null;
+    physicianProfileId: null;
+    saturdayConsultationTextPlan: boolean;
+    sundayConsultationTextPlan: boolean;
+    thursdayConsultationTextPlan: boolean;
+    tuesdayConsultationTextPlan: boolean;
+    wednesdayConsultationTextPlan: boolean;
+  } | null;
 }
 
 export interface CommentType {

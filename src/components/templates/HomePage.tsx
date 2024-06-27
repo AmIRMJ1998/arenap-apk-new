@@ -20,12 +20,13 @@ import FaqPage from './FaqPage';
 import BestSpeciality from '@modules/BestSpeciality';
 import TitleHeading from '@modules/titles/TitleHeading';
 import ServicesSectionHome from '@modules/ServicesSectionHome';
-import AISearchSectionHomePage from '@modules/AISearchSectionHomePage';
+
 import CommentSectionHomePage from '../modules/CommentSectionHomePage';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getUrlImage } from '@/services/getImageUrl/getImageUrl';
 import cn from '@/utils/clsxFun';
+import AISearchSectionHomePage from '../modules/AISearchSectionHomePage';
 
 
 interface HomePagePropType {

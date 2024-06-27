@@ -84,8 +84,12 @@ const ContactUsPage = () => {
                         <div className='text-md  w-full md:w-6/12'>
 
                             <div className='grid grid-cols-2 gap-2 '>
-                                <div className='bg-bg_content p-2 rounded-sm'><p className='flex justify-start items-center flex-wrap'>شماره تماس: <Link className='font-bold'
+                                <div className='bg-bg_content p-2 rounded-sm'><p className='flex justify-start items-center flex-wrap'>شماره تماس(ساعات اداری) : <Link className='font-bold'
                                     href={"tel:021910966760"}>6760 - 9109 - 021</Link> </p></div>
+                                <div className='bg-bg_content p-2 rounded-sm'><p className='flex justify-start items-center flex-wrap'>شماره تماس (24ساعته) : <Link className='font-bold'
+                                    href={"tel:09196546019"}>09196546019</Link> </p></div>
+                                <div className='bg-bg_content p-2 rounded-sm'><p className='flex justify-start items-center flex-wrap'>شماره تماس مشاوره: <Link className='font-bold'
+                                    href={"tel:09196546016"}>09196546016</Link> </p></div>
                                 <div className='bg-bg_content p-2 rounded-sm'><p className='flex justify-start items-center flex-wrap'>اینستاگرام ما : <Link className='font-bold'
                                     target='_blank' href={"https://www.instagram.com/arenap_team"} >Arenap_team@</Link> </p></div>
                                 <div className='bg-bg_content p-2 rounded-sm'><p className='flex justify-start items-center flex-wrap'>لینکدین ما : <Link className='font-bold'

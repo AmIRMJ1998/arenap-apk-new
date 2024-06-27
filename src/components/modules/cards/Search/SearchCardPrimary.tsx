@@ -10,7 +10,7 @@ import convertMonthOfYear from '@/utils/convertMonthOfYear';
 import Image from 'next/image';
 import React from 'react'
 
-const SearchCardPrimary = (props : PhysicianSearchType) => {
+const SearchCardPrimary = (props: PhysicianSearchType) => {
     const {
         firstName,
         lastName,
@@ -22,6 +22,11 @@ const SearchCardPrimary = (props : PhysicianSearchType) => {
         id,
         physicianSpecialities,
         firstAppointment,
+        rate,
+        immediateConsultation,
+        onlineAppointment,
+        textConsultation,
+        voiceConsultation
     } = props;
 
 
@@ -58,13 +63,13 @@ const SearchCardPrimary = (props : PhysicianSearchType) => {
                         ></span>
                     </span>
                 </div>
-                <div className="flex-1 rtl:pr-4 ltr:pl-4 flex justify-between items-start flex-col min-h-[60px]">
+                <div className="flex-1 rtl:pr-4 ltr:pl-4 flex justify-center gap-2 items-start flex-col min-h-[60px]">
                     <div className="flex justify-between items-center w-full">
-                        <p className="text-lg font-bold ">
-                            دکتر {firstName} {lastName} 
+                        <p className="text-lg font-bold line-clamp-1">
+                            دکتر {firstName} {lastName}
                         </p>
                         <div className="flex justify-between items-center ">
-                            <p className="px-2 relative border-l border-black border-dashed ">
+                            <p className="px-2 relative border-l border-gray border-dashed ">
                                 {provinceName}
                             </p>
 
@@ -72,11 +77,11 @@ const SearchCardPrimary = (props : PhysicianSearchType) => {
                                 <span>
                                     <StarIcon />
                                 </span>
-                                <span>-</span>
+                                <span>{rate === 0 ? "-" : Math.floor(rate)}</span>
                             </div>
                         </div>
                     </div>
-                    <p className="short-text-2 mt-5">
+                    <p className="short-text-1 ">
                         {physicianSpecialities[0]?.specialityTitle}
                     </p>
                 </div>
@@ -84,26 +89,26 @@ const SearchCardPrimary = (props : PhysicianSearchType) => {
             <div className="px-4 w-full">
                 <PathLine color={"stroke-bg_content"} />
             </div>
-            <div className="px-4  w-full grid grid-cols-2 gap-1">
-            <TagPhysicain disabled={!props.onlineAppointment} title={"نوبت دهی اینترنتی"} />
+            <div className="px-4  w-full grid grid-cols-2 gap-1 my-2">
+                <TagPhysicain disabled={!onlineAppointment} title={"نوبت دهی اینترنتی"} />
                 <TagPhysicain
-                    disabled={!props.voiceConsultation}
+                    disabled={!textConsultation}
                     title={"مشاوره متنی"}
                 />
                 <TagPhysicain
-                    disabled={!props.textConsultation}
+                    disabled={!voiceConsultation}
                     title={"مشاوره تلفنی"}
                 />
-                
+
                 <TagPhysicain
-                    disabled={!props.immediateConsultation}
+                    disabled={!immediateConsultation}
                     title={"مشاوره تلفنی فوری"}
                 />
             </div>
             <div className="px-2 pb-2 w-full">
-                <div className="bg-gray-700  p-1 rounded-ss flex justify-between items-center min-h-[46px]">
+                <div className="bg-gray-700  p-1 px-4 rounded-ss flex justify-between items-center min-h-[46px]">
                     <p className="text-sm">
-                        اولین نوبت خالی تلفنی:{" "}
+                        اولین نوبت خالی اینترنتی:{" "}
                         <span className="font-bold">
                             {firstAppointment?.dayOfMonth}{" "}
                             {convertMonthOfYear(firstAppointment?.month)}{" "}

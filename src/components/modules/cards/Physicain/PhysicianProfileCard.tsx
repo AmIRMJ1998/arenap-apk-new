@@ -5,23 +5,20 @@ import LocationIcon from "@/components/icons/LocationIcon";
 import ApprovedIcon from "@/components/icons/ApprovedIcon";
 import ShareIcon from "@/components/icons/ShareIcon";
 import LikeIcon from "@/components/icons/LikeIcon";
-
-
 import StarIcon from "@/components/icons/StarIcon";
-
 import cn from "@/utils/clsxFun";
 import TagPhysicain from "@/components/elements/TagPhysician";
 import Loader from "@/components/elements/Loader";
-import LinkElement from "@/components/elements/LinkElement";
-import ButtonElement from "@/components/elements/ButtonElement";
 import { ReactNode } from "react";
 import { RWebShare } from "react-web-share";
+import StarRateModule from "@/components/elements/StarRateMofule";
+import { PhysicianSpeciality } from "@/types/appointment";
 
 
 export type PhysicianProfileCardType = {
   name: string,
   profileURL: string,
-  speciality: string,
+  speciality: any,
   rate: {
     count: number,
     rate: number
@@ -40,7 +37,7 @@ export type PhysicianProfileCardType = {
   likeLoading: boolean,
   physicianUrl: string,
   children?: ReactNode,
-  linkShare : string
+  linkShare: string
 }
 
 const PhysicianProfileCard = ({
@@ -59,9 +56,7 @@ const PhysicianProfileCard = ({
   linkShare
 }: PhysicianProfileCardType) => {
 
-
-
-
+  
 
 
   return (
@@ -77,6 +72,7 @@ const PhysicianProfileCard = ({
               priority={false}
               className="rounded-full w-full h-full"
             />
+
             {/* {status &&
                             <span className='size-[1rem] bg-white rounded-full absolute bottom-[1px] rtl:right-[9px] ltr:-left-[5px] flex justify-center items-center '>
                                 <span className={`w-[10px]  h-[10px] ${status === "online" ? "bg-primary-100 animate-pulse" : "bg-gray-400"} rounded-full `}>
@@ -94,18 +90,19 @@ const PhysicianProfileCard = ({
           </div>
           <div className="flex flex-col gap-1 mt-1">
             <h1 className="font-bold">{name}</h1>
-            <h2 className="font-normal text-md">{speciality}</h2>
+            <h2 className="text-sm text-gray">نوبت‌دهی اینترنتی مطب   {name}</h2>
+            <h3 className="font-normal text-md">{speciality.length ? speciality[0]?.specialityTitle : ""} {speciality.length > 1 ? "|" : ""} {speciality.length > 1 ? speciality[1]?.specialityTitle : ""} </h3>
             <div className="flex items-center gap-2">
-              <StarIcon />
-              {/* <StarRateModule size="lg" rate={rate.rate} ltr={false} /> */}
-              <p>{rate.count === 0 ? "-" : `${rate.count} نفر`}</p>
+              {/* <StarIcon /> */}
+              {rate.rate  ? <StarRateModule size="lg" rate={rate.rate} ltr={true} /> : ""}
+              <p>{rate.count  ?  `${rate.count} نفر` : ""}</p>
             </div>
           </div>
         </div>
         <div className="flex flex-wrap gap-4">
           <TagPhysicain disabled={!services.appointment} title={"نوبت دهی ویزیت"} />
           <TagPhysicain
-            disabled={!services.phoneConsultation}
+            disabled={!services.textConsultation}
             title={"مشاوره متنی"}
           />
           <TagPhysicain
@@ -153,7 +150,6 @@ const PhysicianProfileCard = ({
             </div>
             {
               likeLoading ? (
-
                 <Loader size="size-[2rem]" color="border-primary" />
               ) : (
                 <button

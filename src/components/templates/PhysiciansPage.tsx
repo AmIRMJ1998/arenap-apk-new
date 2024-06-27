@@ -134,8 +134,8 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
 
             {/* ----------header------------- */}
             {/* header */}
-            <header className='w-full rounded-sm shadow-shadow_category bg-white p-4'>
-                {pathName !== "/physicians" ? <h1 className='text-lg font-bold text-center' >
+            <header className='w-full rounded-sm shadow-shadow_category bg-white py-2 px-4'>
+                {pathName !== "/physicians" ? <h1 className='text-md text-center' >
                     <span className=''>دکترهای </span>
                     {slugs?.specialty ? (<LinkElement className='text-primary underline underline-offset-4 ' link={`physicians?specialty=${slugs.specialty}`}>{specialities.find((item) => item.enName === slugs.specialty)?.specialityTitle} </LinkElement>) : null}
                     {slugs?.city ? (<>
@@ -151,7 +151,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                             }
                         </LinkElement></>) : (<span> در آرناپ</span>)}
                 </h1> : null}
-                {pathName === "/physicians" ? <h1 className='text-xl font-bold text-center' >نوبت دهی از بهترین دکتر های آرناپ</h1> : null}
+                {pathName === "/physicians" ? <h1 className='text-md text-center' >نوبت دهی از بهترین دکتر های آرناپ</h1> : null}
             </header>
             {/* ----------header------------- */}
 

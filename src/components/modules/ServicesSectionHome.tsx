@@ -27,20 +27,21 @@ const ServicesSectionHome = () => {
 
                 <SwiperSlide className='swiper_width_auto' >
                     <LinkElement link={"physicians"} className={cn(
-                        ' h-full w-[16.25rem]  pt-4 px-4 overflow-hidden rounded-md shadow-shadow_category flex justify-start items-center flex-col bg-white group relative',
-                        "after:absolute after:-top-full after:-right-0 after:w-full after:h-full after:bg-primary after:transition-all after:duration-500 after:-z-1",
-                        "hover:after:right-0 hover:after:top-0 hover:shadow-shadow_comment"
+                        ' h-full w-[16.25rem]  pt-4 px-4 overflow-hidden rounded-md shadow-shadow_category flex justify-start items-center flex-col bg-white group relative transition-all duration-500',
+                        // "after:absolute after:-top-full after:-right-0 after:w-full after:h-full after:bg-primary after:transition-all after:duration-500 after:-z-1",
+                        // "hover:after:right-0 hover:after:top-0 hover:shadow-shadow_comment"
+                        " hover:border-[#006A67] hover:shadow-hover",
                     )}>
 
                         <div className='z-[3] overflow-hidden rounded-[0.875rem] '>
-                            <Image src={"/services_2.jpg"} width={500} height={500} alt='services_image' className={cn(
+                            <Image src={"/services_2.jpg"} loading='lazy' width={500} height={500} alt='services_image' className={cn(
                                 'w-[14.25rem] h-[9.1875rem]  group-hover:scale-[1.2] transition-all duration-500',
                             )} />
                         </div>
 
                         <h2 className={cn(
                             'py-4 font-bold text-black transition-all duration-500 delay-500 z-[1]',
-                            "group-hover:text-white "
+                            // "group-hover:text-white "
                         )}>نوبت دهی پزشکان</h2>
 
                     </LinkElement>
@@ -48,27 +49,53 @@ const ServicesSectionHome = () => {
                 </SwiperSlide>
                 <SwiperSlide className='swiper_width_auto' >
                     <a href={"https://dr.arenap.ir/"} rel='nofollow noopener noreferrer external' target='_blank' className={cn(
-                        ' h-full w-[16.25rem]  pt-4 px-4 overflow-hidden rounded-md shadow-shadow_category flex justify-start items-center flex-col bg-white group relative',
-                        "after:absolute after:-top-full after:-right-0 after:w-full after:h-full after:bg-primary after:transition-all after:duration-500 after:-z-1",
-                        "hover:after:right-0 hover:after:top-0 hover:shadow-shadow_comment"
+                        ' h-full w-[16.25rem]  pt-4 px-4 overflow-hidden rounded-md shadow-shadow_category flex justify-start items-center flex-col bg-white group relative transition-all duration-500',
+                        // "after:absolute after:-top-full after:-right-0 after:w-full after:h-full after:bg-primary after:transition-all after:duration-500 after:-z-1",
+                        // "hover:after:right-0 hover:after:top-0 hover:shadow-shadow_comment"
+                        " hover:border-[#006A67] hover:shadow-hover",
                     )}>
 
                         <div className='z-[3] overflow-hidden rounded-[0.875rem] '>
-                            <Image src={"/services_1.jpg"} width={500} height={500} alt='services_image' className={cn(
+                            <Image src={"/services_1.jpg"} loading='lazy' width={500} height={500} alt='services_image' className={cn(
                                 'w-[14.25rem] h-[9.1875rem]  group-hover:scale-[1.2] transition-all duration-500',
                             )} />
                         </div>
 
                         <h2 className={cn(
                             'py-4 font-bold text-black transition-all duration-500 delay-500 z-[1]',
-                            "group-hover:text-white "
+                            // "group-hover:text-white "
                         )}>پنل پزشکان</h2>
 
                     </a>
 
                 </SwiperSlide>
                 <SwiperSlide className='swiper_width_auto' >
-                    <ServicesCard id={3} disabled={true} title="مشاوره آنلاین" link="physicians" image="/services_3.jpg" />
+                    <LinkElement link={"onlinecounseling"} className={cn(
+                        ' h-full w-[16.25rem]  pt-4 px-4 overflow-hidden rounded-md shadow-shadow_category flex justify-start items-center flex-col bg-white group relative transition-all duration-500',
+                        // "after:absolute after:-top-full after:-right-0 after:w-full after:h-full after:bg-primary after:transition-all after:duration-500 after:-z-1",
+                        // "hover:after:right-0 hover:after:top-0 hover:shadow-shadow_comment"
+                        " hover:border-[#006A67] hover:shadow-hover",
+                    )}>
+
+                        <div className='z-[3] overflow-hidden rounded-[0.875rem] '>
+                            <Image src={"/services_3.jpg"} loading='lazy' width={500} height={500} alt='services_image' className={cn(
+                                'w-[14.25rem] h-[9.1875rem]  group-hover:scale-[1.2] transition-all duration-500',
+                            )} />
+                        </div>
+
+                        <h2 className={cn(
+                            'py-4 font-bold text-black transition-all duration-500 delay-500 z-[1]',
+                            // "group-hover:text-white "
+                        )}>مشاوره آنلاین</h2>
+                        <span className={
+                            cn(
+                                'absolute top-[1.1875rem] -right-[1.8125rem] bg-primary text-white w-[7.5rem] h-6 block rotate-45 z-10 rounded-xl trinagle text-md text-center font-bold ',
+                                "after:absolute after:-top-[1px] after:-right-[1px] after:size-6 after:block   after:bg-primary  ",
+                                "before:absolute before:-top-[1px] before:-left-[1px] before:size-6 before:block   before:bg-primary  ",
+                            )}>
+                            جدید
+                        </span>
+                    </LinkElement>
                 </SwiperSlide>
                 <SwiperSlide className='swiper_width_auto' >
                     <ServicesCard id={4} disabled={true} title="نوبت دهی کلینیک ها" link="physicians" image="/services_4.jpg" />
@@ -92,7 +119,7 @@ export const ServicesCard = (props: ServicesDataType) => {
                 ' h-full w-[16.25rem]  pt-4 px-4 rounded-md shadow-shadow_category flex justify-start items-center flex-col bg-white'
             )}>
                 <div className='relative'>
-                    <Image src={image} width={500} height={500} alt='services_image' className='w-[14.25rem] h-[9.1875rem] rounded-[0.875rem] grayscale' />
+                    <Image src={image} width={500} height={500} loading='lazy' alt='services_image' className='w-[14.25rem] h-[9.1875rem] rounded-[0.875rem] grayscale' />
 
                 </div>
                 {/* <span className=' top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-bold text-primary-100 text-sm'>(بزودی ... )</span> */}
@@ -106,7 +133,7 @@ export const ServicesCard = (props: ServicesDataType) => {
             )}>
 
                 <div className='z-[3] overflow-hidden rounded-[0.875rem] '>
-                    <Image src={image} width={500} height={500} alt='services_image' className={cn(
+                    <Image src={image} width={500} height={500} loading='lazy' alt='services_image' className={cn(
                         'w-[14.25rem] h-[9.1875rem]  group-hover:scale-[1.2] transition-all duration-500',
                     )} />
                 </div>
