@@ -21,8 +21,6 @@ export default function Home() {
   useEffect(() => {
     if (!backState.active) {
       dispatch(activeHandler())
-
-
       if (Capacitor.isNativePlatform()) {
         App.addListener('backButton', ({ canGoBack }) => {
           if (!canGoBack) {

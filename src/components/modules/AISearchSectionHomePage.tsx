@@ -169,7 +169,7 @@ const AISearchSectionHomePage = () => {
             </div>
             <Modal show={resultModal} closeHandler={() => {
                 setResultModal(false)
-            }} customClassname="flex justify-center items-center" >
+            }} customClassname="flex justify-center items-center px-2" >
                 {/* <div className="w-full h-full  flex justify-center items-center py-4 px-2" > */}
                 <div className="relative w-full md:w-8/12 min-h-[6.25rem] max-w-full max-h-screen overflow-y-auto p-2 md:p-8  bg-bg_content shadow-shadow_category rounded-lg ">
                     <button onClick={() => { setResultModal(false) }} type="button" className="absolute left-[1rem] top-[1rem] p-3 bg-primary rounded-full">
@@ -195,7 +195,7 @@ const AISearchSectionHomePage = () => {
                             <div key={index}>
                                 <div className="flex justify-between items-center py-3">
                                     <p className="font-bold line-clamp-1 text-md md:text-lg" >{physiciansData.length ? index + 1 : null}- <span>{item?.speciality?.name}</span></p>
-                                    <Link href={`/physicians/specialty/${item.speciality.enName}`}>
+                                    <Link href={`/physicians?specialty=${item.speciality.enName}`}>
                                         <ButtonElement typeButton="transparent" customStyle="min-w-fit">
                                             مشاهده بیشتر
                                             <ArrowLeft />

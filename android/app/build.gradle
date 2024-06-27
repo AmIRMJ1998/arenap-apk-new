@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "www.arenap.ir"
-    compileSdk rootProject.ext.compileSdkVersion
+    namespace "my.arenap.app"
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "www.arenap.ir"
+        applicationId "my.arenap.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

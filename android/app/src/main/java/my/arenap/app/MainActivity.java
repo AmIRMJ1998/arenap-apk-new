@@ -1,4 +1,4 @@
-package www.arenap.ir;
+package my.arenap.app;
 
 import com.getcapacitor.BridgeActivity;
 

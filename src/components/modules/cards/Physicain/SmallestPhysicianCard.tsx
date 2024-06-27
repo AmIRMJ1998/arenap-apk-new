@@ -7,7 +7,7 @@ import Link from "next/link"
 const SmallestPhysicianCard = (props: PhysicainCardPrimaryType) => {
     const { firstName, hasImage, lastName, physicianProfileUrl, immediateConsultation, physicianSpecialities, id } = props
     return (
-        <Link href={`/Physician/${physicianProfileUrl}`} className=' shadow-shadow_category rounded-sm bg-white p-1 flex items-center gap-1 text-center text-md'>
+        <Link href={`/Physician?url=${physicianProfileUrl}`} className=' shadow-shadow_category rounded-sm bg-white p-1 flex items-center gap-1 text-center text-md'>
 
             <div className='flex relative'>
                 <Image
