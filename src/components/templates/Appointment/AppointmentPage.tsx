@@ -9,6 +9,7 @@ import {
   PhysicianProfile,
   PhysicianProfileCalendar,
 } from "@/types/appointment";
+import { RelatedPhysicianType } from "@/types/physicianProfile";
 
 
 
@@ -20,6 +21,7 @@ export type AppointmentPageType = {
   firstAppointment: Firstppointment | null;
   ramainingTime: number;
   times: string[];
+  relatedPhysicians?: RelatedPhysicianType[] | []
 };
 
 const AppointmentPage = ({
@@ -28,13 +30,14 @@ const AppointmentPage = ({
   ramainingTime,
   times,
   firstAppointment,
+  relatedPhysicians 
 }: AppointmentPageType) => {
 
   const [step, setStep] = useState<1 | 2>(1)
   const changeStepHandler = (step: 1 | 2) => {
     setStep(step)
   }
-
+  
 
   return (
     <>
@@ -47,9 +50,10 @@ const AppointmentPage = ({
           times={times}
           firstAppointment={firstAppointment}
           changeStep={changeStepHandler}
+          relatedPhysicians={relatedPhysicians ? relatedPhysicians : []}
         />
       ) : null}
-      {step === 2 ? <PaymentAppointmentStep physician={physician}  /> : null}
+      {step === 2 ? <PaymentAppointmentStep physician={physician} /> : null}
     </>
   );
 };

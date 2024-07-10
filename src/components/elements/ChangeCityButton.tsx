@@ -7,10 +7,12 @@ import Loader from './Loader'
 import cn from '@/utils/clsxFun'
 import Modal from '../modules/modals/Modal'
 import BottomSheetAndCenterContent from '../modules/modals/BottomSheetAndCenterContent'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow , Mousewheel } from 'swiper/modules';
+
+
 import MagnifierIcon from '../icons/menu/MagnifierIcon'
 import { useCookies } from 'react-cookie'
+import InputSearch from './inputs/InputSearch'
+
 
 
 const ChnageCityButton = () => {
@@ -30,18 +32,18 @@ const ChnageCityButton = () => {
     centerName: string,
     provinceId: number,
     provinceName: string,
-    cityEnName : string
+    cityEnName: string
 
   }) => item.cityName.toLowerCase().includes(searchText.toLocaleLowerCase()))
-  
-  
+
+
   return (
     <div className={
       cn(
         "relative",
         {
-          'md:z-[19]' : !show,
-          "md:z-[20]" : show
+          'md:z-[19]': !show,
+          "md:z-[20]": show
         }
       )
     }>
@@ -73,6 +75,44 @@ const ChnageCityButton = () => {
 
             <InputSearch value={searchText} changeHandler={(e) => setSearchText(e.target.value)} />
 
+            <ul className='flex justify-start items-center gap-1 flex-col h-[18.75rem] max-h-[calc(100vh-11rem)] overflow-scroll'>
+              <li
+                className="border-b border-gray-550 py-2 cursor-pointer text-center w-full hover:bg-gray-100  transition-all duration-300"
+                onClick={() => {
+                  setAllProvince()
+                  setShow(false)
+                  setSearchText("")
+                }}
+              >
+                همه استان ها
+              </li>
+
+              {
+                searchProvince?.map((item: {
+                  cityId: number,
+                  cityName: string,
+                  centerName: string,
+                  provinceId: number,
+                  provinceName: string,
+                  cityEnName: string
+                }) => (
+
+                  <li
+                    className="border-b border-gray-550 py-2 cursor-pointer text-center w-full hover:bg-gray-100  transition-all duration-300"
+                    onClick={() => {
+                      cityHandler(item.cityEnName, item.cityName, item.cityId)
+                      setSearchText("")
+                      setShow(false)
+                    }}
+                    key={item.cityName}
+                  >
+
+                    {item.provinceName} / {item.cityName}
+                  </li>))
+              }
+            </ul>
+
+            {/* 
             <Swiper
               modules={[EffectCoverflow , Mousewheel]}
               spaceBetween={10}
@@ -131,7 +171,7 @@ const ChnageCityButton = () => {
                 ))
               }
 
-            </Swiper>
+            </Swiper> */}
 
           </BottomSheetAndCenterContent>
         </Modal>
@@ -144,17 +184,3 @@ const ChnageCityButton = () => {
 export default ChnageCityButton
 
 
-
-const InputSearch = ({ value, changeHandler }: { value: string, changeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
-
-
-  return (
-    <div className="bg-gray-100 rounded-xl w-full flex items-center">
-      <input className="bg-gray-100 h-[2.5rem] rtl:pr-4 ltr:pl-4 rounded-xl w-[calc(100%-2.8125rem)]" value={value} onChange={changeHandler} type="text" placeholder={"جستجو"} />
-
-      <div className="flex justify-center w-[2.8125rem]">
-        <MagnifierIcon active={false} />
-      </div>
-    </div>
-  )
-}

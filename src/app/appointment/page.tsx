@@ -63,7 +63,7 @@ const AppointmentPhysician = async ({ physicianUrl }: { physicianUrl: string }) 
         <>
             {
                 physicianCalendar.isLoading  ? <LoadingPage /> : (
-                    <AppointmentPage calendar={physicianCalendar.data?.physicianProfileCalendars} physician={physicianCalendar.data.physicianProfile} ramainingTime={ramainingTime.data} times={convertToHour()} firstAppointment={physicianCalendar.data.firstppointment} />
+                    <AppointmentPage calendar={physicianCalendar.data?.physicianProfileCalendars} physician={physicianCalendar.data.physicianProfile} ramainingTime={ramainingTime.data} times={convertToHour()} firstAppointment={physicianCalendar.data.firstppointment} relatedPhysicians={physicianCalendar.data.relatedPhysicians} />
                 )
             }
         </>
