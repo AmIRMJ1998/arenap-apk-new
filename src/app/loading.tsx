@@ -1,3 +1,4 @@
+"use client"
 import Loader from '@/components/elements/Loader'
 import React from 'react'
 

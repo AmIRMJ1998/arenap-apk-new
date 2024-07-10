@@ -17,6 +17,7 @@ export type AppointmentType = {
     nationalNumber: string;
     phoneNumber: string;
   };
+  showRelatedPhysician : boolean
 };
 
 type AppointmentSelectInfoType = {
@@ -56,6 +57,7 @@ const initialState: AppointmentType = {
     status: false,
     id: 0,
   },
+  showRelatedPhysician : false
 };
 
 const appointmentSlice = createSlice({
@@ -104,6 +106,10 @@ const appointmentSlice = createSlice({
       };
       state.isLocked = true;
     },
+    showRalatedPhysicians : (state) => {
+      
+        state.showRelatedPhysician = true
+    }
   },
 });
 
@@ -111,5 +117,6 @@ export const {
   selectAppointment,
   offSelectAppointment,
   lockedAppointmentRedux,
+  showRalatedPhysicians
 } = appointmentSlice.actions;
 export default appointmentSlice.reducer;

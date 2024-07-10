@@ -2,6 +2,7 @@ import {
   selectAppointment,
   lockedAppointmentRedux,
   offSelectAppointment,
+  showRalatedPhysicians,
 
 } from "@/store/features/appointmentSlice";
 import { useAppDispatch, useAppSelector } from "./useRedux";
@@ -14,6 +15,7 @@ import {
 import { createAppointment, createPayment } from "@/services/payment/payment";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Toastify from "@/components/elements/toasts/Toastify";
 
 
 const useSelectAppointment = () => {
@@ -23,7 +25,8 @@ const useSelectAppointment = () => {
     appointmentSelectInfo,
     isSelectAppointment,
     lockedAppointmentInfo,
-    patient
+    patient,
+    showRelatedPhysician
   } = useAppSelector((state) => state.appointment);
   const { isLogin } = useUserInfo();
   const dispatch = useAppDispatch();
@@ -77,7 +80,13 @@ const useSelectAppointment = () => {
         appointmentSelectInfo.physicianProfileId,
         appointmentSelectInfo.index
       );
-      console.log(res)
+      
+      if (res.resultCode === 205) {
+        dispatch(showRalatedPhysicians())
+        
+        throw new Error("")
+        
+      }
       if (res.resultCode === 200) {
         const { chargeAmount, id, remainingSeconds, status } = res.value;
         dispatch(
@@ -95,7 +104,6 @@ const useSelectAppointment = () => {
       const result = await queryClient.invalidateQueries({
         queryKey: [`myAppointment`],
       });
-      console.log(result)
     },
   });
 
@@ -122,7 +130,6 @@ const useSelectAppointment = () => {
   });
   const payment = useMutation({
     mutationFn: async () => {
-      console.log(lockedAppointmentInfo.chrageAmount )
       if (lockedAppointmentInfo.chrageAmount === 0) {
         const res = await createAppointment(appointmentSelectInfo.physicianProfileId, appointmentSelectInfo.calendarId, appointmentSelectInfo.index)
 
@@ -134,7 +141,6 @@ const useSelectAppointment = () => {
         return res
       } else {
         const res = await createPayment(lockedAppointmentInfo.id, lockedAppointmentInfo.chrageAmount, 1)
-        console.log(res)
         window.location.href = res
         return res
       }
@@ -178,7 +184,8 @@ const useSelectAppointment = () => {
     offSelectHandler,
     lockAppointmentInfo: lockedAppointmentInfo,
     patient,
-    payment
+    payment,
+    showRelatedPhysician
   };
 };
 

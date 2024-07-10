@@ -1,8 +1,6 @@
-"use client"
 import React, { useEffect, useState } from 'react'
 import { Firstppointment, PhysicianProfile, PhysicianProfileCalendar } from '@/types/appointment'
 import TurnsIcon from '@icons/menu/TurnsIcon'
-
 import convertMonthOfYear from '@/utils/convertMonthOfYear';
 import cn from '@/utils/clsxFun';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
@@ -21,9 +19,14 @@ import Timer from '@modules/Timer';
 import Modal from '@modules/modals/Modal';
 import BottomSheetAndCenterContent from '@modules/modals/BottomSheetAndCenterContent';
 import CloseButton from '@elements/CloseButton';
+import SectionTitle from '@/components/modules/titles/SectionTitle';
+import SwiperContainerFreeMode from '@/components/modules/swiper/SwiperContianerFreeMode';
+import PhysicainCardPrimary from '@/components/modules/cards/Physicain/PhysicianCardPrimary';
+import { RelatedPhysicianType } from '@/types/physicianProfile';
 
 
-const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firstAppointment, changeStep }: { calendar: PhysicianProfileCalendar[], physician: PhysicianProfile, ramainingTime: number, times: string[], firstAppointment: Firstppointment | null, changeStep: (step: 1 | 2) => void }) => {
+
+const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firstAppointment, changeStep, relatedPhysicians }: { calendar: PhysicianProfileCalendar[], physician: PhysicianProfile, ramainingTime: number, times: string[], firstAppointment: Firstppointment | null, relatedPhysicians: RelatedPhysicianType[] | [], changeStep: (step: 1 | 2) => void }) => {
 
 
   const [selectAppointmentBeforeSign, setSelectAppointmentBeforeSign] = useState({
@@ -71,7 +74,7 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
 
 
   //selectAppointment
-  const { selectAppointment, offSelectHandler, isSelectAppointment, selectIndex, selectCalendarId, isNextStep, lockedAppointmentHandler, firstAppointmentHandler, appointmentInfo } = useSelectAppointment()
+  const { selectAppointment, offSelectHandler, isSelectAppointment, selectIndex, selectCalendarId, isNextStep, lockedAppointmentHandler, firstAppointmentHandler, appointmentInfo, showRelatedPhysician } = useSelectAppointment()
 
 
 
@@ -94,6 +97,12 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
 
   }, [lockedAppointmentHandler.isSuccess])
 
+  useEffect(() => {
+    if (lockedAppointmentHandler.isError) {
+      setShowModalRules(false)
+    }
+  }, [lockedAppointmentHandler.isError])
+
 
 
   let time = new Date()
@@ -108,8 +117,6 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
       return
     }
     firstAppointmentHandler.mutate({ physicianProfileId: physician.id, physicianProfileUrl: physician.physicianProfileUrl })
-
-
   }
 
   const selectHandler = (calendar: PhysicianProfileCalendar, index: number) => {
@@ -131,6 +138,7 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
 
 
     selectAppointment(calendar.calendar.year, calendar.calendar.month, calendar.calendar.dayOfMonth, index, calendar.calendar.id, physician.id, physician.physicianProfileUrl)
+    setShowModalRules(true)
 
   }
 
@@ -164,6 +172,9 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
   }, [])
 
 
+
+
+
   return (
     <>
       <ModalLogin callbacks={callbacks} isCallback={true} callbacksIndex={callbackIndex} />
@@ -174,8 +185,8 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
           <div className="size-[2.625rem] rounded-full bg-white shadow-shadow_category flex justify-center items-center">
             <TurnsIcon active={false} />
           </div>
-          <h1 className="h-[2.625r] px-2 rounded-3xl text-lg font-bold bg-white shadow-shadow_category flex justify-center items-center">
-            نوبت دهی اینترنتی مطب دکتر {physician.firstName} {physician.lastName}
+          <h1 className="p-2 rounded-3xl text-sm sm:text-md md:text-lg font-bold bg-white shadow-shadow_category flex justify-center items-center">
+            نوبت دهی اینترنتی {physician.firstName.startsWith("مرکز") ? "" : "مطب"} {physician.firstName.startsWith("مرکز") ? "" : "دکتر"} {physician.firstName} {physician.lastName}
           </h1>
         </div>
       </header>
@@ -214,7 +225,7 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
             ) : (
               <div className="mt-8 flex justify-center items-center gap-2">
                 <span className="text-lg font-bold">
-                  {convertMonthOfYear(activeMonth)} {1402}
+                  {convertMonthOfYear(activeMonth)} {1403}
                 </span>
                 <span>
                   <TurnsIcon active={false} />{" "}
@@ -233,9 +244,12 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
           >
             <TabList
               className={cn(
-                `flex justify-start items-center appointments_scroll pb-2 gap-1 overflow-x-auto `, {
-                "hidden": ramainingTime > 0
-              }
+                `flex justify-start items-center appointments_scroll pb-2 gap-1 overflow-x-auto `,
+                {
+                  "hidden": ramainingTime > 0,
+                  "overflow-auto appointments_scroll py-2 w-full  max-w-[28.125rem] mx-auto":
+                    !showHoursType,
+                }
               )}
             >
               {calendar.map((item, index) => (
@@ -253,6 +267,7 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
                         +item.calendar.dayOfWeek
                       )}
                       isAppointment={item.calendar.id === selectCalendarId}
+                      isComplete={item.availableHours.split("").findIndex(num => num === "1") === -1}
                       dayOfMonth={item.calendar.dayOfMonth}
                     />
                     <input
@@ -261,6 +276,7 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
                       id={item.calendar.id}
                       value={item.calendar.id}
                       onChange={(e) => {
+
                         if (item.available === false) return;
                         setActiveTab(index);
                         setActiveMonth(item?.calendar?.month)
@@ -285,12 +301,13 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
               </div>
               {firstAppointment === null && ramainingTime <= 0 && (
                 <div className="flex flex-col gap-2 absolute z-[15]  left-[50%] top-[50%] -translate-x-1/2 -translate-y-1/2 text-center">
-                  <p className="text-md drop-shadow-[0px_0px_4px_rgba(0,0,0,1)] ">
+                  <p className="text-md ">
                     نوبت خالی پیدا نشد!
                   </p>
 
                 </div>
-              )}
+              )
+              }
 
               {
                 // map in calendar 
@@ -303,7 +320,7 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
                         {
                           "flex-wrap grid grid-cols-3 min-[380px]:grid-cols-4 md:grid-cols-6":
                             showHoursType,
-                          "overflow-auto appointments_scroll py-2":
+                          "overflow-auto appointments_scroll py-2 w-full  max-w-[28.125rem] mx-auto":
                             !showHoursType,
                         }
                       )}
@@ -334,19 +351,22 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
                         ) : calendar[indexP].availableHours[index] ===
                           "2" ||
                           calendar[indexP].availableHours[index] ===
-                          "3" ? (
-                          <button
-                            type="button"
-                            key={index}
-                            className={cn(` w-full gap-2`, {
-                              "flex justify-start items-center cursor-default ":
-                                !showHoursType,
-                            })}
-                            disabled
-                          >
-                            <AppointmentRadioButton name="Appointment_time" active={false} calendarId={item.calendar.id} handler={() => console.log("first")} index={index} ramainingTime={ramainingTime} selected={false} time={times[index]} />
-                          </button>
-                        ) : null
+                          "3" || calendar[indexP].availableHours[index] ===
+                          "6" ?
+                          showHoursType ? (
+                            <button
+                              type="button"
+                              key={index}
+                              className={cn(` w-full gap-2`, {
+                                "flex justify-start items-center cursor-default ":
+                                  !showHoursType,
+                              })}
+                              disabled
+                            >
+                              <AppointmentRadioButton name="Appointment_time" active={false} calendarId={item.calendar.id} handler={() => console.log("first")} index={index} ramainingTime={ramainingTime} selected={false} time={times[index]} />
+                            </button>
+                          ) : null
+                          : null
                       )}
                     </div>
                   </TabPanel>
@@ -358,50 +378,53 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
         {/* ----------section------------- */}
 
 
-
-
         {/* ----------section------------- */}
         {/* buttons */}
-        <section className="mt-6  sticky bottom-[1.25rem] w-full left-0 flex justify-center items-center z-[14]">
-          <div className="w-full max-w-[118.75rem]   gap-2 ">
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <ButtonElement
-                  disabled={
-                    ramainingTime > 0 || firstAppointmentHandler.isLoading || firstAppointment === null
-                  }
-                  fontWeight='bold'
-                  loading={firstAppointmentHandler.isLoading}
-                  typeButton={
-                    ramainingTime > 0 || firstAppointment === null ? "gray-light" : "primary"
-                  }
+        {/* {
+          firstAppointment === null ? null : (
 
-                  handler={getFirstAppointment}
-                >
+            <section className="mt-6  sticky bottom-[1.25rem] w-full left-0 flex justify-center items-center z-[14]">
+              <div className="w-full max-w-[118.75rem]   gap-2 ">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <ButtonElement
+                      disabled={
+                        ramainingTime > 0 || firstAppointmentHandler.isLoading || firstAppointment === null
+                      }
+                      fontWeight='bold'
+                      loading={firstAppointmentHandler.isLoading}
+                      typeButton={
+                        ramainingTime > 0 || firstAppointment === null ? "gray-light" : "primary"
+                      }
 
-
-                  اولین نوبت خالی
-
-                </ButtonElement>
+                      handler={getFirstAppointment}
+                    >
 
 
+                      اولین نوبت خالی
+
+                    </ButtonElement>
+
+
+                  </div>
+                  <div>
+                    <ButtonElement
+                      disabled={!isNextStep}
+                      typeButton={!isNextStep ? "gray-light" : "primary"}
+                      fontWeight='bold'
+                      handler={() => setShowModalRules(true)}
+                      loading={lockedAppointmentHandler.isLoading}
+                    >
+
+                      قدم بعدی
+
+                    </ButtonElement>
+                  </div>
+                </div>
               </div>
-              <div>
-                <ButtonElement
-                  disabled={!isNextStep}
-                  typeButton={!isNextStep ? "gray-light" : "primary"}
-                  fontWeight='bold'
-                  handler={() => setShowModalRules(true)}
-                  loading={lockedAppointmentHandler.isLoading}
-                >
-
-                  قدم بعدی
-
-                </ButtonElement>
-              </div>
-            </div>
-          </div>
-        </section>
+            </section>
+          )
+        } */}
         {/* ----------section------------- */}
 
         {/* ----------section------------- */}
@@ -417,7 +440,34 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
         </section>
         {/* ----------section------------- */}
 
-      </main>
+        {/* ----------section------------- */}
+        {/* relatedPhysicians Slider */}
+        {
+          firstAppointment === null || showRelatedPhysician ? (
+            <div className="w-full mt-4 order-8">
+
+              {relatedPhysicians.length ? (
+                <>
+                  <SectionTitle
+                    title={"پزشکان مرتبط"}
+                    textLink={"مشاهده بیشتر"}
+                    link={
+                      `physicians/specialty/`
+                    }
+                    btn={false}
+                  />
+                  <div className=" ">
+                    <SwiperContainerFreeMode data={relatedPhysicians ? relatedPhysicians : []} gap={10} CardComponent={PhysicainCardPrimary} />
+                  </div>
+                </>
+              ) : null}
+            </div>
+          ) : null
+        }
+        {/* ----------section------------- */}
+
+
+      </main >
       {/* ----------main------------- */}
 
 
@@ -425,10 +475,12 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
       {/* rules modal and lock appointment */}
       <Modal show={showModalRules} closeHandler={() => setShowModalRules(false)}>
         <BottomSheetAndCenterContent show={showModalRules}>
-          <div className="flex justify-between items-center ">
-            <div></div>
+          <div className="flex justify-between items-center flex-col ">
+
             <p className="font-bold">شرایط پزشک</p>
-            <div><CloseButton closeHanlder={() => setShowModalRules(false)} /></div>
+            <p className='text-md mt-4  '>نوبت شما در تاریخ : <span className='font-bold text-primary underline'>{appointmentInfo.year}/{appointmentInfo.month}/{appointmentInfo.day}</span> و ساعت : <span className='font-bold text-primary underline'>{times[appointmentInfo.index]}</span></p>
+
+            <span className='absolute top-4 left-4'><CloseButton closeHanlder={() => setShowModalRules(false)} /></span>
           </div>
           <div className="mt-6 rounded-sm bg-bg_content p-4 max-h-[12.5rem] overflow-y-auto">
             <DropInfo
@@ -595,11 +647,12 @@ const DropInfo = ({ physician }: { physician: PhysicianProfile }) => {
 
         {
           splitTerms?.length
-            ? splitTerms.map((item: string, index: number) => (
-              <li className="list-disc" key={index}>
+            ? splitTerms.map((item: string, index: number) => {
+              if (item.trim() === "") return
+              return <li className="list-disc" key={index}>
                 {item}
               </li>
-            ))
+            })
             : null}
       </ul>
 

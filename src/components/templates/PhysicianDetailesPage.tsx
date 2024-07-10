@@ -1,6 +1,10 @@
 "use client";
 
+
+
+
 import BaseCard from "@modules/cards/BaseCard"
+
 import { useEffect, useState } from "react";
 import ProfileSummaryCard from "@modules/cards/ProfileSummaryCard";
 import Link from "next/link";
@@ -17,8 +21,6 @@ import ButtonElement from "@elements/ButtonElement";
 import OfficeCard from "@modules/cards/OfficeCard";
 import PhysicianProfileCard from "@modules/cards/Physicain/PhysicianProfileCard";
 import LinkElement from "@elements/LinkElement";
-import SwiperContainerFreeMode from "@modules/swiper/SwiperContianerFreeMode";
-import PhysicainCardPrimary from '@modules/cards/Physicain/PhysicianCardPrimary';
 import CreateCommentCom from "@modules/CreateCommentCom";
 import Image from "next/image";
 import ConsultationPlanItemCard from "../modules/cards/ConsultationPlanItemCard";
@@ -30,65 +32,20 @@ import { useRouter } from "next/navigation";
 import Modal from "../modules/modals/Modal";
 import BottomSheetAndCenterContent from "../modules/modals/BottomSheetAndCenterContent";
 import CloseButton from "../elements/CloseButton";
-import priceSplitter from "@/utils/priceSplitter";
 import PhysicianCommentCard from "../modules/cards/PhysicianCommentCard";
-import weekConverted from "@/utils/weekConverter";
 import OkIcon from "../icons/OkIcon";
 import CancelIcon from "../icons/CancelIcon";
+import weekConverted from "@/utils/weekConverter";
+import priceSplitter from "@/utils/priceSplitter";
 
 
 
 const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }) => {
-
+  const [consultationModal, setConsultationModal] = useState(false)
   const router = useRouter()
   const { price, textConsultationPrice } = usePrice()
   const { isLogin, getUser, user } = useUserInfo();
   const { isShow, openModalLogin } = useModalLogin();
-  const [showVisitQuestionModal, setShowVisitQuestionModal] = useState(false);
-  const [modals, setModals] = useState({
-    textConsultation: false
-  })
-
-  const showCreateCommentHandler = () => {
-    if (isLogin === "unauthorization") {
-      openModalLogin()
-      setCallbackIndex(1)
-      return
-    }
-
-    setShowVisitQuestionModal(true)
-
-
-  }
-  //use favorite hook
-  const { userFavorite, addFavorite, deleteFavorite, likeLoading } = useFavorite(physician.id)
-
-  const favoritePhysicianHandler = async () => {
-    if (isLogin === "isLoading") return;
-    if (isLogin === "unauthorization") {
-      setCallbackIndex(0)
-      openModalLogin();
-      return;
-    }
-
-    if (!userFavorite) {
-      const res = addFavorite();
-    } else {
-      const status = deleteFavorite();
-    }
-  };
-
-  //callbacks index
-  const [callbackIndex, setCallbackIndex] = useState(0)
-  //callbacks for after login
-  const callbacks = [async () => {
-    window.location.reload()
-  }, () => {
-    setShowVisitQuestionModal(true)
-  }]
-
-
-
   let waitingTimeArray = [0, 0, 0, 0];
 
   for (let item of physician?.comments) {
@@ -121,12 +78,12 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
   }[] = [
       {
         id: "appointment",
-        url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
+        url: `/appointment/online-appointment/${physician.physicianProfileUrl}`,
         title: " نوبت اینترنتی",
         price: price ? price / 10 : 15000,
         isHandler: false,
         // firstDescription: waitingTimeAvg ? `میانگین زمان انتظار ${waitingTimeAvg} دقیقه` : null,
-        // secondDescription: physician.clinic ? `نوبت در ${physician.clinic}` : null,
+        secondDescription: physician.address ? `نوبت در ${physician.address}` : null,
         active: physician.onlineAppointment,
         status: null,
       },
@@ -137,7 +94,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         price: physician.textConsultationPrice + textConsultationPrice ? physician.textConsultationPrice / 10 + textConsultationPrice / 10 : null,
         isHandler: true,
         // firstDescription: physician.textConsultationWaitingTimeAvg ? `میانگین زمان انتظار ${physician.textConsultationWaitingTimeAvg} دقیقه` : null,
-        // secondDescription: physician.maximumTextConsultationDuration ? `حداکثر مدت زمان مکالمه ${physician.maximumTextConsultationDuration} دقیقه` : null,
+        secondDescription: 'حداکثر زمان پاسخگویی 12 ساعت',
         active: physician.textConsultation,
         status: null,
       },
@@ -146,7 +103,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
         title: "مشاوره تلفنی فوری",
         price: 1000 ? 100 : null,
-        isHandler: false,
+        isHandler: true,
         // firstDescription: physician.emergencyPhoneConsultationDuration ? `${physician.emergencyPhoneConsultationDuration} دقیقه گفتگو` : null,
         // secondDescription: physician.emergencyphoneWaitingTime ? `پاسخ دهی کمتر از ${physician.phoneWaitingTime} دقیقه` : null,
         active: physician.immediateConsultation,
@@ -157,16 +114,14 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
         title: "مشاوره تلفنی",
         price: 1000 ? 100 : null,
-        isHandler: false,
+        isHandler: true,
         // firstDescription: physician.phoneConsultationDuration ? `${physician.phoneConsultationDuration} دقیقه گفتگو` : null,
         // secondDescription: physician.phoneWaitingTime ? `پاسخ دهی بین ${physician.phoneWaitingTime[0]} تا ${physician.phoneWaitingTime[1]} دقیقه` : null,
         active: physician.voiceConsultation,
         status: null,
       },
 
-
     ];
-
   const [buttonText, setButtonText] = useState(
     consultationList.find((item) => item.active)?.title
   );
@@ -178,6 +133,58 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
   const [activeConsultation, setActiveConsultation] = useState<string | undefined>(
     consultationList.find((item) => item.active)?.id
   );
+
+  const [showVisitQuestionModal, setShowVisitQuestionModal] = useState(false);
+  const [modals, setModals] = useState({
+    textConsultation: false
+  })
+
+  const showCreateCommentHandler = () => {
+    if (isLogin === "unauthorization") {
+      openModalLogin()
+      setCallbackIndex(1)
+      return
+    }
+
+    setShowVisitQuestionModal(true)
+
+
+  }
+
+  //callbacks index
+  const [callbackIndex, setCallbackIndex] = useState(0)
+  //callbacks for after login
+  const callbacks = [async () => {
+    window.location.reload()
+  }, () => {
+    setShowVisitQuestionModal(true)
+  }, () => {
+    setModals({ ...modals, [activeConsultation ? activeConsultation : "textConsultation"]: true })
+  }]
+  //use favorite hook
+  const { userFavorite, addFavorite, deleteFavorite, likeLoading } = useFavorite(physician.id)
+
+  const favoritePhysicianHandler = async () => {
+    if (isLogin === "isLoading") return;
+    if (isLogin === "unauthorization") {
+      setCallbackIndex(0)
+      openModalLogin();
+      return;
+    }
+
+    if (!userFavorite) {
+      const res = addFavorite();
+    } else {
+      const status = deleteFavorite();
+    }
+  };
+
+
+
+
+
+
+
 
   useEffect(() => {
     const findName = consultationList.find(
@@ -195,20 +202,18 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
 
   const getConsultationHandler = useMutation({
     mutationFn: async () => {
-      if (isLogin === "isLoading") return;
-      if (isLogin === "unauthorization") {
-        openModalLogin();
-        return;
-      }
-      let amountTextConsultation = user.accountBalance - physician.textConsultationPrice;
 
-      if (amountTextConsultation > 0) {
+      let amountTextConsultation = user.accountBalance - (physician.textConsultationPrice + textConsultationPrice);
+
+
+      if (amountTextConsultation >= 0) {
         const res = await createConsulation(physician.id)
         if (res.resultCode == 200) {
           router.push(`/profile/mymessages/${res?.value?.id}`)
         }
       } else {
-        const res = await paymentConsutationText(amountTextConsultation, physician.id, 2)
+        const res = await paymentConsutationText((amountTextConsultation * -1), physician.id, 2)
+
         if (res) {
           window.location.href = res
           return res
@@ -217,171 +222,202 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
     }
   })
 
-  const showConsultationModal = () => {
-
-    setModals({ ...modals, [activeConsultation ? activeConsultation : "textConsultation"]: true })
+  const showConsultationModal = (consultation: string) => {
+    if (isLogin === "isLoading") return;
+    if (isLogin === "unauthorization") {
+      setConsultationModal(false)
+      setCallbackIndex(2)
+      openModalLogin();
+      return;
+    }
+    setConsultationModal(false)
+    setModals({ ...modals, [consultation ? consultation : "textConsultation"]: true })
   }
+
+  // let speciality = `${physician.physicianSpecialities[0]?.specialityTitle} ${physician.physicianSpecialities[1]?.specialityTitle ? "|" : ""} ${physician.physicianSpecialities[1]?.specialityTitle}`
 
 
   return (
     <>
-      <TitlePagesMobile title={`صفحه ی اختصاصی ${spliterName[0] === "مرکز" ? "" : "دکتر"} ${physician.firstName} ${physician.lastName}`} />
+      <TitlePagesMobile title={`صفحه‌ی اختصاصی ${physician.firstName.startsWith("مرکز") ? " " : "دکتر"} ${physician.firstName} ${physician.lastName}`} />
       <ModalLogin isCallback={true} callbacks={callbacks} callbacksIndex={callbackIndex} />
       <div className=" mt-4 rounded-sm bg-white max-w-[118.75rem] w-full border overflow-x-scroll breadcrumb">
         <div className="  p-2 flex justify-start items-center gap-2 w-fit text-primary rounded-sm">
           <LinkElement link="" className="text-sm text-primary min-w-fit">
-            <Image src={"/favicon.png"} width={500} height={500} alt='icon' className='size-[2rem]' />
+            <Image src={"/arenapLogo.png"} width={500} height={500} alt='icon' className='size-[2rem]' />
           </LinkElement>
-          <LinkElement link="physicians" className="text-sm text-primary min-w-fit">دکترها </LinkElement>/
-          <LinkElement link={`physicians/city?name=${physician.cityEnName}`} className="text-sm text-primary min-w-fit">دکترهای {physician.cityName}</LinkElement>/
-          {physician.physicianSpecialities[0] ? <LinkElement link={`physicians?specialty=${physician?.physicianSpecialities[0]?.enName}`} className="text-sm text-primary min-w-fit">دکترهای {physician.physicianSpecialities[0]?.specialityTitle} /</LinkElement> : ""}
-          <div className="text-sm text-primary min-w-fit pl-2">دکتر {physician.firstName} {physician.lastName}</div>
+          <LinkElement link="physicians" className="text-sm text-primary fillRulew-fit">دکترها </LinkElement>/
+          <LinkElement link={`physicians/city/${physician.cityEnName}`} className="text-sm text-primary min-w-fit">دکترهای {physician.cityName}</LinkElement>/
+          {physician.physicianSpecialities[0] ? <LinkElement link={`physicians/specialty/${physician?.physicianSpecialities[0]?.enName}`} className="text-sm text-primary !min-w-fit block text-nowrap">دکترهای {physician.physicianSpecialities[0]?.specialityTitle} </LinkElement> : ""}
+          <div className="text-sm text-primary min-w-fit pl-2">/ دکتر {physician.firstName} {physician.lastName}</div>
         </div>
       </div>
-      {/* ----------content------------- */}
-      <div className="relative md:pb-5 flex flex-wrap ">
-        {/* ----------section------------- */}
-        {/* Button */}
-        {consultationList.find((item) => item.active) && (
-          <div className="sticky  bottom-[1.25rem] left-0 order-[13] md:hidden  w-full flex justify-center items-center z-[14] pt-4">
-            <div className=" w-full ">
+      <div className="flex justify-between items-start relative ">
+        {/* ----------content------------- */}
+        <div className="relative flex flex-wrap md:w-6/12 lg:w-8/12 ">
+          {/* ----------section------------- */}
+          {/* Button */}
+          {consultationList.find((item) => item.active) && (
+            <div className="sticky  bottom-[1.25rem] left-0 order-[13] md:hidden  w-full flex justify-center items-center z-[14] pt-4">
+              <div className=" w-full ">
 
 
-              {activeConsultation && consultationList.find((item) => item.id === activeConsultation)?.isHandler ? (
+                {/* {activeConsultation && consultationList.find((item) => item.id === activeConsultation)?.isHandler ? (
                 <ButtonElement typeButton="primary" customStyle="w-full block" handler={showConsultationModal}>
                   {buttonText}
                 </ButtonElement>
+              ) : ( */}
+
+                <ButtonElement
+                  typeButton="primary"
+                  fontWeight="bold"
+                  handler={() => setConsultationModal(true)}
+                >
+                  نوبت بگیرید
+                </ButtonElement>
+                {/* )} */}
+              </div>
+            </div>
+          )}
+          {/* ----------section------------- */}
+
+
+          {/* ----------section------------- */}
+          {/* Physician Card  */}
+          <div className="w-full order-0">
+            <PhysicianProfileCard
+              profileURL={physician.hasImage ? getUrlImage(physician.id) : "/noImage.jfif"}
+              name={`${physician.firstName.startsWith("مرکز") ? " " : "دکتر"} ${physician.firstName} ${physician.lastName}`}
+              speciality={physician.physicianSpecialities}
+              rate={{ rate: physician.rate, count: physician.comments.length }}
+              linkShare={`https://arenap.ir/Physician/${physician.physicianProfileUrl}`}
+              services={{
+                appointment: physician.onlineAppointment,
+                textConsultation: physician.textConsultation,
+                phoneConsultation: physician.voiceConsultation,
+                emergencyPhoneConsultation: physician.immediateConsultation,
+              }}
+              MENumber={physician.medicalSystemCode}
+              city={physician.cityName}
+              liked={userFavorite}
+              likeLoading={likeLoading}
+              status={physician.immediateConsultation}
+              addFavorite={favoritePhysicianHandler}
+              physicianUrl={buttonLink as string}
+            >
+
+
+            </PhysicianProfileCard>
+          </div>
+          {/* ----------section------------- */}
+
+
+          {/* ----------section------------- */}
+          {/* Office card */}
+          <div className={cn(`mt-4  md:h-[13.125rem] w-full`, { " ": physician.comments.length > 0 })}>
+            <OfficeCard
+              title={"اطلاعات مطب"}
+              address={physician.address}
+              numbers={physician?.telePhoneNumber}
+              latitude={physician.latitude}
+              longitude={physician.longitude}
+            />
+          </div>
+          {/* ----------section------------- */}
+
+          {/* ----------section------------- */}
+          {/* consultation plan */}
+          {/* <div className="w-full mt-4 ">
+          <BaseCard title={"نوع مشاوره"} customStyle="" >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 ">
+              {consultationList?.map((consultation) => (
+                <label
+                  className="block mb-3"
+                  htmlFor={consultation?.id}
+                  key={consultation.id}
+                >
+                  <ConsultationPlanItemCard
+                    icon={consultation?.id}
+                    title={consultation?.title}
+                    price={consultation?.price}
+                    firstDescription={consultation?.firstDescription}
+                    secondDescription={consultation?.secondDescription}
+                    selected={activeConsultation === consultation?.id}
+                    active={consultation?.active}
+                    status={
+                      consultation?.status !== null ? consultation?.status : null
+                    }
+                  />
+                  <input
+                    onChange={(e) => setActiveConsultation(e.target.value)}
+                    type="radio"
+                    name="consultation-plan"
+                    id={consultation?.id}
+                    value={consultation?.id}
+                    hidden
+                    disabled={!consultation?.active}
+                  />
+                </label>
+              ))}
+            </div>
+
+            <div className="hidden md:flex justify-center items-center ">
+              {activeConsultation && consultationList.find((item) => item.id === activeConsultation)?.isHandler ? (
+                <ButtonElement typeButton="primary" handler={showConsultationModal} customStyle="w-fit">
+                  {buttonText} بگیرید
+                </ButtonElement>
               ) : (
-                <LinkElement link={buttonLink as string} className="block w-full">
-                  <ButtonElement
-                    typeButton="primary"
-                    fontWeight="bold"
-                  >
-                    دریافت {buttonText}
+                <LinkElement link={buttonLink as string} className="w-fit">
+                  <ButtonElement typeButton="primary" customStyle="w-fit">
+                    {buttonText} بگیرید
                   </ButtonElement>
                 </LinkElement>
               )}
             </div>
-          </div>
-        )}
-        {/* ----------section------------- */}
 
-
-        {/* ----------section------------- */}
-        {/* Physician Card  */}
-        <div className="w-full order-0">
-          <PhysicianProfileCard
-            profileURL={physician.hasImage ? getUrlImage(physician.id) : "/noImage.jfif"}
-            name={`${spliterName[0] === "مرکز" ? "" : "دکتر"} ${physician.firstName} ${physician.lastName}`}
-            speciality={physician.physicianSpecialities}
-            rate={{ rate: physician.rate, count: physician.comments.length }}
-            services={{
-              appointment: physician.onlineAppointment,
-              textConsultation: physician.textConsultation,
-              phoneConsultation: physician.voiceConsultation,
-              emergencyPhoneConsultation: physician.immediateConsultation,
-            }}
-            MENumber={physician.medicalSystemCode}
-            city={physician.cityName}
-            liked={userFavorite}
-            likeLoading={likeLoading}
-            status={physician.immediateConsultation}
-            addFavorite={favoritePhysicianHandler}
-            physicianUrl={buttonLink as string}
-            linkShare={`https://arenap.ir/Physician/${physician.physicianProfileUrl}`}
-          >
-
-          </PhysicianProfileCard>
-        </div>
-        {/* ----------section------------- */}
-        {/* consultation plan */}
-        <div className="w-full mt-4 ">
-          <BaseCard title={"پلن مشاوره"} customStyle="grid grid-cols-1 md:grid-cols-2 gap-2 " >
-            {consultationList?.map((consultation) => (
-              <label
-                className="block mb-3"
-                htmlFor={consultation?.id}
-                key={consultation.id}
-              >
-                <ConsultationPlanItemCard
-                  icon={consultation?.id}
-                  title={consultation?.title}
-                  price={consultation?.price}
-                  firstDescription={consultation?.firstDescription}
-                  secondDescription={consultation?.secondDescription}
-                  selected={activeConsultation === consultation?.id}
-                  active={consultation?.active}
-                  status={
-                    consultation?.status !== null ? consultation?.status : null
-                  }
-                />
-                <input
-                  onChange={(e) => setActiveConsultation(e.target.value)}
-                  type="radio"
-                  name="consultation-plan"
-                  id={consultation?.id}
-                  value={consultation?.id}
-                  hidden
-                  disabled={!consultation?.active}
-                />
-              </label>
-            ))}
           </BaseCard>
-        </div>
-        {/* ----------section------------- */}
+        </div> */}
+          {/* ----------section------------- */}
 
-        {/* ----------section------------- */}
-        {/* physicianSpecialities */}
-        <div className="flex justify-between items-stretch flex-col md:flex-row  w-full  gap-2">
-          {physician.physicianSpecialities.length > 0 && (
-            <div className="w-full mt-4 order-2">
-              <BaseCard title={"تخصص ها "}>
-                <div className="flex justify-start items-center gap-2 flex-wrap">
-                  {physician.physicianSpecialities.map((item, index) => (
-                    <Link
-                      href={`/physicians/specialty/${item.enName}`}
-                      key={index}
-                      className="bg-gray-100 w-auto px-3 py-1 rounded-sm text-md transition-all duration-300 hover:bg-gray-400 hover:text-white"
-                    >
-                      {item.specialityTitle}
-                    </Link>
-                  ))}
-                </div>
-              </BaseCard>
-            </div>
-          )}
+
+
+
+          {/* ----------section------------- */}
+          {/* physicianSpecialities */}
+          <div className="flex justify-between items-stretch flex-col md:flex-row  w-full  gap-2">
+            {physician.physicianSpecialities.length > 0 && (
+              <div className="w-full mt-4 ">
+                <BaseCard title={"تخصص ها "}>
+                  <div className="flex justify-start items-center gap-2 flex-wrap">
+                    {physician.physicianSpecialities.map((item, index) => (
+                      <Link
+                        href={`/physicians/specialty/${item.enName}`}
+                        key={index}
+                        className="bg-gray-100 w-auto px-3 py-1 rounded-sm text-md transition-all duration-300 hover:bg-gray-400 hover:text-white"
+                      >
+                        {item.specialityTitle}
+                      </Link>
+                    ))}
+                  </div>
+                </BaseCard>
+              </div>
+            )}
+            {/* ----------section------------- */}
+
+            {/* ----------section------------- */}
+            {/* Physician Description */}
+            {physician.description && (
+              <div className="w-full mt-4 ">
+                <BaseCard title={"درباره پزشک"}>{physician.description}</BaseCard>
+              </div>
+            )}
+            {/* ----------section------------- */}
+          </div>
           {/* ----------section------------- */}
 
           {/* ----------section------------- */}
-          {/* Physician Description */}
-          {physician.description && (
-            <div className="w-full mt-4 order-3">
-              <BaseCard title={"درباره پزشک"}>{physician.description}</BaseCard>
-            </div>
-          )}
-          {/* ----------section------------- */}
-        </div>
-        {/* ----------section------------- */}
-
-
-        {/* ----------section------------- */}
-        {/* Office card */}
-        <div className={cn(`mt-4 order-5 md:h-[13.125rem] w-full`, { " md:rtl:pr-2 md:ltr:pl-2": physician.comments.length > 0 })}>
-          <OfficeCard
-            title={"اطلاعات مطب"}
-            address={physician.address}
-            numbers={physician?.telePhoneNumber}
-            latitude={physician.latitude}
-            longitude={physician.longitude}
-          />
-        </div>
-        {/* ----------section------------- */}
-
-
-
-        {/* ----------section------------- */}
-        {/* waitingTimeAvg */}
-        {/* {physician.comments.length > 0 && (
+          {/* waitingTimeAvg */}
+          {/* {physician.comments.length > 0 && (
           <div className="mt-4 order-7 md:order-4 md:h-[13.125rem] w-full md:w-1/2 md:rtl:pl-2 md:ltr:pr-2">
             <BaseCard title={"مدت زمان انتظار در مطب"}>
               <div className="flex flex-wrap xs:flex-nowrap items-center justify-between">
@@ -478,80 +514,164 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             </BaseCard>
           </div>
         )} */}
-        {/* ----------section------------- */}
+          {/* ----------section------------- */}
 
 
-        {/* ----------section------------- */}
-        {/* relatedPhysicians Slider */}
-        {/* <div className="w-full mt-4 order-8">
-          <TitlePrimary
+          {/* ----------section------------- */}
+          {/* relatedPhysicians Slider */}
+          {/* <div className="w-full mt-4 order-8">
+          <SectionTitle
             title={"پزشکان مرتبط"}
             textLink={"مشاهده بیشتر"}
-            link={`physicians/specialty/${physician.physicianSpecialities[0]?.enName}`}
+            link={
+              `physicians/specialty/${physician.physicianSpecialities[0].enName}`
+            }
             btn={true}
-            prefix={true}
           />
-          <div className="mt-4 order-9">
+          <div className=" order-9">
             <SwiperContainerFreeMode data={physician.relatedPhysicians} gap={10} CardComponent={PhysicainCardPrimary} />
           </div>
         </div> */}
-        {/* ----------section------------- */}
+          {/* ----------section------------- */}
+
+          {/* ----------section------------- */}
+          {/* Profile summary */}
+          <div className="w-full mt-4 order-10">
+            <ProfileSummaryCard
+              physician={physician}
+              tags={[]}
+              title={"خلاصه پروفایل"}
+              subTitle={"هشتگ های مرتبط"}
+            />
+
+          </div>
+          {/* ----------section------------- */}
 
 
-        {/* ----------section------------- */}
-        {/* Profile summary */}
-        <div className="w-full mt-4 order-11">
-          <ProfileSummaryCard
-            physician={physician}
-            tags={[]}
-            title={"خلاصه پروفایل"}
-            subTitle={"هشتگ های مرتبط"}
-          />
+          {/* ----------section------------- */}
+          {/* Comments */}
+          <div className="w-full mt-4 order-11" id="comment">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-lg font-bold rtl:mr-[1.25rem] ltr:ml-[1.25rem] relative after:absolute after:rtl:-right-[1.25rem] after:rounded-lg after:top-0 after:block after:bg-primary after:w-1.5 after:h-full">
+                نظرات کاربران{" "}
+                <span className="text-md text-gray-500 font-normal">
+                  ({physician.comments.length}نظر)
+                </span>
+              </h3>
+              <div className="w-[11.25rem]">
+                <CreateCommentCom physicianId={physician.id} firstName={physician.firstName} lastName={physician.lastName} showComment={showVisitQuestionModal} setShowComment={showCreateCommentHandler} closeComment={() => setShowVisitQuestionModal(false)} />
+              </div>
+            </div>
+
+            {physician.comments.length > 0 ? (
+              physician.comments.map((comment: CommentType) => (
+                <div key={comment.id} className="mb-4">
+                  <PhysicianCommentCard
+                    {...comment}
+                  >
+                    {comment.message}
+                  </PhysicianCommentCard>
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 my-10">
+                تا کنون نظری ثبت نشده!
+              </p>
+            )}
+
+
+          </div>
+          {/* ----------section------------- */}
+
 
         </div>
-        {/* ----------section------------- */}
+        {/* ----------content------------- */}
 
         {/* ----------section------------- */}
-        {/* Comments */}
-        <div className="w-full mt-4 order-11" id="comment">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-bold rtl:mr-[1.25rem] ltr:ml-[1.25rem] relative after:absolute after:rtl:-right-[1.25rem] after:rounded-lg after:top-0 after:block after:bg-primary after:w-1.5 after:h-full">
-              نظرات کاربران{" "}
-              <span className="text-md text-gray-500 font-normal">
-                ({physician.comments.length}نظر)
-              </span>
-            </h3>
-            <div className="w-[11.25rem]">
-              <CreateCommentCom physicianId={physician.id} firstName={physician.firstName} lastName={physician.lastName} showComment={showVisitQuestionModal} setShowComment={showCreateCommentHandler} closeComment={() => setShowVisitQuestionModal(false)} />
+        {/* ----------Cosultation------------- */}
+        <div
+
+          className={cn(
+            "  md:animate-none md:block md:w-6/12 lg:w-4/12 md:py-4 md:pr-4 md:sticky md:top-[4.5rem]  mdSecondary:top-0 md:h-auto",
+            {
+              "hidden": !consultationModal,
+              "flex justify-end items-end  fixed top-0 left-0 right-0 h-screen  animate-modal_search  w-full  backdrop-blur-md z-[20] transition-all duration-300": consultationModal
+            }
+          )}>
+          <span className="md:hidden fixed top-0 left-0 w-full h-screen " onClick={() => setConsultationModal(false)} ></span>
+          <div className={cn(`bg-white p-5 shadow-shadow_category relative  rounded-tr-xl rounded-tl-xl md:rounded-sm w-full  max-h-[calc(100vh-2rem)] md:max-h-full`)}>
+            <span className="absolute top-4 left-4 md:hidden"><CloseButton closeHanlder={() => {
+              setConsultationModal(false)
+            }} /></span>
+            <div className='text-lg font-bold relative '>نوع مشاوره</div>
+            <div className={cn(
+              'mt-6',
+              "max-h-[calc(100vh-9.5rem)]  md:max-h-[calc(100vh-7.5rem)] overflow-auto"
+            )}>
+              {consultationList?.map((consultation) => {
+                if (!consultation.isHandler) {
+                  return (
+                    <Link
+                      href={consultation.url}
+                      className={cn("block mb-3",
+                        {
+                          "pointer-events-none": !consultation?.active
+                        }
+                      )}
+                      aria-disabled={!consultation?.active}
+                      tabIndex={!consultation?.active ? -1 : undefined}
+                      key={consultation.id}
+                    >
+                      <ConsultationPlanItemCard
+                        icon={consultation?.id}
+                        title={consultation?.title}
+                        price={consultation?.price}
+                        firstDescription={consultation?.firstDescription}
+                        secondDescription={consultation?.secondDescription}
+                        selected={activeConsultation === consultation?.id}
+                        active={consultation?.active}
+                        status={
+                          consultation?.status !== null ? consultation?.status : null
+                        }
+                      />
+                    </Link>
+                  )
+                } else {
+                  return (
+                    <div
+                      className="mb-3"
+                      onClick={() => {
+                        if (consultation.active) {
+                          setActiveConsultation(consultation.id)
+                          showConsultationModal(consultation.id)
+                        }
+                      }}
+                      key={consultation.id}
+                    >
+                      <ConsultationPlanItemCard
+                        icon={consultation?.id}
+                        title={consultation?.title}
+                        price={consultation?.price}
+                        firstDescription={consultation?.firstDescription}
+                        secondDescription={consultation?.secondDescription}
+                        selected={activeConsultation === consultation?.id}
+                        active={consultation?.active}
+                        status={
+                          consultation?.status !== null ? consultation?.status : null
+                        }
+                      />
+                    </div>
+                  )
+                }
+              })}
             </div>
           </div>
 
-          {physician.comments.length > 0 ? (
-            physician.comments.map((comment: CommentType) => (
-              <div key={comment.id} className="mb-4">
-                <PhysicianCommentCard
-                  {...comment}
-                >
-                  {comment.message}
-                </PhysicianCommentCard>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500 my-10">
-              تا کنون نظری ثبت نشده!
-            </p>
-          )}
-
-
         </div>
         {/* ----------section------------- */}
-
-
-
-
-
       </div>
-      {/* ----------content------------- */}
+
+
 
       {/* ----------Modal consultation ------------- */}
       <Modal show={modals.textConsultation} closeHandler={() => {
@@ -620,6 +740,66 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         </BottomSheetAndCenterContent>
       </Modal>
       {/* ----------Modal consultation ------------- */}
+
+
+      {/* ----------Modal consultation ------------- */}
+      {/* <Modal show={consultationModal} closeHandler={() => setConsultationModal(false)} customClassname="w-full" >
+        <BottomSheetAndCenterContent show={consultationModal} className="md:w-[40.625rem]   "  >
+          <div className="  h-[calc(100vh-6.25rem)] md:h-auto overflow-auto pb-6">
+            <span className="absolute top-4 left-4 z-20"><CloseButton closeHanlder={() => setConsultationModal(false)} /> </span>
+            <div className="flex justify-center items-center flex-col ">
+              <p className="font-bold">انتخاب نوع مشاوره</p>
+              <p className="text-md my-2">یکی از انواع ویزیت فعال پزشک انتخاب کنید</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 ">
+              {consultationList?.map((consultation) => (
+                <label
+                  className="block mb-3"
+                  htmlFor={consultation?.id}
+                  key={consultation.id}
+                >
+                  <ConsultationPlanItemCard
+                    icon={consultation?.id}
+                    title={consultation?.title}
+                    price={consultation?.price}
+                    firstDescription={consultation?.firstDescription}
+                    secondDescription={consultation?.secondDescription}
+                    selected={activeConsultation === consultation?.id}
+                    active={consultation?.active}
+                    status={
+                      consultation?.status !== null ? consultation?.status : null
+                    }
+                  />
+                  <input
+                    onChange={(e) => setActiveConsultation(e.target.value)}
+                    type="radio"
+                    name="consultation-plan"
+                    id={consultation?.id}
+                    value={consultation?.id}
+                    hidden
+                    disabled={!consultation?.active}
+                  />
+                </label>
+              ))}
+            </div>
+            <div className="flex justify-center items-center sticky bottom-0 ">
+              {activeConsultation && consultationList.find((item) => item.id === activeConsultation)?.isHandler ? (
+                <ButtonElement typeButton="primary" handler={() => showConsultationModal("textConsultation")} customStyle="w-fit">
+                  {buttonText} بگیرید
+                </ButtonElement>
+              ) : (
+                <LinkElement link={buttonLink as string} className="w-fit">
+                  <ButtonElement typeButton="primary" customStyle="w-fit">
+                    {buttonText} بگیرید
+                  </ButtonElement>
+                </LinkElement>
+              )}
+            </div>
+          </div>
+        </BottomSheetAndCenterContent>
+      </Modal> */}
+      {/* ----------Modal consultation ------------- */}
+
     </>
   );
 };
