@@ -26,7 +26,8 @@ const SearchCardPrimary = (props: PhysicianSearchType) => {
         immediateConsultation,
         onlineAppointment,
         textConsultation,
-        voiceConsultation
+        voiceConsultation,
+        showDisabled
     } = props;
 
 
@@ -39,6 +40,7 @@ const SearchCardPrimary = (props: PhysicianSearchType) => {
                 {
                     "w-[320px]": freeMode,
                     "w-full": !freeMode,
+                    "hidden": showDisabled && firstAppointment === null
                 }
             )}
         >
@@ -54,7 +56,7 @@ const SearchCardPrimary = (props: PhysicianSearchType) => {
                     <span className="w-[16px] h-[16px] bg-white rounded-full absolute bottom-0 rtl:right-0 ltr:left-0 flex justify-center items-center ">
                         <span
                             className={cn(
-                                `w-[12px] h-[12px]  rounded-full `,
+                                `size-[0.75rem]  rounded-full `,
                                 {
                                     "bg-primary-100": online,
                                     "bg-gray-400": !online,
@@ -66,7 +68,7 @@ const SearchCardPrimary = (props: PhysicianSearchType) => {
                 <div className="flex-1 rtl:pr-4 ltr:pl-4 flex justify-center gap-2 items-start flex-col min-h-[60px]">
                     <div className="flex justify-between items-center w-full">
                         <p className="text-lg font-bold line-clamp-1">
-                            دکتر {firstName} {lastName}
+                            {firstName.startsWith("مرکز") ? " " : "دکتر"} {firstName} {lastName}
                         </p>
                         <div className="flex justify-between items-center ">
                             <p className="px-2 relative border-l border-gray border-dashed ">

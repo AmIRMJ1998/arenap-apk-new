@@ -71,23 +71,12 @@ const ConsultationPlanItemCard = ({ icon, title, price, firstDescription, second
                         <p className="text-md">
                               {secondDescription}
                         </p>
-                        <div className="flex gap-2">
-                              {active ?
-                                    <>
-                                          {/* <CustomRadioButton selected={selected} color="bg-green-300" /> */}
-                                          <div className={cn(`rounded-full w-[19px] h-[19px] flex items-center justify-center `, {
-                                                "bg-green-300": selected,
-                                                "bg-gray-100": !selected
-                                          })}>
-                                                {selected &&
-                                                      <div className="rounded-full w-[11px] h-[11px] bg-white shadow-[0_2px_4px_0_rgba(0,0,0,0.5)]" />
-                                                }
-                                          </div>
-                                          <p className="text-primary text-md font-bold">انتخاب</p>
-                                    </>
-                                    :
-                                    <p className="text-primary text-md font-bold">غیرفعال</p>
-                              }
+                        <div className="flex gap-2 ">
+                              <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="38" height="38" rx="9" className="fill-primary" />
+                                    <path d="M11.25 18.2739L26.25 18.2739" className="stroke-white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M17.2998 24.2985L11.2498 18.2745L17.2998 12.2495" className="stroke-white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
                         </div>
                   </div>
             </div >

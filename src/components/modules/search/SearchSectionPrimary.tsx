@@ -23,6 +23,8 @@ import { useQueryClient } from '@tanstack/react-query'
 export interface SearchSectionPrimaryProps {
     showFilters: boolean;
     closeFilterHandler: () => void;
+    showDisabledPhysicianHandler: () => void,
+    showDisabledPhysician: boolean,
     specialities: SpecialityType[]
     slugs?: {
         city?: string,
@@ -47,7 +49,7 @@ export interface SearchSectionPrimaryProps {
 
 
 const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
-    const { specialities, slugs, searchText, services, showFilters, closeFilterHandler, diseases, signs, loading, getDisease } = props
+    const { specialities, slugs, searchText, services, showFilters, closeFilterHandler, diseases, signs, loading, getDisease , showDisabledPhysician , showDisabledPhysicianHandler } = props
     const [cookies] = useCookies(["cityInfo"])
     const queryClient = useQueryClient();
 
@@ -107,7 +109,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
     const serachedSigns = signs?.filter(item => item.name.toLowerCase().includes(searchsFilterCards.signs.toLocaleLowerCase()))
 
 
-    
+
 
     const filterHandler = async () => {
 
@@ -217,7 +219,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
                                     }
                                     <span>{item.specialityTitle}</span>
                                     <input id={`specialities-${index}`} type="radio" name='specialty' className='hidden' onChange={() => {
-                                        
+
                                         setSearchParametrs({
                                             ...searchParametrs,
                                             specialty: item.enName
@@ -435,6 +437,28 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
 
                     <FilterCardSecondary inputContent={genders} defaultCheck={searchParametrs.gender} changeInputHandler={radioButtonHandler} title={titlesActive.gender} name='gender' index={5} active={activeCard === 5} openHandler={openFilterCard} />
                     <FilterCardSecondary inputContent={plans} defaultCheck={searchParametrs.consultingPlan} changeInputHandler={radioButtonHandler} title={titlesActive.ConsultingPlan} name='consultingPlan' index={6} active={activeCard === 6} openHandler={openFilterCard} />
+                    <div
+                        onClick={showDisabledPhysicianHandler}
+                        className={cn(
+                            'flex justify-between items-center gap-2 text-md font-bold text-primary  cursor-pointer',
+
+                        )}>
+                        <p>نمایش پزشکان غیرفعال</p>
+                        <div className={cn(
+                            'size-4 border border-primary rounded-[0.25rem]  flex justify-center items-center',
+                            {
+                                "bg-primary": !showDisabledPhysician
+                            }
+                        )}>
+                            {
+                                !showDisabledPhysician ? (
+                                    <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2.8 4.2998L1.2 2.6998L0 3.8998L2.8 6.6998L8 1.4998L6.8 0.299805L2.8 4.2998Z" fill="white" />
+                                    </svg>
+                                ) : null
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div className='mt-4 grid md:grid-cols-1 grid-cols-2 gap-4'>
                     <ButtonElement typeButton='primary' handler={filterHandler} >اعمال فیلتر</ButtonElement>

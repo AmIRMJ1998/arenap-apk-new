@@ -78,7 +78,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
   }[] = [
       {
         id: "appointment",
-        url: `/appointment/online-appointment/${physician.physicianProfileUrl}`,
+        url: `/appointment?physician=${physician.physicianProfileUrl}`,
         title: " نوبت اینترنتی",
         price: price ? price / 10 : 15000,
         isHandler: false,
@@ -89,7 +89,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
       },
       {
         id: "textConsultation",
-        url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
+        url: `appointment?physician=${physician.physicianProfileUrl}`,
         title: " مشاوره متنی",
         price: physician.textConsultationPrice + textConsultationPrice ? physician.textConsultationPrice / 10 + textConsultationPrice / 10 : null,
         isHandler: true,

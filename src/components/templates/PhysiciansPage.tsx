@@ -52,6 +52,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
     const router = useRouter()
     const [diseases, setDiseases] = useState<DiseaseType[]>([])
     const [signs, setSigns] = useState<SignType[]>([])
+    const [doNotshowDisabledPhysician, setDoNotShowDisabledPhysician] = useState(true)
 
     const getDiseaseHandler = async (enName: string) => {
         setDiseasesLoading(true)
@@ -366,7 +367,13 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                 {/* ----------section------------- */}
                 {/* search section */}
 
-                <SearchSectionPrimary loading={diseasesLoading} getDisease={getDiseaseHandler} services={services} diseases={diseases} signs={signs} searchText={searchText} showFilters={showFilters} closeFilterHandler={() => setShowFilters(false)} specialities={specialities} slugs={slugs} />
+             
+                <SearchSectionPrimary 
+                showDisabledPhysicianHandler={() => {
+                    setDoNotShowDisabledPhysician(!doNotshowDisabledPhysician)
+                }}
+                showDisabledPhysician={doNotshowDisabledPhysician}
+                loading={diseasesLoading} getDisease={getDiseaseHandler} services={services} diseases={diseases} signs={signs} searchText={searchText} showFilters={showFilters} closeFilterHandler={() => setShowFilters(false)} specialities={specialities} slugs={slugs} />
 
                 {/* ----------section------------- */}
 
@@ -594,7 +601,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                         // endMessage={<div className="text-error font-bold">پایان😁</div>}
                         >
                             {searchData?.map((item) => (
-                                <SearchCardPrimary key={item.id} {...item} online={item.immediateConsultation} freeMode={false} />
+                                <SearchCardPrimary key={item.id} {...item}  showDisabled={doNotshowDisabledPhysician} online={item.immediateConsultation}  freeMode={false} />
                             ))}
                         </InfiniteScroll>
 

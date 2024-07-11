@@ -78,7 +78,7 @@ export interface PhysicianSearchType {
   physicianSpecialities: PhysicianSpeciality[];
   online?: boolean;
   freeMode?: boolean;
-  
+  showDisabled?: boolean
 }
 
 interface PhysicianSpeciality {

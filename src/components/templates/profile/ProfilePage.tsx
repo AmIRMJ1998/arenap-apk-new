@@ -86,7 +86,7 @@ const ProfilePage = () => {
                     {/* <LinkProfilePageCard link={"profile/family"} title={t("ticket")} /> */}
                     <LinkProfilePageCard link={"arenap"} title={"آرناپ"} />
                 </section>
-                <section className='mt-4 flex justify-between items-start md:items-stretch ltr:flex-row-reverse bg-[#C0E1E7] py-3 rounded-sm overflow-hidden  '>
+                {/* <section className='mt-4 flex justify-between items-start md:items-stretch ltr:flex-row-reverse bg-[#C0E1E7] py-3 rounded-sm overflow-hidden  '>
                     <div className='w-1/4'><Image src={'/banner.png'} width={500} height={500} alt='banner-image' className='w-full' /> </div>
                     <div className=' h-full px-2 w-3/4 md:self-center'>
                         <div className='flex justify-between items-center gap-4 flex-col '>
@@ -99,7 +99,7 @@ const ProfilePage = () => {
                             </LinkElement>
                         </div>
                     </div>
-                </section>
+                </section> */}
             </div>
         </>
     )

@@ -9,6 +9,7 @@ import { Capacitor } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { useRouter } from "next/navigation"
 
+import { SplashScreen } from '@capacitor/splash-screen';
 
 
 
@@ -17,8 +18,16 @@ export default function Home() {
   const backState = useAppSelector(state => state.back)
   const dispatch = useAppDispatch()
   const router = useRouter()
+  const dontShowSplashHandler = async () => {
+    await SplashScreen.hide()
+  }
+  // const showSplashHandler = async () => {
+  //   await SplashScreen.show()
+  // }
+
 
   useEffect(() => {
+    // showSplashHandler()
     if (!backState.active) {
       dispatch(activeHandler())
       if (Capacitor.isNativePlatform()) {
@@ -32,6 +41,16 @@ export default function Home() {
       }
     }
   }, [])
+
+
+
+  useEffect(() => {
+
+    if (!bestPhysicians.isLoading && !newestPhysicians.isLoading) {
+      dontShowSplashHandler()
+    }
+
+  }, [bestPhysicians.isLoading, newestPhysicians.isLoading])
 
 
   return (

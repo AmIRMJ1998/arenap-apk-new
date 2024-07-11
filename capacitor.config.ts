@@ -2,8 +2,8 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'my.arenap.app',
-  appName: 'arenap',
-  webDir: 'out',
+  appName: 'آرناپ',
+  webDir: 'out',  
   server: {
     androidScheme: 'https'
   }
