@@ -33,7 +33,19 @@ const Doctors = () => {
   const [loadingData, setLoadingData] = useState(true)
   const [fetchMoreLoading, setFetchMoreLoading] = useState(false)
   const [page, setPage] = useState(1)
-
+  const [infoPage, setInfoPage] = useState<{
+    specialtyName: string,
+    diseaseName: string,
+    signName: string,
+    serviceName: string,
+    cityName: string,
+  }>({
+    specialtyName: "",
+    diseaseName: "",
+    signName: "",
+    serviceName: "",
+    cityName: "",
+  })
   const [hasMore, setHasMore] = useState(false)
 
   const specialtyParam = useSearchParams().get("specialty")
@@ -72,8 +84,14 @@ const Doctors = () => {
     const res = await axios(`${apiDomainNobat}${urls.advanceSearch.serach.url}?Filter=${search_keyParam ? search_keyParam : ""}&CityName=${cityParam ? cityParam : ""}&Gender=${genderParam ? genderParam : "0"}&Specialty=${specialtyParam ? specialtyParam : ""}&Disease=${diseaseParam ? diseaseParam : ""}&Sign=${signParam ? signParam : ""}&Service=${serviceParam ? serviceParam : ""}&ConsultingPlan=${consultingPlanParam ? consultingPlanParam : "All"}&PageNumber=${pageParam ? pageParam : 1}&ItemsCountPerPage=10`)
 
     if (res.data.resultCode === 200 && res.data.value !== null) {
-      
-      setSearchData(res.data.value.items)
+      setInfoPage({
+        specialtyName: res.data?.value?.value?.specialtyName,
+        diseaseName: res.data?.value?.value?.diseaseName,
+        signName: res.data?.value?.value?.signName,
+        serviceName: res.data?.value?.value?.serviceName,
+        cityName: res.data?.value?.value?.cityName,
+      })
+      setSearchData(res.data.value.value.physcians)
       setHasMore(
         res.data?.value?.currentPage === res.data?.value?.totalPages
           ? false
@@ -116,7 +134,7 @@ const Doctors = () => {
           setHasMore(false);
           return;
         }
-        setSearchData([...searchData, ...data.value?.items]);
+        setSearchData([...searchData, ...data.value?.value?.physcians]);
         setHasMore(
           data.value.currentPage === data.value.totalPages
             ? false
@@ -138,7 +156,6 @@ const Doctors = () => {
         loadingData || specialitiesQuery.isLoading || servicesQuery.isLoading ?
           <LoadingPage />
           :
-
           <PhysiciansPage
             fetchMoreData={fetchMoreData}
             fetchMoreLoading={fetchMoreLoading}
@@ -153,7 +170,15 @@ const Doctors = () => {
               service: serviceParam ? serviceParam : "",
               search_key: search_keyParam ? search_keyParam : "",
               city: cityParam ? cityParam : "",
-            }} hasMore={hasMore} specialities={specialitiesQuery.data} services={servicesQuery.data} searchData={searchData} />}
+            }}
+            hasMore={hasMore}
+            specialities={specialitiesQuery.data}
+            services={servicesQuery.data}
+            searchData={searchData}
+            infoPage={infoPage}
+          />
+
+      }
     </>
   )
 }

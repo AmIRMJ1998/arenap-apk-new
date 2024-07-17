@@ -33,7 +33,7 @@ export interface TransctionsType {
 
 export interface SpecialityType {
   id: number;
-  specialityTitle: string;
+  specialtyTitle: string;
   counter: number;
   enName: string;
   parentId?: any;
@@ -41,4 +41,9 @@ export interface SpecialityType {
   citySpecialties?: any;
   physicianSpecialtySigns?: any;
   physicianSpecialtyDiseases?: any;
+  children? : {
+    enName : string,
+    id : number,
+    specialtyTitle : string
+  }[] | []
 }

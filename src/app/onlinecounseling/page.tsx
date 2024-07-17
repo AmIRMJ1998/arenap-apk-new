@@ -15,27 +15,7 @@ import LoadingPage from '../loading'
 
 
 const OnlineConsultation = async () => {
-      let result: {
-            value: {
-                  items: PhysicianDataSearch[] | [],
-                  currentPage: number,
-                  totalPages: number,
-                  pageSize: number,
-                  totalCount: number
-            },
-            resultMessage: string,
-            resultCode: number
-      } = {
-            value: {
-                  items: [],
-                  currentPage: 0,
-                  totalPages: 0,
-                  pageSize: 0,
-                  totalCount: 0
-            },
-            resultMessage: "",
-            resultCode: 0
-      }
+      
 
       const { data, isLoading, isError } = useQuery(["onlineCounseling"], async () => {
             const physicians = await fetch(`${apiDomainNobat}${urls.advanceSearch.serach.url}?Gender=0&ConsultingPlan=TextConsultation&PageNumber=1&ItemsCountPerPage=15`)
@@ -43,7 +23,7 @@ const OnlineConsultation = async () => {
             const physiciansData = await physicians.json()
             
             if (physiciansData.resultCode === 200) {
-                  result = physiciansData
+                 
                   return physiciansData
             }
             return {
@@ -68,7 +48,7 @@ const OnlineConsultation = async () => {
 
       return (
 
-            <OnlineCounselingPage physicians={data?.value.items} currentPage={data?.value.currentPage} pageSize={data?.value.pageSize} totalCount={data?.value.totalCount} totalPages={data?.value.totalPages} hasMore={data?.value?.totalPages === data?.value?.currentPage ? false : true} />
+            <OnlineCounselingPage physicians={data?.value.value.physcians} currentPage={data?.value.currentPage} pageSize={data?.value.pageSize} totalCount={data?.value.totalCount} totalPages={data?.value.totalPages} hasMore={data?.value?.totalPages === data?.value?.currentPage ? false : true} />
 
 
       )

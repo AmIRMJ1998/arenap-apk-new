@@ -38,12 +38,19 @@ export type PhysiciansPageProps = {
     slugs: SlugsType,
     fetchMoreData: () => void,
     loadingData: boolean,
-    fetchMoreLoading: boolean
+    fetchMoreLoading: boolean,
+    infoPage: {
+        specialtyName: string,
+        diseaseName: string,
+        signName: string,
+        serviceName: string,
+        cityName: string
+    }
 }
 
 
 const PhysiciansPage = (props: PhysiciansPageProps) => {
-    const { specialities, slugs, services, searchData, hasMore, fetchMoreData, loadingData, fetchMoreLoading } = props
+    const { specialities, slugs, services, searchData, hasMore, fetchMoreData, loadingData, fetchMoreLoading , infoPage } = props
 
 
     const pathName = usePathname()
@@ -52,7 +59,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
     const router = useRouter()
     const [diseases, setDiseases] = useState<DiseaseType[]>([])
     const [signs, setSigns] = useState<SignType[]>([])
-    const [doNotshowDisabledPhysician, setDoNotShowDisabledPhysician] = useState(true)
+    const [doNotshowDisabledPhysician, setDoNotShowDisabledPhysician] = useState(false)
 
     const getDiseaseHandler = async (enName: string) => {
         setDiseasesLoading(true)
@@ -138,18 +145,10 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
             <header className='w-full rounded-sm shadow-shadow_category bg-white py-2 px-4'>
                 {pathName !== "/physicians" ? <h1 className='text-md text-center' >
                     <span className=''>دکترهای </span>
-                    {slugs?.specialty ? (<LinkElement className='text-primary underline underline-offset-4 ' link={`physicians?specialty=${slugs.specialty}`}>{specialities.find((item) => item.enName === slugs.specialty)?.specialityTitle} </LinkElement>) : null}
-                    {slugs?.city ? (<>
+                    {slugs?.specialty && infoPage.specialtyName? (<LinkElement className='text-primary underline underline-offset-4 ' link={`physicians?specialty=${slugs.specialty}`}>{infoPage.specialtyName} </LinkElement>) : null}
+                    {slugs?.city && infoPage.cityName ? (<>
                         در شهر <LinkElement className='text-primary underline underline-offset-4 ' link={`physicians/city?name=${slugs.city}`}>
-                            {provinces.find((item: {
-                                cityId: number,
-                                cityName: string,
-                                centerName: string,
-                                provinceId: number,
-                                provinceName: string,
-                                cityEnName: string
-                            }) => item.cityEnName === slugs?.city)?.cityName
-                            }
+                            {infoPage.cityName}
                         </LinkElement></>) : (<span> در آرناپ</span>)}
                 </h1> : null}
                 {pathName === "/physicians" ? <h1 className='text-md text-center' >نوبت دهی از بهترین دکتر های آرناپ</h1> : null}
@@ -172,14 +171,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
 
                         {slugs?.city ?
                             <SwiperSlide className='swiper_width_auto' >
-                                <FilterTag id={1} title={provinces.find((item: {
-                                    cityId: number,
-                                    cityName: string,
-                                    centerName: string,
-                                    provinceId: number,
-                                    provinceName: string,
-                                    cityEnName: string
-                                }) => item.cityEnName === slugs?.city)?.cityName} handler={() => {
+                                <FilterTag id={1} title={infoPage.cityName} handler={() => {
 
                                     const url = generateUrlSearchPage({
                                         consultingPlan: slugs?.consultingPlan ? slugs?.consultingPlan : "",
@@ -200,7 +192,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                         }
                         {slugs?.specialty ?
                             <SwiperSlide className='swiper_width_auto' >
-                                <FilterTag id={1} title={specialities.find((item) => item.enName === slugs.specialty)?.specialityTitle} handler={() => {
+                                <FilterTag id={1} title={infoPage.specialtyName} handler={() => {
 
                                     const url = generateUrlSearchPage({
                                         consultingPlan: slugs?.consultingPlan ? slugs?.consultingPlan : "",
@@ -219,7 +211,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                         }
                         {slugs?.service ?
                             <SwiperSlide className='swiper_width_auto' >
-                                <FilterTag id={1} title={services.find((item) => item.enName === slugs.service)?.name} handler={() => {
+                                <FilterTag id={1} title={infoPage.serviceName} handler={() => {
 
                                     const url = generateUrlSearchPage({
                                         consultingPlan: slugs?.consultingPlan ? slugs?.consultingPlan : "",
@@ -238,7 +230,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                         }
                         {slugs?.disease ?
                             <SwiperSlide className='swiper_width_auto' >
-                                <FilterTag id={1} title={diseases.find((item) => item.enName === slugs.disease)?.name} handler={() => {
+                                <FilterTag id={1} title={infoPage.diseaseName} handler={() => {
                                     const url = generateUrlSearchPage({
                                         consultingPlan: slugs?.consultingPlan ? slugs?.consultingPlan : "",
                                         specialty: slugs?.specialty ? slugs?.specialty : "",
@@ -256,7 +248,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                         }
                         {slugs?.sign ?
                             <SwiperSlide className='swiper_width_auto' >
-                                <FilterTag id={1} title={signs.find((item) => item.enName === slugs.sign)?.name} handler={() => {
+                                <FilterTag id={1} title={infoPage.signName} handler={() => {
 
                                     const url = generateUrlSearchPage({
                                         consultingPlan: slugs?.consultingPlan ? slugs?.consultingPlan : "",
@@ -276,7 +268,6 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                         {slugs?.gender ?
                             <SwiperSlide className='swiper_width_auto' >
                                 <FilterTag id={1} title={convertGender(slugs.gender)} handler={() => {
-
 
                                     const url = generateUrlSearchPage({
                                         consultingPlan: slugs?.consultingPlan ? slugs?.consultingPlan : "",
@@ -373,7 +364,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                     setDoNotShowDisabledPhysician(!doNotshowDisabledPhysician)
                 }}
                 showDisabledPhysician={doNotshowDisabledPhysician}
-                loading={diseasesLoading} getDisease={getDiseaseHandler} services={services} diseases={diseases} signs={signs} searchText={searchText} showFilters={showFilters} closeFilterHandler={() => setShowFilters(false)} specialities={specialities} slugs={slugs} />
+                loading={diseasesLoading} getDisease={getDiseaseHandler} services={services} diseases={diseases} signs={signs} searchText={searchText} showFilters={showFilters} closeFilterHandler={() => setShowFilters(false)} specialities={specialities} slugs={slugs} infoPage={infoPage} />
 
                 {/* ----------section------------- */}
 
@@ -431,7 +422,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                                                 })
                                                 router.push(`/physicians${url}`)
                                             }}>
-                                            <span className='text-gray-500'>{specialities.find((item) => item.enName === slugs.specialty)?.specialityTitle}</span>
+                                            <span className='text-gray-500'>{infoPage.specialtyName}</span>
                                             <span ><CloseIcon color='stroke-gray-500' /> </span>
                                         </div> : null
                                 }
@@ -453,7 +444,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                                                 })
                                                 router.push(`/physicians${url}`)
                                             }}>
-                                            <span className='text-gray-500'>{diseases.find((item) => item.enName === slugs.disease)?.name}</span>
+                                            <span className='text-gray-500'>{infoPage.diseaseName}</span>
                                             <span ><CloseIcon color='stroke-gray-500' /> </span>
                                         </div> : null
                                 }
@@ -475,7 +466,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                                                 })
                                                 router.push(`/physicians${url}`)
                                             }}>
-                                            <span className='text-gray-500'>{signs.find((item) => item.enName === slugs.sign)?.name}</span>
+                                            <span className='text-gray-500'>{infoPage.signName}</span>
                                             <span ><CloseIcon color='stroke-gray-500' /> </span>
                                         </div> : null
                                 }
@@ -497,7 +488,7 @@ const PhysiciansPage = (props: PhysiciansPageProps) => {
                                                 })
                                                 router.push(`/physicians${url}`)
                                             }}>
-                                            <span className='text-gray-500'>{services.find((item) => item.enName === slugs.service)?.name}</span>
+                                            <span className='text-gray-500'>{infoPage.serviceName}</span>
                                             <span ><CloseIcon color='stroke-gray-500' /> </span>
                                         </div> : null
                                 }

@@ -29,7 +29,7 @@ const OnlineCounselingPage = (props: OnlineCounselingPageType) => {
       const [loadingData, setLoadingData] = useState(false)
       const [page, setPage] = useState(1)
 
-      console.log(physicians)
+
 
 
       const fetchMoreData = async () => {

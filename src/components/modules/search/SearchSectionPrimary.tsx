@@ -43,13 +43,19 @@ export interface SearchSectionPrimaryProps {
     diseases: DiseaseType[],
     getDisease: (enName: string) => void,
     loading: boolean,
-
+    infoPage: {
+        specialtyName: string,
+        diseaseName: string,
+        signName: string,
+        serviceName: string,
+        cityName: string
+    }
 }
 
 
 
 const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
-    const { specialities, slugs, searchText, services, showFilters, closeFilterHandler, diseases, signs, loading, getDisease , showDisabledPhysician , showDisabledPhysicianHandler } = props
+    const { specialities, slugs, searchText, services, showFilters, closeFilterHandler, diseases, signs, loading, getDisease, showDisabledPhysician, showDisabledPhysicianHandler } = props
     const [cookies] = useCookies(["cityInfo"])
     const queryClient = useQueryClient();
 
@@ -57,8 +63,12 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
 
     const genders = [...genderContent]
     const plans = [...plansContent]
-
     const [activeCard, setActiveCard] = useState<null | number>(0)
+
+    const [showChildren, setShowChildren] = useState({
+        speciality: ""
+    })
+
 
     const router = useRouter()
 
@@ -82,7 +92,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
     })
     const [titlesActive, setTitlesActive] = useState({
         gender: slugs?.gender ? convertGender(slugs.gender) : "جنسیت",
-        specialty: slugs?.specialty ? specialities.find(item => item.enName === slugs.specialty)?.specialityTitle : "تخصص",
+        specialty: slugs?.specialty ? specialities.find(item => item.enName === slugs.specialty)?.specialtyTitle : "تخصص",
         disease: slugs?.disease ? diseases.find(item => item.enName === slugs.disease)?.name : "بیماری",
         sign: slugs?.sign ? signs.find(item => item.enName === slugs.sign)?.name : "علائم",
         service: slugs?.service ? services.find(item => item.enName === slugs.service)?.name : "خدمات",
@@ -103,7 +113,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
         })
     }
 
-    const searchedSpecialities = specialities.filter(item => item.specialityTitle.toLowerCase().includes(searchsFilterCards.specialty.toLocaleLowerCase()))
+    const searchedSpecialities = specialities.filter(item => item.specialtyTitle.toLowerCase().includes(searchsFilterCards.specialty.toLocaleLowerCase()))
     const serachedServices = services?.filter(item => item.name.toLowerCase().includes(searchsFilterCards.services.toLocaleLowerCase()))
     const serachedDiseases = diseases?.filter(item => item.name.toLowerCase().includes(searchsFilterCards.diseases.toLocaleLowerCase()))
     const serachedSigns = signs?.filter(item => item.name.toLowerCase().includes(searchsFilterCards.signs.toLocaleLowerCase()))
@@ -143,7 +153,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
 
     return (
         <section className={cn(
-            ' md:sticky top-2.5 right-0',
+            ' md:sticky top-2.5 right-0 ',
             {
                 " md:block": showFilters,
                 "hidden md:block": !showFilters
@@ -152,7 +162,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
             <div className={
                 cn(
                     'fixed  left-0 h-screen w-full  bg-white-200 p-4 bg-bg_content transition-all duration-300',
-                    "md:static md:h-auto md:w-[18.75rem] md:rounded-sm md:bg-white md:shadow-shadow_category ",
+                    "md:static md:h-auto md:w-[18.75rem] md:rounded-sm md:bg-white md:shadow-shadow_category md:max-h-[calc(100vh-2rem)] md:overflow-auto",
                     {
                         "top-0 z-[20]": showFilters,
                         "-top-full": !showFilters
@@ -163,7 +173,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
                     <CloseButton closeHanlder={closeFilterHandler} />
                 </div>
                 <div className='flex justify-between items-center gap-4 font-bold'>
-                    <p className='text-primary md:min-w-fit  w-full font-[900] md:font-normal text-center md:text-right '>فیلتر ها</p>
+                    <p className=' md:min-w-fit  w-full font-[900] md:font-normal text-center md:text-right '>فیلتر ها</p>
                     <button type='button' className='text-error hidden md:block min-w-fit font-normal text-md' onClick={() => {
                         router.push("/physicians")
                     }} >حذف فیلترها</button>
@@ -178,9 +188,9 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
                                 })
                             }} />
                         </div>
-                        <div className='h-[6.25rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
+                        <div className='max-h-[15rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
 
-                            <label htmlFor={`specialities-`} className='my-2 flex justify-start items-center gap-1 cursor-pointer'>
+                            <label htmlFor={`specialities-`} className='my-2 flex justify-start items-start gap-1 cursor-pointer'>
                                 {
                                     searchParametrs.specialty === "" ? <span className={cn(
                                         ' min-w-[1rem] size-[1rem] rounded-[0.25rem] bg-primary flex justify-center items-center'
@@ -202,36 +212,85 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
                                         ...titlesActive,
                                         specialty: "تخصص"
                                     })
+                                    setShowChildren({
+                                        ...showChildren,
+                                        speciality: ""
+                                    })
                                 }} />
                             </label>
-                            {searchedSpecialities.map((item, index) => (
-                                <label htmlFor={`specialities-${index}`} className='my-2 flex justify-start items-center gap-1 cursor-pointer' key={item.id}>
-                                    {
-                                        item.enName === searchParametrs.specialty ? <span className={cn(
-                                            ' min-w-[1rem] size-[1rem] rounded-[0.25rem] bg-primary flex justify-center items-center'
-                                        )}>
-                                            <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M2.8 4.2998L1.2 2.6998L0 3.8998L2.8 6.6998L8 1.4998L6.8 0.299805L2.8 4.2998Z" fill="white" />
-                                            </svg>
-                                        </span> : <span className='min-w-[1rem] size-[1rem] rounded-[0.25rem] border border-gray-300 flex justify-center items-center'>
+                            {searchedSpecialities.map((item, index) => {
 
-                                        </span>
-                                    }
-                                    <span>{item.specialityTitle}</span>
-                                    <input id={`specialities-${index}`} type="radio" name='specialty' className='hidden' onChange={() => {
 
-                                        setSearchParametrs({
-                                            ...searchParametrs,
-                                            specialty: item.enName
-                                        })
-                                        setTitlesActive({
-                                            ...titlesActive,
-                                            specialty: item.specialityTitle
-                                        })
-                                        getDisease(item.enName)
-                                    }} />
-                                </label>
-                            ))}
+                                return (
+                                    <div key={item.id}  >
+                                        <label htmlFor={`specialities-${index}`} className='my-2 flex justify-between items-start gap-1 cursor-pointer '  >
+                                            {
+                                                item.enName === searchParametrs.specialty ? <span className={cn(
+                                                    ' min-w-[1rem] size-[1rem] rounded-[0.25rem] bg-primary flex justify-center items-center'
+                                                )}>
+                                                    <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M2.8 4.2998L1.2 2.6998L0 3.8998L2.8 6.6998L8 1.4998L6.8 0.299805L2.8 4.2998Z" fill="white" />
+                                                    </svg>
+                                                </span> : <span className='min-w-[1rem] size-[1rem] rounded-[0.25rem] border border-gray-300 flex justify-center items-center'>
+                                                </span>
+                                            }
+                                            <span className='flex justify-between items-start  flex-1'>{item.specialtyTitle} {item.children && item.children.length ? <ArrowLeft className={item.enName === showChildren.speciality ? "rotate-90 min-w-[1.5rem] " : "-rotate-90 min-w-[1.5rem] "} /> : ""}</span>
+                                            <input id={`specialities-${index}`} type="radio" name='specialty' className='hidden' onChange={() => {
+
+                                                setSearchParametrs({
+                                                    ...searchParametrs,
+                                                    specialty: item.enName
+                                                })
+                                                setTitlesActive({
+                                                    ...titlesActive,
+                                                    specialty: item.specialtyTitle
+                                                })
+                                                getDisease(item.enName)
+                                                setShowChildren({
+                                                    ...showChildren,
+                                                    speciality: item.enName
+                                                })
+                                            }} />
+                                        </label>
+                                        {
+                                            item.children?.length && item.enName === showChildren.speciality ? <div className=' max-h-[12.25rem] overflow-auto  py-1'>
+                                                {
+                                                    item.children.map((child, indexC) => {
+
+                                                        return (
+                                                            <label htmlFor={`specialities-${child.enName}-${indexC}`} key={child.id} className='px-4 my-2 flex justify-start items-start gap-1 cursor-pointer' >
+                                                                {
+                                                                    child.enName === searchParametrs.specialty ? <span className={cn(
+                                                                        ' min-w-[1rem] size-[1rem] rounded-[0.25rem] bg-primary flex justify-center items-center'
+                                                                    )}>
+                                                                        <svg width="8" height="7" viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M2.8 4.2998L1.2 2.6998L0 3.8998L2.8 6.6998L8 1.4998L6.8 0.299805L2.8 4.2998Z" fill="white" />
+                                                                        </svg>
+                                                                    </span> : <span className='min-w-[1rem] size-[1rem] rounded-[0.25rem] border border-gray-300 flex justify-center items-center'>
+                                                                    </span>
+                                                                }
+                                                                <span className='flex justify-between items-center text-black'>{child.specialtyTitle}</span>
+                                                                <input id={`specialities-${child.enName}-${indexC}`} type="radio" name='specialty' className='hidden' onChange={() => {
+
+                                                                    setSearchParametrs({
+                                                                        ...searchParametrs,
+                                                                        specialty: child.enName
+                                                                    })
+                                                                    setTitlesActive({
+                                                                        ...titlesActive,
+                                                                        specialty: child.specialtyTitle
+                                                                    })
+                                                                    getDisease(item.enName)
+                                                                }} />
+                                                            </label>
+                                                        )
+                                                    })
+                                                }
+                                            </div> : ""
+                                        }
+                                    </div>
+                                )
+                            })}
                         </div>
                     </FilterCard>
                     <FilterCard title={titlesActive.service} name='filter_card' index={2} active={activeCard === 2} openHandler={openFilterCard} >
@@ -243,7 +302,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
                                 })
                             }} />
                         </div>
-                        <div className='h-[6.25rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
+                        <div className='max-h-[15rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
 
                             <label htmlFor={`services-`} className='my-2 flex justify-start items-center gap-1 cursor-pointer'>
                                 {
@@ -313,7 +372,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
                                         })
                                     }} />
                                 </div>
-                                <div className='h-[6.25rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
+                                <div className='max-h-[15rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
 
                                     <label htmlFor={`diseases-`} className='my-2 flex justify-start items-center gap-1 cursor-pointer'>
                                         {
@@ -379,7 +438,7 @@ const SearchSectionPrimary = (props: SearchSectionPrimaryProps) => {
                                         })
                                     }} />
                                 </div>
-                                <div className='h-[6.25rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
+                                <div className='max-h-[15rem] overflow-y-auto mt-2 bg-white rounded-sm p-1 text-md'>
 
                                     <label htmlFor={`signs-`} className='my-2 flex justify-start items-center gap-1 cursor-pointer'>
                                         {
@@ -499,7 +558,7 @@ const FilterCard = (props: FilterCardProps) => {
             <div className={
                 cn(
                     'flex justify-between items-center  relative ',
-                    "after:absolute after:-right-5 md:after:-right-3 after:rounded-lg after:top-0 after:block after:bg-primary after:w-1 after:h-full"
+                    // "after:absolute after:-right-5 md:after:-right-3 after:rounded-lg after:top-0 after:block after:bg-primary after:w-1 after:h-full"
                 )
             }
                 onClick={() => {
@@ -519,7 +578,7 @@ const FilterCard = (props: FilterCardProps) => {
                 )}><ArrowLeft /></span>
             </div>
             <div className={cn(
-                ' mt-4 relative h-[9.375rem] cursor-auto',
+                ' mt-4 relative  cursor-auto',
                 {
                     "hidden": !active
                 }
@@ -530,7 +589,6 @@ const FilterCard = (props: FilterCardProps) => {
         </div>
     )
 }
-
 export type FilterCardSecondaryProps = {
     openHandler: (filterIndex: number | null) => void,
     name: string,
