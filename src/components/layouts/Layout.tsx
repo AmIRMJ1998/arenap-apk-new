@@ -15,6 +15,7 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 
 import { CookiesProvider } from 'react-cookie';
+import 'regenerator-runtime/runtime';
 
 const Layout = ({ children }: { children: ReactNode }) => {
     const [query] = useState(() => new QueryClient())
