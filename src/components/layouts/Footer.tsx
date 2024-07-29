@@ -96,7 +96,7 @@ const Footer = () => {
                 }
               </ul>
             </div>
-            <div className='flex justify-center items-center flex-col w-full'>
+            {/* <div className='flex justify-center items-center flex-col w-full'>
               <h4 className='text-primary text-md font-bold text-center'>پربازدیدترین شهرها</h4>
               <ul className='flex justify-start items-center gap-1 flex-col text-sm mt-4'>
                 <li className='hover:font-bold hover:text-primary transition-all duration-300 cursor-pointer' ><LinkElement link={`physicians/city?name=tehran`}>پزشکان شهر  تهران</LinkElement></li>
@@ -108,7 +108,7 @@ const Footer = () => {
                 <li className='hover:font-bold hover:text-primary transition-all duration-300 cursor-pointer' ><LinkElement link={`physicians/city?name=tabriz`}>پزشکان شهر  تبریز</LinkElement></li>
                 <li className='hover:font-bold hover:text-primary transition-all duration-300 cursor-pointer' ><LinkElement link={`physicians/city?name=ahvaz`}>پزشکان شهر  اهواز</LinkElement></li>
               </ul>
-            </div>
+            </div> */}
           </div>
           <div className='lg:order-1 w-full my-2 lg:my-0' >
             <h4 className='text-primary text-md font-bold text-center'>درباره ما</h4>
