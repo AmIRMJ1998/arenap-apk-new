@@ -247,7 +247,7 @@ const SelectAppointmentStep = ({ calendar, physician, ramainingTime, times, firs
                 `flex justify-start items-center appointments_scroll pb-2 gap-1 overflow-x-auto `,
                 {
                   "hidden": ramainingTime > 0,
-                  "overflow-auto appointments_scroll py-2 w-full  max-w-[28.125rem] mx-auto":
+                  "overflow-hidden py-2 w-full  max-w-[28.125rem] mx-auto":
                     !showHoursType,
                 }
               )}
