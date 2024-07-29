@@ -24,10 +24,11 @@ const PhysicianCommentCard = (props: CommentType) => {
                                     <UpThumbIcon size="19px" />
                                     <span className="text-[#4FA148] text-sm font-bold">این پزشک را پیشنهاد میکند</span>
                               </div> :
-                              <div className="rounded-[1.5rem] bg-error/20 flex items-center gap-3 px-3 py-1">
-                                    <DownThumbIcon size="19px" />
-                                    <span className="text-error text-sm font-bold">این پزشک را پیشنهاد نمیکند</span>
-                              </div>
+                              // <div className="rounded-[1.5rem] bg-error/20 flex items-center gap-3 px-3 py-1">
+                              //       <DownThumbIcon size="19px" />
+                              //       <span className="text-error text-sm font-bold">این پزشک را پیشنهاد نمیکند</span>
+                              // </div>
+                              null
                         }
                   </div>
                   <p className="text-sm pt-6 pb-3">

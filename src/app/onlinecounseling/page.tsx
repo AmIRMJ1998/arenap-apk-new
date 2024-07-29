@@ -40,6 +40,7 @@ const OnlineConsultation = async () => {
       })
 
       
+      
 
 
       if(isError) return <ServerErrorPage /> 
@@ -47,10 +48,9 @@ const OnlineConsultation = async () => {
 
 
       return (
-
-            <OnlineCounselingPage physicians={data?.value.value.physcians} currentPage={data?.value.currentPage} pageSize={data?.value.pageSize} totalCount={data?.value.totalCount} totalPages={data?.value.totalPages} hasMore={data?.value?.totalPages === data?.value?.currentPage ? false : true} />
-
-
+            <OnlineCounselingPage physicians={data?.value.value.physcians} currentPage={data?.value.currentPage} pageSize={data?.value.pageSize} totalCount={data?.value.totalCount} totalPages={data?.value.totalPages} hasMore={data?.value?.totalPages === data?.value?.currentPage ? false : true}
+            
+             />
       )
 }
 
