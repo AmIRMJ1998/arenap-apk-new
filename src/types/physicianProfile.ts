@@ -27,7 +27,9 @@ export interface PhysicainProfileType {
   firstAppointment?: any;
   physicianSpecialities: PhysicianSpeciality[];
   comments: any[];
-  relatedPhysicians: RelatedPhysicianType[];
+  extraImages: ExtraImageType[];
+  // relatedPhysicians: RelatedPhysicianType[];
+  today: string;
   physicianProfileSetting: {
     fridayConsultationTextPlan: boolean;
     id: string;
@@ -58,6 +60,7 @@ export interface CommentType {
   physicianFirstName: string;
   physicianLastName: string;
 }
+
 export interface RelatedPhysicianType {
   id: string;
   firstName: string;
@@ -83,6 +86,13 @@ export interface PhysicianSpeciality {
   parentId?: any;
   parent?: any;
   citySpecialties?: any;
+}
+
+export interface ExtraImageType {
+  id: string;
+  physicianProfileId: string;
+  createdAt: string;
+  clickHandler : () => void
 }
 
 // ------------------------------------------------------------------------------------//

@@ -39,9 +39,9 @@ const Layout = ({ children }: { children: ReactNode }) => {
                         }
                     }
                 />
-                <ReactQueryDevtools initialIsOpen={false} />
+                <ReactQueryDevtools initialIsOpen={false} />  
             </CookiesProvider>
-        </QueryClientProvider>
+        </QueryClientProvider> 
 
     )
 }

@@ -10,12 +10,12 @@ import ProfileSummaryCard from "@modules/cards/ProfileSummaryCard";
 import Link from "next/link";
 import useModalLogin from "@/hooks/useModalLogin";
 import useFavorite from "@/hooks/useFavorite";
-import { CommentType, PhysicainProfileType } from "@/types/physicianProfile";
+import { CommentType, ExtraImageType, PhysicainProfileType } from "@/types/physicianProfile";
 import TitlePagesMobile from "@modules/titles/TitlePagesMobile";
 import TitlePrimary from "@modules/titles/TitlePrimary";
 import ModalLogin from "@layouts/ModalLogin/ModalLogin";
 import cn from "@/utils/clsxFun";
-import { getUrlImage } from "@/services/getImageUrl/getImageUrl";
+import { getUrlExtraImage, getUrlImage } from "@/services/getImageUrl/getImageUrl";
 import useUserInfo from "@/hooks/useUserInfo";
 import ButtonElement from "@elements/ButtonElement";
 import OfficeCard from "@modules/cards/OfficeCard";
@@ -37,12 +37,19 @@ import OkIcon from "../icons/OkIcon";
 import CancelIcon from "../icons/CancelIcon";
 import weekConverted from "@/utils/weekConverter";
 import priceSplitter from "@/utils/priceSplitter";
+import SectionTitle from "../modules/titles/SectionTitle";
+import SwiperContainerFreeMode from "../modules/swiper/SwiperContianerFreeMode";
+import { SwiperSlide } from "swiper/react";
+import ExtraImageCard from "../modules/cards/ExtraImageCard";
 
 
 
 const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }) => {
   const [consultationModal, setConsultationModal] = useState(false)
   const router = useRouter()
+  const [activeImage, setActiveImage] = useState("")
+  const [showActiveImage, setShowActiveImage] = useState(false)
+
   const { price, textConsultationPrice } = usePrice()
   const { isLogin, getUser, user } = useUserInfo();
   const { isShow, openModalLogin } = useModalLogin();
@@ -102,7 +109,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         id: "emergencyPhoneConsultation",
         url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
         title: "مشاوره تلفنی فوری",
-        price: 1000 ? 100 : null,
+        price: 1000,
         isHandler: true,
         // firstDescription: physician.emergencyPhoneConsultationDuration ? `${physician.emergencyPhoneConsultationDuration} دقیقه گفتگو` : null,
         // secondDescription: physician.emergencyphoneWaitingTime ? `پاسخ دهی کمتر از ${physician.phoneWaitingTime} دقیقه` : null,
@@ -113,7 +120,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
         id: "phoneConsultation",
         url: `appointment/online-appointment/${physician.physicianProfileUrl}`,
         title: "مشاوره تلفنی",
-        price: 1000 ? 100 : null,
+        price: 1000,
         isHandler: true,
         // firstDescription: physician.phoneConsultationDuration ? `${physician.phoneConsultationDuration} دقیقه گفتگو` : null,
         // secondDescription: physician.phoneWaitingTime ? `پاسخ دهی بین ${physician.phoneWaitingTime[0]} تا ${physician.phoneWaitingTime[1]} دقیقه` : null,
@@ -547,7 +554,56 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
           </div>
           {/* ----------section------------- */}
 
+          {/* ----------section------------- */}
+          {/* Extra images */}
+          {
+            physician.extraImages.length ? (
+              <div className="mt-4">
+                <SectionTitle
+                  title={"عکس های مطب"}
+                  textLink={"مشاهده بیشتر"}
+                  link={
+                    `physicians/specialty/`
+                  }
+                  btn={false}
+                />
 
+                <SwiperContainerFreeMode CardComponent={ExtraImageCard} data={physician.extraImages} >
+                  {
+                    physician.extraImages?.map((item: ExtraImageType, index) => (
+                      <SwiperSlide className='swiper_width_auto' key={item.id ? item.id : index}>
+                        <ExtraImageCard {...item} clickHandler={() => {
+                          setActiveImage(item.id)
+                          setShowActiveImage(true)
+
+                        }} />
+                      </SwiperSlide>
+                    ))
+                  }
+                </SwiperContainerFreeMode>
+                <Modal show={showActiveImage} closeHandler={() => {
+                  setActiveImage("")
+                  setShowActiveImage(false)
+                }}
+                  customClassname="flex justify-center items-center"
+
+                >
+                  <span
+                    className="absolute top-4 left-4"
+                  ><CloseButton closeHanlder={() => {
+                    setActiveImage("")
+                    setShowActiveImage(false)
+                  }} /> </span>
+
+                  {activeImage &&
+                    <Image src={getUrlExtraImage({ physicianId: physician.id, id: activeImage })} width={500} height={500} alt="active image" className="max-w-full" />
+                  }
+
+                </Modal>
+              </div>
+            ) : null
+          }
+          {/* ----------section------------- */}
           {/* ----------section------------- */}
           {/* Comments */}
           <div className="w-full mt-4 order-11" id="comment">
@@ -629,6 +685,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
                         firstDescription={consultation?.firstDescription}
                         secondDescription={consultation?.secondDescription}
                         selected={activeConsultation === consultation?.id}
+                        firstAppointment={physician.firstAppointment}
                         active={consultation?.active}
                         status={
                           consultation?.status !== null ? consultation?.status : null
@@ -654,6 +711,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
                         price={consultation?.price}
                         firstDescription={consultation?.firstDescription}
                         secondDescription={consultation?.secondDescription}
+                        firstAppointment={physician.firstAppointment}
                         selected={activeConsultation === consultation?.id}
                         active={consultation?.active}
                         status={

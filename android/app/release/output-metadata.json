@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "my.arenap.app",
+  "applicationId": "ir.arenap.app",
   "variantName": "release",
   "elements": [
     {

@@ -5,6 +5,8 @@ import MessageIcon from "@/components/icons/profile/MessageIcon"
 import priceSplitter from "@/utils/priceSplitter"
 import cn from "@/utils/clsxFun"
 import RadioButton from "@/components/elements/inputs/RadioButton"
+import { Firstppointment } from "@/types/appointment"
+import convertMonthOfYear from "@/utils/convertMonthOfYear"
 
 
 export type ConsultationPlanItemCardType = {
@@ -15,11 +17,12 @@ export type ConsultationPlanItemCardType = {
       secondDescription: string | null | undefined,
       selected: boolean,
       active: boolean,
-      status: boolean | null
+      status: boolean | null,
+      firstAppointment: Firstppointment
 }
 
 
-const ConsultationPlanItemCard = ({ icon, title, price, firstDescription, secondDescription, selected, active, status }: ConsultationPlanItemCardType) => {
+const ConsultationPlanItemCard = ({ icon, title, price, firstDescription, secondDescription, selected, active, status , firstAppointment }: ConsultationPlanItemCardType) => {
       return (
             <div className={cn(
                   `flex flex-col gap-5 rounded-sm border-2 border-gray-100 p-3 `,
@@ -58,9 +61,13 @@ const ConsultationPlanItemCard = ({ icon, title, price, firstDescription, second
                                     {title}
                               </p>
                         </div>
-                        {active && price &&
+                        {active && firstAppointment &&
                               <p className="text-md">
-                                    {priceSplitter(price)} تومان
+                                    اولین نوبت خالی :
+                                    <span className="font-bold">
+                                          {firstAppointment?.dayOfMonth}
+                                          {convertMonthOfYear(firstAppointment?.month)}
+                                    </span>
                               </p>
                         }
                   </div>

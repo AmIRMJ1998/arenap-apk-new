@@ -9,11 +9,13 @@ import { FreeMode, Autoplay } from 'swiper/modules';
 
 
 import { AIPhysicianProfileCardType, ArticleCardType, AutohrCardType, CategoryPrimaryType, CommentCardPrimaryType, PhysicainCardPrimaryType } from '@/types/cards';
-import { RelatedPhysicianType } from '@/types/physicianProfile';
+import { ExtraImageType, RelatedPhysicianType } from '@/types/physicianProfile';
 import { PhysicianSpecialityType, SearchSmallCardType, SpecialitySearchTagType } from '@/types/search';
 import { ServicesDataType } from '@/data/servicesData';
 import { FilterTagProps } from '@/components/elements/FilterTag';
 import cn from '@/utils/clsxFun';
+import { ReactNode } from 'react';
+
 
 
 
@@ -21,20 +23,22 @@ import cn from '@/utils/clsxFun';
 interface SwiperContainerFreeModeType {
     CardComponent: React.ComponentType<any>;
     gap?: number;
-    data: CategoryPrimaryType[] | PhysicainCardPrimaryType[] | ArticleCardType[] | CommentCardPrimaryType[] | RelatedPhysicianType[] | SearchSmallCardType[] | SpecialitySearchTagType[] | PhysicianSpecialityType[] | AutohrCardType[] | ServicesDataType[] | FilterTagProps[] | AIPhysicianProfileCardType[]
+    data: CategoryPrimaryType[] | PhysicainCardPrimaryType[] | ArticleCardType[] | CommentCardPrimaryType[] | RelatedPhysicianType[] | SearchSmallCardType[] | SpecialitySearchTagType[] | PhysicianSpecialityType[] | AutohrCardType[] | ServicesDataType[] | FilterTagProps[] | AIPhysicianProfileCardType[] | ExtraImageType[]
     center?: boolean
+    children?: ReactNode
+
 }
 
 
-const SwiperContainerFreeMode = ({ data, gap, CardComponent, center = true }: SwiperContainerFreeModeType) => {
+const SwiperContainerFreeMode = ({ data, gap, CardComponent, center = true , children }: SwiperContainerFreeModeType) => {
 
     return (
         <div className={
             cn(
-                "flex  items-center" , 
+                "flex  items-center",
                 {
-                    "justify-center" : center,
-                    "justify-start" : !center
+                    "justify-center": center,
+                    "justify-start": !center
                 }
             )
         }>
@@ -50,16 +54,19 @@ const SwiperContainerFreeMode = ({ data, gap, CardComponent, center = true }: Sw
                 className={cn(
                     "swiper_freemode",
                     {
-                        "!mx-0" : !center
+                        "!mx-0": !center
                     }
                 )}
             >
                 {
-                    data?.map((item, index) => (
+                    !children && data?.map((item, index) => (
                         <SwiperSlide className='swiper_width_auto' key={item.id ? item.id : index}>
                             <CardComponent {...item} />
                         </SwiperSlide>
                     ))
+                }
+                {
+                    children
                 }
             </Swiper>
         </div>

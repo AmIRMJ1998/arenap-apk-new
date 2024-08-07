@@ -18,6 +18,9 @@ import SpecialityTagSearch from './SpecialityTagSearch'
 import { PhysicianProfileType, PhysicianSpecialityType } from '@/types/search'
 import Skeleton from 'react-loading-skeleton'
 import { useCookies } from 'react-cookie';
+import categoryData from '@/data/categoryData'
+import { CategoryPrimaryType } from '@/types/cards'
+import LinkElement from '@/components/elements/LinkElement'
 
 
 
@@ -234,11 +237,14 @@ const SearchHomePage = ({ physicians }: { physicians: RelatedPhysicianType[] }) 
                                             </>
                                         ) : null
                                     }
-                                    <div>
-                                        <TitleSection title="پزشک" />
-                                        <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
-                                            {physicians?.slice(0, 6).map((item, index) => <SearchSmallCard key={item.id} {...item} bg='md:bg-gray-100 bg-white' />)}
-                                        </div>
+                                    <div className='flex justify-start items-start gap-2 flex-wrap'>
+                                        {categoryData.map((item: CategoryPrimaryType, index) => {
+                                            return (
+                                                <LinkElement key={item.id} link={item.link} className='border border-gray-300 bg-white rounded-3xl flex justify-center items-center text-md h-[2.8125rem] transition-all duration-300 px-4 hover:bg-gray-300 hover:text-white '>
+                                                    {item.title}
+                                                </LinkElement>
+                                            )
+                                        })}
                                     </div>
                                 </>
                             ) : null

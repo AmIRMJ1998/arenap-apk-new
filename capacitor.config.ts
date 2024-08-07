@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'my.arenap.app',
+  appId: 'ir.arenap.app',
   appName: 'آرناپ',
   webDir: 'out',  
   server: {
