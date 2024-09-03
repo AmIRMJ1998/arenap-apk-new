@@ -6,7 +6,7 @@ import React from 'react'
 
 const ExtraImageCard = (props: ExtraImageType) => {
 
-      const { id, createdAt, physicianProfileId , clickHandler } = props
+      const { id, createdAt, physicianProfileId , clickHandler , alt } = props
 
       return (
             <div className=' rounded-md cursor-pointer' onClick={clickHandler}>
@@ -14,7 +14,7 @@ const ExtraImageCard = (props: ExtraImageType) => {
                         src={getUrlExtraImage({ id, physicianId: physicianProfileId })}
                         width={500}
                         height={500}
-                        alt="doctor_profile"
+                        alt={alt}
                         className="size-[12.5rem] object-cover rounded-sm "
                   />
             </div>

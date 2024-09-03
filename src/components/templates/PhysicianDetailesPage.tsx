@@ -41,6 +41,7 @@ import SectionTitle from "../modules/titles/SectionTitle";
 import SwiperContainerFreeMode from "../modules/swiper/SwiperContianerFreeMode";
 import { SwiperSlide } from "swiper/react";
 import ExtraImageCard from "../modules/cards/ExtraImageCard";
+import ArrowLeft from "../icons/ArrowLeft";
 
 
 
@@ -49,7 +50,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
   const router = useRouter()
   const [activeImage, setActiveImage] = useState("")
   const [showActiveImage, setShowActiveImage] = useState(false)
-
+  const [showCountComments, setShowCountComments] = useState<number>(5)
   const { price, textConsultationPrice } = usePrice()
   const { isLogin, getUser, user } = useUserInfo();
   const { isShow, openModalLogin } = useModalLogin();
@@ -560,7 +561,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             physician.extraImages.length ? (
               <div className="mt-4">
                 <SectionTitle
-                  title={"عکس های مطب"}
+                  title={"تصاویر  مطب"}
                   textLink={"مشاهده بیشتر"}
                   link={
                     `physicians/specialty/`
@@ -572,7 +573,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
                   {
                     physician.extraImages?.map((item: ExtraImageType, index) => (
                       <SwiperSlide className='swiper_width_auto' key={item.id ? item.id : index}>
-                        <ExtraImageCard {...item} clickHandler={() => {
+                        <ExtraImageCard {...item} alt={`دکتر ${physician.firstName} ${physician.lastName} متخصص ${physician.physicianSpecialities?.[0].specialityTitle} در شهر ${physician.cityName}`} clickHandler={() => {
                           setActiveImage(item.id)
                           setShowActiveImage(true)
 
@@ -620,15 +621,33 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             </div>
 
             {physician.comments.length > 0 ? (
-              physician.comments.map((comment: CommentType) => (
-                <div key={comment.id} className="mb-4">
-                  <PhysicianCommentCard
-                    {...comment}
-                  >
-                    {comment.message}
-                  </PhysicianCommentCard>
+              <div>
+                <div className="grid grid-cols-1 gap-2">
+                  {physician.comments.slice(0, showCountComments).map((comment: CommentType) => (
+                    <div key={comment.id} className="">
+                      <PhysicianCommentCard
+                        {...comment}
+                      >
+                        {comment.message}
+                      </PhysicianCommentCard>
+                    </div>
+                  ))}
                 </div>
-              ))
+                {
+                  showCountComments <= physician.comments.length ? (
+                    <div className=" py-2 flex justify-center items-center gap-1 text-primary cursor-pointer font-bold"
+                      onClick={() => {
+                        setShowCountComments(prev => {
+                          return prev + 5
+                        })
+                      }}
+                    >
+                      <p>مشاهده بیشتر</p>
+                      <span className="-rotate-90"><ArrowLeft /> </span>
+                    </div>
+                  ) : null
+                }
+              </div>
             ) : (
               <p className="text-center text-gray-500 my-10">
                 تا کنون نظری ثبت نشده!
@@ -659,7 +678,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
             <span className="absolute top-4 left-4 md:hidden"><CloseButton closeHanlder={() => {
               setConsultationModal(false)
             }} /></span>
-            <div className='text-lg font-bold relative '>نوع مشاوره</div>
+            <div className='text-lg font-bold  '>نوع مشاوره</div>
             <div className={cn(
               'mt-6',
               "max-h-[calc(100vh-9.5rem)]  md:max-h-[calc(100vh-7.5rem)] overflow-auto"
@@ -680,6 +699,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
                     >
                       <ConsultationPlanItemCard
                         icon={consultation?.id}
+                        showPrice={false}
                         title={consultation?.title}
                         price={consultation?.price}
                         firstDescription={consultation?.firstDescription}
@@ -706,6 +726,7 @@ const PhysicianProfilePage = ({ physician }: { physician: PhysicainProfileType }
                       key={consultation.id}
                     >
                       <ConsultationPlanItemCard
+                        showPrice={true}
                         icon={consultation?.id}
                         title={consultation?.title}
                         price={consultation?.price}

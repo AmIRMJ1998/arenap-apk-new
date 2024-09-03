@@ -18,10 +18,10 @@ const Appointment = () => {
 
 
     useEffect(() => {
-        if(physicianProfileUrl === null){
+        if (physicianProfileUrl === null) {
             router.replace("/physicians")
         }
-    } , [])
+    }, [])
 
     return (
         <>
@@ -57,13 +57,15 @@ const AppointmentPhysician = async ({ physicianUrl }: { physicianUrl: string }) 
         }
     })
 
-    
+
 
     return (
         <>
             {
-                physicianCalendar.isLoading  ? <LoadingPage /> : (
-                    <AppointmentPage calendar={physicianCalendar.data?.physicianProfileCalendars} physician={physicianCalendar.data.physicianProfile} ramainingTime={ramainingTime.data} times={convertToHour()} firstAppointment={physicianCalendar.data.firstppointment} relatedPhysicians={physicianCalendar.data.relatedPhysicians} />
+                physicianCalendar.isLoading ? <LoadingPage /> : (
+                    <AppointmentPage calendar={physicianCalendar.data?.physicianProfileCalendars} physician={physicianCalendar?.data?.physicianProfile} ramainingTime={ramainingTime.data} times={convertToHour()} firstAppointment={physicianCalendar?.data?.firstppointment} relatedPhysicians={physicianCalendar?.data?.relatedPhysicians}
+                        appointmentPrice={physicianCalendar?.data?.physicianProfile.appointmentPrice}
+                    />
                 )
             }
         </>

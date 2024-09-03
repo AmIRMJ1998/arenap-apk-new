@@ -103,7 +103,7 @@ const AISearchSectionHomePage = () => {
     return (
         <div className="flex flex-col items-center w-full rounded-lg px-10 py-12 gap-y-2 bg-pattern min-h-[300px] max-w-[1088px] shadow-shadow_category  mx-auto">
             <p className="font-bold text-center">انتخاب هوشمند پزشک</p>
-            <p className=" text-md text-center text-gray">با وارد کردن علائم (سردرد، گلو درد و ...) پزشکان پیشنهادی به شما نمایش داده میشود.</p>
+            <p className=" text-md text-center text-[#8f8f8f]">با وارد کردن علائم (سردرد، گلو درد و ...) پزشکان پیشنهادی به شما نمایش داده میشود.</p>
             <div className="flex flex-col gap-y-4 w-full items-center">
                 <div className="w-full relative max-w-[500px]  mt-6">
                     <input className="rounded-[2rem] bg-[#fafafa] border border-gray pr-4  py-4 pl-10  w-full outline-none" onBlur={() => currentSignInputFocusHandler(false)} onFocus={() => currentSignInputFocusHandler(true)} value={searchSign} onChange={(e) => {

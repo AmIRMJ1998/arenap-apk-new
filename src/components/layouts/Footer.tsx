@@ -158,8 +158,22 @@ const Footer = () => {
             <textarea name='message' value={form.message} onChange={changeHandler} className='w-full resize-none  mt-4 border-b border-gray-500 text-md bg-transparent ' placeholder='دیدگاه شما درباره ما ' ></textarea>
             <ButtonElement typeButton="primary" handler={sendComment} loading={loadingButton} disabled={loadingButton}>ثبت دیدگاه</ButtonElement>
           </div>
+          <div className='w-full order-4   px-2 mt-4  p-2 flex justify-center items-center gap-2 flex-wrap'  >
+            <img referrerPolicy='origin' id='rgvjjzpeesgtoeukfukzrgvj' className={'cursor-pointer size-[6.25rem] '} onClick={() => {
+              window.open("https://logo.samandehi.ir/Verify.aspx?id=370863&p=xlaojyoeobpdmcsigvkaxlao", "Popup", "toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
+            }} alt='logo-samandehi' src='https://logo.samandehi.ir/logo.aspx?id=370863&p=qftiyndtlymaaqgwwlbqqfti' />
 
+
+            <a referrerPolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=245969&Code=xTcCIIDXRFsaDRX65h9x'><img referrerPolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=245969&Code=xTcCIIDXRFsaDRX65h9x' alt='' className='cursor-pointer size-[6.25rem]'  /></a>
+
+            {/* <Image referrerPolicy='origin' id='rgvjjzpeesgtoeukfukzrgvj' className='cursor-pointer w-[6.25rem]' onClick={() => {
+              window.open("https://logo.samandehi.ir/Verify.aspx?id=370863&p=xlaojyoeobpdmcsigvkaxlao", "Popup", "toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")
+            }} src='https://logo.samandehi.ir/logo.aspx?id=370863&p=qftiyndtlymaaqgwwlbqqfti' alt='logo-samandehi' width={500} height={500} /> */}
+          </div>
         </div>
+      </div>
+      <div className="text-center text-gray text-md pb-2">
+        تمامی حقوق این وبسایت متعلق به شرکت طراحان سیستم پنام میباشد.
       </div>
     </footer>
   )

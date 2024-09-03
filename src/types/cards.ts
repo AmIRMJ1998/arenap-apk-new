@@ -64,7 +64,8 @@ export interface AppointmentPrimaryCardType {
     hour: number;
     minute: number;
 
-  }
+  },
+  phone?: string
 }
 
 
@@ -74,7 +75,7 @@ export type AutohrCardType = {
   physicianId: string,
   physicianName: string,
   hasImage: boolean,
-  speciality : string
+  speciality: string
 }
 
 export type AIPhysicianProfileCardType = {

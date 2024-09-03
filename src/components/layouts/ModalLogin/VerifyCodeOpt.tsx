@@ -23,7 +23,9 @@ const VerifyCodeOpt = ({ changeStep, callbacks, isCallback, callbacksIndex = 0 }
 
     if (result?.resultCode === 200 && isCallback) {
       callbacks?.[callbacksIndex]()
+      return
     }
+
     if (result?.resultCode === 1200) {
       changeStep(3)
       setOtp("")
@@ -61,6 +63,9 @@ const VerifyCodeOpt = ({ changeStep, callbacks, isCallback, callbacksIndex = 0 }
           دریافت نکردید؟{" "}
           <button
             type="button"
+            onClick={() => {
+
+            }}
           >
             {" "}
             ارسال مجدد کد
@@ -79,7 +84,7 @@ const VerifyCodeOpt = ({ changeStep, callbacks, isCallback, callbacksIndex = 0 }
       </div>
       <ButtonElement typeButton={otp.length < 5 ? "gray-light" : "primary"} handler={() => {
         verficationOtp(+otp, loginVerifications.phoneVerificationCodeId);
-      }} disabled={otp.length < 5 || loading} loading={loading} customStyle='mt-4' >ارسال کد تایید</ButtonElement>
+      }} disabled={otp.length < 5 || loading} loading={loading} customStyle='mt-4' >تایید و ادامه</ButtonElement>
     </div>
   )
 }

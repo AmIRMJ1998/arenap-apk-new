@@ -3,6 +3,8 @@ import {
   lockedAppointmentRedux,
   offSelectAppointment,
   showRalatedPhysicians,
+  isFamily,
+  isAutoLockHan,
 
 } from "@/store/features/appointmentSlice";
 import { useAppDispatch, useAppSelector } from "./useRedux";
@@ -26,21 +28,24 @@ const useSelectAppointment = () => {
     isSelectAppointment,
     lockedAppointmentInfo,
     patient,
-    showRelatedPhysician
+    showRelatedPhysician,
+    family,
+    isAutoLock
   } = useAppSelector((state) => state.appointment);
   const { isLogin } = useUserInfo();
   const dispatch = useAppDispatch();
-  const { user } = useUserInfo()
   const router = useRouter()
   const status = useSearchParams().get("status")
   const calendarId = useSearchParams().get("calendarId")
   const physicianUrl = useSearchParams().get("physicianUrl")
+  const isForFamily = useSearchParams().get("isForFamily")
+  const familyId = useSearchParams().get("familyId")
   const physicianId = useSearchParams().get("physicianId")
   const index = useSearchParams().get("index")
   const year = useSearchParams().get("year")
   const month = useSearchParams().get("month")
   const day = useSearchParams().get("day")
-  const [isAutoLocked, setIsAutoLocked] = useState(false)
+
 
 
 
@@ -65,47 +70,59 @@ const useSelectAppointment = () => {
         physicianProfileUrl
       })
     );
+    dispatch(
+      isFamily({
+        isForFamily: false,
+        familyId: ""
+      })
+    );
   };
   const offSelectHandler = () => {
     dispatch(offSelectAppointment());
   };
 
-
+  const isFamilyState = (isForFamily: boolean, familyId: string) => {
+    dispatch(isFamily({ familyId, isForFamily }))
+  }
 
 
   const locked = useMutation({
     mutationFn: async () => {
       const res = await lockedAppointment(
-        appointmentSelectInfo.calendarId,
-        appointmentSelectInfo.physicianProfileId,
-        appointmentSelectInfo.index
+        calendarId ? calendarId : appointmentSelectInfo.calendarId,
+        physicianId ? physicianId : appointmentSelectInfo.physicianProfileId,
+        index ? +index : appointmentSelectInfo.index,
+        isForFamily && isForFamily === "1" ? true : family.isForFamily,
+        familyId ? familyId : family.familyId,
       );
-      
+
       if (res.resultCode === 205) {
         dispatch(showRalatedPhysicians())
-        
         throw new Error("")
-        
       }
       if (res.resultCode === 200) {
-        const { chargeAmount, id, remainingSeconds, status } = res.value;
+        const { chargeAmount, id, remainingSeconds, status, user, isForFamily, family } = res.value;
+
         dispatch(
           lockedAppointmentRedux({
-            chargeAmount, id, remainingSeconds, status, firstName: user.firstName,
-            lastName: user.lastName,
-            nationalNumber: user.nationalNumber, phoneNumber: user.phoneNumber
+            chargeAmount, id, remainingSeconds, status, firstName: isForFamily ? family?.firstName : user?.firstName,
+            lastName: isForFamily ? family?.lastName : user?.lastName,
+            nationalNumber: isForFamily ? family?.nationalNumber : user?.nationalNumber, phoneNumber: isForFamily ? "" : user?.phoneNumber
           })
+
         );
+
+        return res.data;
       }
-      return res.data;
+      throw new Error("")
     },
     onSuccess: async () => {
-
       const result = await queryClient.invalidateQueries({
         queryKey: [`myAppointment`],
       });
     },
   });
+
 
   const firstAppointment = useMutation({
     mutationFn: async ({
@@ -131,16 +148,17 @@ const useSelectAppointment = () => {
   const payment = useMutation({
     mutationFn: async () => {
       if (lockedAppointmentInfo.chrageAmount === 0) {
-        const res = await createAppointment(appointmentSelectInfo.physicianProfileId, appointmentSelectInfo.calendarId, appointmentSelectInfo.index)
+        const res = await createAppointment(appointmentSelectInfo.physicianProfileId, appointmentSelectInfo.calendarId, appointmentSelectInfo.index, family.isForFamily, family.familyId)
 
         if (res.resultCode === 200) {
           router.replace(
-            `/Check/Payment/${appointmentSelectInfo.physicianProfileurl}?Status=Success&AppointmentId=${res?.value.id}`
+            `/Payment/slug?slug=${appointmentSelectInfo.physicianProfileurl}&Status=Success&AppointmentId=${res?.value.id}`
           );
         }
+        isFamilyState(false, "")
         return res
       } else {
-        const res = await createPayment(lockedAppointmentInfo.id, lockedAppointmentInfo.chrageAmount, 1)
+        const res = await createPayment(lockedAppointmentInfo.id, lockedAppointmentInfo.chrageAmount, 1, family.isForFamily, family.familyId)
         window.location.href = res
         return res
       }
@@ -155,19 +173,11 @@ const useSelectAppointment = () => {
 
   useEffect(() => {
     if (status && calendarId && index && year && month && day && physicianUrl && physicianId) {
-      setIsAutoLocked(true)
+      console.log("test use");
       selectAppointmentHandler(year, month, day, +index, calendarId, physicianId, physicianUrl)
-    }
-  }, [])
-
-
-  useEffect(() => {
-
-    if (isAutoLocked) {
       locked.mutate()
     }
-
-  }, [isAutoLocked])
+  }, [])
 
 
 
@@ -178,15 +188,18 @@ const useSelectAppointment = () => {
     selectCalendarId: appointmentSelectInfo.calendarId,
     isSelectAppointment,
     isNextStep: isSelectAppointment && isLogin === "authorization",
-
+    chargeAmount: lockedAppointmentInfo.chrageAmount,
     lockedAppointmentHandler: locked,
+    isForFamily: false,
     firstAppointmentHandler: firstAppointment,
     offSelectHandler,
     lockAppointmentInfo: lockedAppointmentInfo,
     patient,
     payment,
-    showRelatedPhysician
+    showRelatedPhysician,
+    isFamilyState,
   };
 };
 
 export default useSelectAppointment;
+ 

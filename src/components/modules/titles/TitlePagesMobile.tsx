@@ -5,6 +5,7 @@ import ButtonBack from "@elements/ButtonBack"
 import Image from "next/image"
 import Link from "next/link"
 import cn from "@/utils/clsxFun"
+import LinkElement from "@/components/elements/LinkElement"
 
 
 
@@ -25,11 +26,15 @@ const TitlePagesMobile = ({ title }: { title: string }) => {
 
     return (
         <div className='fixed top-0 left-0 w-full mdSecondary:hidden h-[4.8125rem] z-[15] flex justify-start items-center bg-primary'>
-            <div className="container w-full flex justify-center items-center">
+            <div className="container w-full flex justify-center items-center ">
                 <div className="absolute top-[calc(50%-1.25rem)] rtl:right-[1.25rem] ltr:left-[1.25rem]">
-                    {pathName === "/" || pathName === "/en" ? "" : <ButtonBack />}
+                    {pathName === "/" || pathName === "/en" ? (
+                        <LinkElement link='' prefetch={true} className="flex justify-center items-center gap-1 h-[2.5rem] ">
+                            <Image src={"/Logo.png"} width={1000} height={1000} alt='Logo website' className='w-[1.875rem]' />
+                        </LinkElement>
+                    ) : <ButtonBack />}
                 </div>
-                <p className="text-white font-bold text-lg px-[42px] text-center">{title}</p>
+                <p className="text-white font-bold text-md px-[42px] text-center">{title}</p>
 
 
                 <div className={cn(

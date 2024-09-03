@@ -83,7 +83,7 @@ const ProfilePage = () => {
                 <section className='mt-4 grid grid-cols-1 gap-4'>
                     {/* <LinkProfilePageCard link={"profile/family"} title={t("my-relatives")} /> */}
                     <LinkProfilePageCard link={"profile/favorites"} title={"پزشکان و مقالات مورد علاقه"} />
-                    {/* <LinkProfilePageCard link={"profile/family"} title={t("ticket")} /> */}
+                    <LinkProfilePageCard link={"profile/family"} title={"بستگان من"} />
                     <LinkProfilePageCard link={"arenap"} title={"آرناپ"} />
                 </section>
                 {/* <section className='mt-4 flex justify-between items-start md:items-stretch ltr:flex-row-reverse bg-[#C0E1E7] py-3 rounded-sm overflow-hidden  '>

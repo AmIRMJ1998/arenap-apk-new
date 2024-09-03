@@ -104,7 +104,7 @@ const OtpInput = (props: Props) => {
                         onKeyUp={handleKeyUp}
                         maxLength={6}
                         onChange={(e) => handleInputChange(e, index)}
-                        value={value.at(index) ?? ""}
+                        value={value[index] ?? ""}
                     />
                 );
             })}

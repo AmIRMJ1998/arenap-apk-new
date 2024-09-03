@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -18,10 +17,10 @@ const config: Config = {
       backgroundImage: {
         white_to_transparent:
           "linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 80%)",
-          chat_pattern:
-          "url('/chat_bg.png')",
-          cosultation_pattern:
-          "url('/patternConsultation.png')",
+        chat_pattern: "url('/chat_bg.png')",
+        cosultation_pattern: "url('/patternConsultation.png')",
+        white_to_up_transparent:
+          "linear-gradient(0deg, rgba(255,255,255,1) 15%, rgba(255,255,255,0) 100%)",
       },
       container: {
         center: true,
@@ -184,6 +183,14 @@ const config: Config = {
             height: "25rem",
           },
         },
+        dropdown_animation: {
+          "0%": {
+            height: "5rem",
+          },
+          "100%": {
+            height: "fit-content",
+          },
+        },
       },
       animation: {
         modal_search: "modal_search 500ms ease-out both",
@@ -192,6 +199,7 @@ const config: Config = {
         bouncing: "bouncing 300ms ease",
         like_thumb: "like_thumb 500ms ease",
         search_content: "search_content 500ms ease",
+        dropdown_animation: "dropdown_animation 500ms ease both",
       },
     },
   },

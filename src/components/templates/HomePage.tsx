@@ -169,7 +169,7 @@ export default HomePage
 const SmallPhysicianCard = (props: PhysicainCardPrimaryType) => {
     const { firstName, hasImage, lastName, physicianProfileUrl, immediateConsultation, physicianSpecialities, id } = props
     return (
-        <Link href={`/Physician?url${physicianProfileUrl}`} className=' shadow-shadow_category  w-[10.625rem] h-[10.9375rem] rounded-lg bg-white p-4 flex justify-center items-center flex-col gap-2 text-center text-md'>
+        <Link href={`/Physician?url=${physicianProfileUrl}`} className=' shadow-shadow_category  w-[10.625rem] h-[10.9375rem] rounded-lg bg-white p-4 flex justify-center items-center flex-col gap-2 text-center text-md'>
 
             <div className='relative'>
                 <Image

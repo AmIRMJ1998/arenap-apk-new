@@ -10,6 +10,12 @@ export interface UserType {
   provinceId: number;
   provinceName: string;
   accountBalance: number;
+  families: {
+    firstName: string;
+    lastName: string;
+    id: string;
+    nationalNumber: string;
+  }[] | [];
 }
 
 export interface TransctionsType {

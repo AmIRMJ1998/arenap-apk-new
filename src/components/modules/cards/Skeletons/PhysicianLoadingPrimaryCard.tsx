@@ -8,7 +8,7 @@ const PhysicianLoadingPrimaryCard = ({ freeMode }: { freeMode: boolean }) => {
   return (
     <div
       className={cn(
-        `bg-white rounded-sm shadow-shadow_category    flex justify-between items-start flex-col`,
+        `bg-white rounded-sm shadow-shadow_category    flex justify-between items-start flex-col w-full`,
         {
           "w-[20rem]": freeMode,
           "w-full": !freeMode,

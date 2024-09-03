@@ -20,7 +20,7 @@ const useTransactions = () => {
     const paymentHandler = useMutation({
         mutationFn: async (parametrs: { id: number, price: number, paymentType: number }) => {
 
-            const result = await createPayment(parametrs.id, parametrs.price, parametrs.paymentType)
+            const result = await createPayment(parametrs.id, parametrs.price, parametrs.paymentType, false, "")
             if (result !== undefined) {
                 window.location.href = result;
             }

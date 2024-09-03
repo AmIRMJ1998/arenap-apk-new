@@ -1,4 +1,4 @@
-import {  createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 export type AppointmentType = {
   appointmentSelectInfo: AppointmentSelectInfoType;
@@ -10,6 +10,7 @@ export type AppointmentType = {
     remainingSeconds: number;
     status: boolean;
     id: number;
+    isForFamily: boolean;
   };
   patient: {
     firstName: string;
@@ -17,7 +18,12 @@ export type AppointmentType = {
     nationalNumber: string;
     phoneNumber: string;
   };
-  showRelatedPhysician : boolean
+  family: {
+    isForFamily: boolean;
+    familyId: string;
+  };
+  showRelatedPhysician: boolean;
+  isAutoLock: boolean;
 };
 
 type AppointmentSelectInfoType = {
@@ -47,17 +53,22 @@ const initialState: AppointmentType = {
     phoneNumber: "",
   },
   isSelectAppointment: false,
-  
+
   isLocked: false,
- 
+  family: {
+    isForFamily: false,
+    familyId: "",
+  },
   lockedAppointmentInfo: {
     index: 0,
     chrageAmount: 0,
     remainingSeconds: 0,
     status: false,
     id: 0,
+    isForFamily: false,
   },
-  showRelatedPhysician : false
+  showRelatedPhysician: false,
+  isAutoLock: false,
 };
 
 const appointmentSlice = createSlice({
@@ -65,7 +76,6 @@ const appointmentSlice = createSlice({
   initialState,
   reducers: {
     selectAppointment: (state, { payload }): void => {
-      
       const data = {
         year: payload.year,
         month: payload.month,
@@ -86,7 +96,7 @@ const appointmentSlice = createSlice({
         index: 0,
         calendarId: "",
         physicianProfileId: "",
-        physicianProfileurl : ""
+        physicianProfileurl: "",
       };
       state.isSelectAppointment = false;
     },
@@ -97,6 +107,7 @@ const appointmentSlice = createSlice({
         id: payload.id,
         remainingSeconds: payload.remainingSeconds,
         status: payload.status,
+        isForFamily: payload.isForFamily,
       };
       state.patient = {
         firstName: payload.firstName,
@@ -106,10 +117,28 @@ const appointmentSlice = createSlice({
       };
       state.isLocked = true;
     },
-    showRalatedPhysicians : (state) => {
-      
-        state.showRelatedPhysician = true
-    }
+    showRalatedPhysicians: (state) => {
+      state.showRelatedPhysician = true;
+    },
+    isFamily: (
+      state,
+      {
+        payload,
+      }: {
+        payload: {
+          familyId: string;
+          isForFamily: boolean;
+        };
+      }
+    ) => {
+      state.family = {
+        familyId: payload.familyId,
+        isForFamily: payload.isForFamily,
+      };
+    },
+    isAutoLockHan: (state, { payload }) => {
+      state.isAutoLock = payload.isAutoLock;
+    },
   },
 });
 
@@ -117,6 +146,8 @@ export const {
   selectAppointment,
   offSelectAppointment,
   lockedAppointmentRedux,
-  showRalatedPhysicians
+  showRalatedPhysicians,
+  isFamily,
+  isAutoLockHan,
 } = appointmentSlice.actions;
 export default appointmentSlice.reducer;

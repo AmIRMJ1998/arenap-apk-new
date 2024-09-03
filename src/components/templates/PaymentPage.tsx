@@ -6,18 +6,11 @@ import TitlePagesMobile from '@modules/titles/TitlePagesMobile'
 import useModalLogin from '@/hooks/useModalLogin'
 import useUserInfo from '@/hooks/useUserInfo'
 import ModalLogin from '@layouts/ModalLogin/ModalLogin'
-import { createPayment } from '@/services/payment/payment'
-import ToastBlue from '@elements/ToastBlue'
-import Toastify from '@elements/toasts/Toastify'
 import useFavorite from '@/hooks/useFavorite'
 import AppointmentPrimaryCard from '@modules/cards/Appointment/AppointmentPrimaryCard'
 import BaseCard from '@modules/cards/BaseCard'
 import LikeIcon from '@icons/LikeIcon'
-import ShareIcon from '@icons/ShareIcon'
-import Image from 'next/image'
-import RefreshIcon from '@icons/RefreshIcon'
-import ButtonElement from '@elements/ButtonElement'
-import LinkElement from '@elements/LinkElement'
+
 
 export type PaymentPageProps = {
     price: number,
@@ -79,24 +72,24 @@ const PaymentPage = (props: PaymentPageProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLogin])
 
-    const addAppointmentHandler = async () => {
-        setLoadingPayment(true)
-        try {
-            const res = await createPayment(props.appointmentId, props.price, 1)
-            ToastBlue(
-                "در حال انتقال به صفحه درگاه پرداخت...",
-                "",
-                props.price,
-                "top-center"
-            );
-            window.location.href = res;
-            return;
+    // const addAppointmentHandler = async () => {
+    //     setLoadingPayment(true)
+    //     try {
+    //         const res = await createPayment(props.appointmentId, props.price, 1, false, "")
+    //         ToastBlue(
+    //             "در حال انتقال به صفحه درگاه پرداخت...",
+    //             "",
+    //             props.price,
+    //             "top-center"
+    //         );
+    //         window.location.href = res;
+    //         return;
 
-        } catch (error: any) {
-            Toastify("error", error.response?.data?.resultMessage)
-        }
-        setLoadingPayment(true)
-    }
+    //     } catch (error: any) {
+    //         Toastify("error", error.response?.data?.resultMessage)
+    //     }
+    //     setLoadingPayment(true)
+    // }
 
     const { userFavorite, addFavorite, deleteFavorite } = useFavorite(props.physician.id)
 
@@ -144,6 +137,7 @@ const PaymentPage = (props: PaymentPageProps) => {
                             month={appointment?.calendar.month ? appointment?.calendar.month : 0}
                             index={0}
                             time={time}
+                            phone={props.physician.telePhoneNumber}
                         />
                         {/* ----------section------------- */}
 
@@ -156,28 +150,28 @@ const PaymentPage = (props: PaymentPageProps) => {
                                         <div className="rounded-full w-[0.4375rem] h-[0.4375rem] mt-[0.4375rem] bg-[#D9D9D9]" />
                                         <div className="flex flex-col gap-1">
                                             <p className="font-bold text-md">نام :</p>
-                                            <p className="text-md">{appointment?.userFirstName}</p>
+                                            <p className="text-md">{appointment?.family ? appointment?.family?.firstName : appointment?.userFirstName}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-2">
                                         <div className="rounded-full w-[0.4375rem] h-[0.4375rem] mt-[0.4375rem] bg-[#D9D9D9]" />
                                         <div className="flex flex-col gap-1">
                                             <p className="font-bold text-md">شماره موبایل :</p>
-                                            <p className="text-md">{appointment?.userPhoneNumber}</p>
+                                            <p className="text-md">{appointment?.family ? "" : appointment?.userPhoneNumber}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-2">
                                         <div className="rounded-full w-[0.4375rem] h-[0.4375rem] mt-[0.4375rem] bg-[#D9D9D9]" />
                                         <div className="flex flex-col gap-1">
                                             <p className="font-bold text-md">نام خانوادگی :</p>
-                                            <p className="text-md">{appointment?.userLastName}</p>
+                                            <p className="text-md">{appointment?.family ? appointment?.family?.lastName : appointment?.userLastName}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-2">
                                         <div className="rounded-full w-[0.4375rem] h-[0.4375rem] mt-[0.4375rem] bg-[#D9D9D9]" />
                                         <div className="flex flex-col gap-1">
                                             <p className="font-bold text-md">کد ملی :</p>
-                                            <p className="text-md">{appointment?.userNationalNumber}</p>
+                                            <p className="text-md">{appointment?.family ? appointment?.family?.nationalNumber : appointment?.userNationalNumber}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -185,25 +179,14 @@ const PaymentPage = (props: PaymentPageProps) => {
                         </section>
                         {/* ----------section------------- */}
 
-                        {/* ----------section------------- */}
-                        {/* favorite  */}
-                        <div className="mt-4">
-                            <button className="rounded-md bg-white p-5 w-full" onClick={favoritePhysicianHandler}>
-                                <div className="flex justify-between items-center">
-                                    <p className="font-bold">پزشک مورد علاقه</p>
-                                    <LikeIcon liked={userFavorite} />
-                                </div>
-                            </button>
-                        </div>
-                        {/* ----------section------------- */}
 
                         {/* ----------section------------- */}
                         {/* share */}
                         <div className="mt-4">
-                            <button className="rounded-md bg-white p-5 w-full">
+                            <button className="rounded-md bg-white p-5 w-full" onClick={favoritePhysicianHandler}>
                                 <div className="flex justify-between items-center">
-                                    <p className="font-bold">معرفی پزشک به دوستان</p>
-                                    <ShareIcon />
+                                    <p className="font-bold">افزودن پزشک  به پزشکان مورد علاقه</p>
+                                    <LikeIcon liked={userFavorite} />
                                 </div>
                             </button>
                         </div>
@@ -216,31 +199,32 @@ const PaymentPage = (props: PaymentPageProps) => {
             {/* when status = fail */}
             {
                 props.status === "Fail" && (
-                    <div className='min-h-screen flex justify-center items-center '>
-                        <div className='flex justify-start items-center gap-3 flex-col'>
-                            <Image src={"/failPayment.png"} width={1000} height={1000} alt='image' className='w-full' />
-                            <p className='text-center'> لطفا دوباره امتحان کنید</p>
-                            <div className='w-[9.375rem]'>
-                                <ButtonElement typeButton='primary' handler={addAppointmentHandler} loading={loadingPayment} disabled={loadingPayment}>
-                                    <RefreshIcon />
-                                    تلاش مجدد
-                                </ButtonElement>
-                            </div>
-                            <div className='w-[9.375rem]'>
-                                <LinkElement link='/' >
-                                    <ButtonElement typeButton='primary' >
-                                        صفحه اصلی
-                                    </ButtonElement>
-                                </LinkElement>
-                            </div>
-                        </div>
-                    </div>
+                    <div></div>
+                    // <div className='min-h-screen flex justify-center items-center '>
+                    //     <div className='flex justify-start items-center gap-3 flex-col'>
+                    //         <Image src={"/failPayment.png"} width={1000} height={1000} alt='image' className='w-full' />
+                    //         <p className='text-center'> لطفا دوباره امتحان کنید</p>
+                    //         <div className='w-[9.375rem]'>
+                    //             <ButtonElement typeButton='primary' handler={addAppointmentHandler} loading={loadingPayment} disabled={loadingPayment}>
+                    //                 <RefreshIcon />
+                    //                 تلاش مجدد
+                    //             </ButtonElement>
+                    //         </div>
+                    //         <div className='w-[9.375rem]'>
+                    //             <LinkElement link='/' >
+                    //                 <ButtonElement typeButton='primary' >
+                    //                     صفحه اصلی
+                    //                 </ButtonElement>
+                    //             </LinkElement>
+                    //         </div>
+                    //     </div>
+                    // </div>
                 )
             }
             {/* ----------section------------- */}
 
         </>
-    ) 
+    )
 }
 
 export default PaymentPage

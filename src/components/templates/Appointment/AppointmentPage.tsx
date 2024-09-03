@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TitlePagesMobile from "@components/modules/titles/TitlePagesMobile";
 import SelectAppointmentStep from "./SelectAppointmentStep";
@@ -12,6 +12,11 @@ import {
 import { RelatedPhysicianType } from "@/types/physicianProfile";
 
 
+import createArrayBetween from "@/utils/createArrayBetween";
+
+import LoadingPage from "@/app/loading";
+import useUserInfo from "@/hooks/useUserInfo";
+import { checkNewPatient } from "@/services/physicians/physicinaClient";
 
 
 
@@ -22,6 +27,7 @@ export type AppointmentPageType = {
   ramainingTime: number;
   times: string[];
   relatedPhysicians?: RelatedPhysicianType[] | []
+  appointmentPrice: number
 };
 
 const AppointmentPage = ({
@@ -30,14 +36,43 @@ const AppointmentPage = ({
   ramainingTime,
   times,
   firstAppointment,
-  relatedPhysicians 
+  relatedPhysicians,
+  appointmentPrice
 }: AppointmentPageType) => {
 
   const [step, setStep] = useState<1 | 2>(1)
   const changeStepHandler = (step: 1 | 2) => {
     setStep(step)
   }
-  
+
+  const [showForNewPatient, setShowForNewPatient] = useState(true)
+  const [loadingNewPatient, setLoadingNewPatient] = useState(physician.doNotShowMyCalendar)
+  const { isLogin } = useUserInfo()
+
+
+
+  const checkNewPatientHandler = async () => {
+    const res = await checkNewPatient(physician.id)
+    console.log(res);
+    if (res.resultCode === 200) {
+      setShowForNewPatient(res.value.isNew)
+    }
+    if (res.resultCode === 400) {
+      setShowForNewPatient(true)
+    }
+    setLoadingNewPatient(false)
+  }
+
+
+  useEffect(() => {
+    if (physician.doNotShowMyCalendar) {
+      checkNewPatientHandler()
+    }
+  }, [isLogin])
+
+  if (loadingNewPatient) return <LoadingPage />
+
+
 
   return (
     <>
@@ -51,6 +86,11 @@ const AppointmentPage = ({
           firstAppointment={firstAppointment}
           changeStep={changeStepHandler}
           relatedPhysicians={relatedPhysicians ? relatedPhysicians : []}
+          appointmentPrice={appointmentPrice}
+          months={calendar ? createArrayBetween(calendar?.[0]?.calendar.month ? +calendar?.[0]?.calendar.month : 0, calendar?.[calendar.length - 1]?.calendar.month ? +calendar?.[calendar.length - 1]?.calendar.month : 0) : []}
+          
+          showCalendar={showForNewPatient}
+          showCalenderHan={checkNewPatientHandler}
         />
       ) : null}
       {step === 2 ? <PaymentAppointmentStep physician={physician} /> : null}

@@ -34,6 +34,10 @@ import LinkElement from "@elements/LinkElement";
 
 const MyAppointmentsPage = () => {
 
+
+
+
+
   const [activeTab, setActiveTab] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
@@ -183,7 +187,7 @@ const MyAppointmentsPage = () => {
                   <p className="text-md font-bold ">در حال حاضر نوبتی گرفته نشده !!</p>
                   <p className="text-md ">برای گرفتن نوبت به صفحه جستجو وارد شوید </p>
                   <div className="w-[13.75rem]">
-                    <LinkElement link="search">
+                    <LinkElement link="physicians">
                       <ButtonElement
                         typeButton="primary"
                         fontWeight="bold"
@@ -223,7 +227,7 @@ const MyAppointmentsPage = () => {
                   <p className="text-md font-bold ">نوبت گذشته ای وجود ندارد</p>
                   <p className="text-md ">برای گرفتن نوبت به صفحه جستجو وارد شوید  </p>
                   <div className="w-[13.75rem]">
-                    <LinkElement link="search">
+                    <LinkElement link="physicians">
                       <ButtonElement
                         typeButton="primary"
                         fontSize="md"
@@ -303,7 +307,7 @@ export default MyAppointmentsPage;
 const AppointmentCard = (props: MyAppointmentType) => {
 
   const [showModalDelete, setShowModalDelete] = useState(false)
-  const { calendar, index, physicianProfileId, physicianProfileUrl } = props;
+  const { calendar, index, physicianProfileId, physicianProfileUrl, family } = props;
   const { cancelMutation } = useMyAppointments()
 
   //cancel appointment handler
@@ -415,6 +419,13 @@ const AppointmentCard = (props: MyAppointmentType) => {
               </span>
             </p>
           </div>
+          {
+            <div className="text-md">
+
+              {family ? <p>نوبت برای  : <span className="text-primary font-bold">{family.firstName} {family.lastName}</span></p> :
+                <p>نوبت برای : <span className="text-primary font-bold">خودم</span></p>}
+            </div>
+          }
         </div>
         <div className="px-4 pb-4 flex justify-between items-center gap-2 flex-col min-[500px]:flex-row w-full">
           <div
@@ -433,6 +444,7 @@ const AppointmentCard = (props: MyAppointmentType) => {
               {statusApppointmentHandler(props.status)}
             </p>
           </div>
+
           <div className="flex justify-between min-[500px]:justify-end items-center gap-1 w-full">
             {props.status !== "Is Deleted By User" ? (
               <div
@@ -441,12 +453,13 @@ const AppointmentCard = (props: MyAppointmentType) => {
                     props.status !== "Awaiting Payment",
                 })}
               >
+
                 {props.status !== "Is Deleted By User" &&
                   props.status !== "Is Deleted By User" && (
                     <>
                       {props.status === "Awaiting Payment" && (
                         <LinkElement
-                          link={`appointment/online-appointment/${props.physicianProfileUrl}?status=noPayment&physicianUrl=${physicianProfileUrl}&physicianId=${physicianProfileId}&calendarId=${calendar.id}&index=${index}&appointmentId=${props.id}&year=${calendar.year}&month=${calendar.month}&day=${calendar.dayOfMonth}`}
+                          link={`appointment/online-appointment/${props.physicianProfileUrl}?status=noPayment&physicianUrl=${physicianProfileUrl}&physicianId=${physicianProfileId}&calendarId=${calendar.id}&index=${index}&appointmentId=${props.id}&year=${calendar.year}&month=${calendar.month}&day=${calendar.dayOfMonth}${family ? `&isForFamily=1` : "&isForFamily=0"}${family ? `&familyId=${family.id}` : ""}`}
 
                         >
                           {/* "Awaiting Payment" */}
@@ -460,7 +473,7 @@ const AppointmentCard = (props: MyAppointmentType) => {
                       )}
                       {props.status === "Paid" && (
                         <LinkElement
-                          link={`Check/Payment/${props.physicianProfileUrl}?Status=Success&AppointmentId=${props.id}`}
+                          link={`Payment/slug?slug=${props.physicianProfileUrl}&Status=Success&AppointmentId=${props.id}`}
 
                         >
                           {/* "Paid Payment" */}
@@ -486,6 +499,7 @@ const AppointmentCard = (props: MyAppointmentType) => {
                     لغو
                   </button>
                 )}
+
               </div>
             ) : null}
           </div>
@@ -534,7 +548,7 @@ const AppointmentCardOff = (props: MyAppointmentType) => {
           />
           <span className="w-[1rem] h-[1rem] bg-white rounded-full absolute bottom-0 rtl:right-0 ltr:left-0 flex justify-center items-center ">
             <span
-              className={cn(`w-[0.75rem] h-[0.75rem]  rounded-full `, {
+              className={cn(`size-[0.75rem]  rounded-full `, {
                 "bg-primary-100": props.immediateConsultation,
                 "bg-gray-400": !props.immediateConsultation,
               })}
@@ -557,6 +571,7 @@ const AppointmentCardOff = (props: MyAppointmentType) => {
           </p>
         </div>
       </div>
+
       <div className="flex justify-start items-start gap-2 flex-col px-4 text-md text-[#8E9190]">
         <div className="flex justify-start items-center gap-3">
           <span>
@@ -620,13 +635,15 @@ const AppointmentCardOff = (props: MyAppointmentType) => {
           <p>آخرین وضعیت :</p>
           <p className="text-md  ">{statusApppointmentHandler(props.status)}</p>
         </div>
+
         <div>
           {props.status !== "Is Deleted By User" &&
             props.status !== "Is Deleted By User" && (
               <>
+
                 {props.status === "Paid" && (
                   <LinkElement
-                    link={`Check/Payment/${props.physicianProfileUrl}?Status=Success&AppointmentId=${props.id}`}
+                    link={`Payment/slug?slug=${props.physicianProfileUrl}&Status=Success&AppointmentId=${props.id}`}
 
                   >
                     {/* "Paid Payment" */}

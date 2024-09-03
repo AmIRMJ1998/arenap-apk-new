@@ -16,10 +16,11 @@ import Loader from '@/components/elements/Loader'
 
 const PaymentAppointmentStep = ({ physician }: { physician: PhysicianProfile }) => {
 
-  const { selectIndex, lockAppointmentInfo, appointmentInfo, patient , payment } = useSelectAppointment()
+
+  const { selectIndex, lockAppointmentInfo, appointmentInfo, patient, payment } = useSelectAppointment()
   const { index, chrageAmount, id, remainingSeconds, status } = lockAppointmentInfo
-  const {user} = useUserInfo()
-  
+  const { user } = useUserInfo()
+
   const { price } = usePrice()
   console.log(price);
   const hourSplit = convertToHour()[selectIndex]?.split(":");
@@ -35,7 +36,7 @@ const PaymentAppointmentStep = ({ physician }: { physician: PhysicianProfile }) 
       {/* ----------section------------- */}
       {/* Appointment Card */}
       <section>
-        <AppointmentPrimaryCard physician={physician} index={index} lockTime={remainingSeconds} month={appointmentInfo.month} year={appointmentInfo.year} price={price} day={appointmentInfo.day} time={timeAppointment} payment={false} />
+        <AppointmentPrimaryCard physician={physician} index={index} lockTime={remainingSeconds} month={appointmentInfo.month} year={appointmentInfo.year} price={price} day={appointmentInfo.day} time={timeAppointment} payment={false} phone={physician.telePhoneNumber} />
       </section>
       {/* ----------section------------- */}
 
@@ -107,7 +108,7 @@ const PaymentAppointmentStep = ({ physician }: { physician: PhysicianProfile }) 
                   </p>
                 </div>
                 <div className="flex justify-center items-center gap-1">
-                    {/* <span
+                  {/* <span
                       className={cn(
                         `size-[0.375rem] rounded-full  block  `,
                         {
@@ -137,7 +138,7 @@ const PaymentAppointmentStep = ({ physician }: { physician: PhysicianProfile }) 
                 handler={() => payment.mutate()}
                 loading={payment.isLoading}
               >
-                  پرداخت
+                پرداخت
               </ButtonElement>
             </>
           )}

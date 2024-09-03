@@ -15,15 +15,19 @@ import ButtonElement from "@components/elements/ButtonElement";
 
 import { AppointmentPrimaryCardType } from "@/types/cards";
 import LinkElement from "@/components/elements/LinkElement";
+import useSelectAppointment from "@/hooks/useSelectAppointment";
+import Link from "next/link";
 
 const AppointmentPrimaryCard = (props: AppointmentPrimaryCardType) => {
 
 
-  const { index, payment, physician: { hasImage, id, firstName, lastName, specialties, address, latitude, longitude, physicianSpecialities }, price, lockTime, year, month, day, time } = props
+  const { index, payment, physician: { hasImage, id, firstName, lastName, specialties, address, latitude, longitude, physicianSpecialities, appointmentPrice }, price, lockTime, year, month, day, time , phone } = props
 
 
   const timerTime = new Date();
   timerTime.setSeconds(timerTime.getSeconds() + lockTime);
+
+
 
   return (
     <div className=" bg-white rounded-md pb-6 overflow-hidden relative">
@@ -55,8 +59,8 @@ const AppointmentPrimaryCard = (props: AppointmentPrimaryCardType) => {
           <p className="text-sm font-bold">
             آخرین وضعیت :
             <span
-              className={cn("", {
-                "font-[400]": payment,
+              className={cn("text-md", {
+                "font-[400] text-primary": payment,
                 "text-error font-bold": !payment,
               })}
             >
@@ -65,10 +69,17 @@ const AppointmentPrimaryCard = (props: AppointmentPrimaryCardType) => {
           </p>
         </div>
         <div className="mt-4">
-          <p className="text-lg font-bold text-center bg-[#EFF4FF] py-2 rounded-sm">
-            مبلغ {payment ? "پرداخت شده" : "قابل پرداخت"}:{" "}
-            <span>{priceSplitter(price / 10)}</span> تومان
-          </p>
+          <div className="text-lg font-bold text-center bg-[#EFF4FF] py-2 rounded-sm flex justify-start items-center gap-2 flex-col">
+            <p className="w-full">مبلغ {payment ? "پرداخت شده" : "قابل پرداخت"}:{" "}
+              <span>{priceSplitter((price + appointmentPrice) / 10)}</span> تومان</p>
+            {
+              appointmentPrice > 0 ? (
+                <p className="text-sm">
+                  ({priceSplitter((price) / 10)} تومان هزینه نوبت  + {priceSplitter((appointmentPrice) / 10)} تومان پیش پرداخت ویزیت)
+                </p>
+              ) : null
+           }
+          </div>
         </div>
 
         {lockTime && lockTime > 0 ? (
@@ -177,7 +188,7 @@ const AppointmentPrimaryCard = (props: AppointmentPrimaryCardType) => {
                     </span>
                     <p className="font-bold">
                       تلفن :{" "}
-                      <span className="font-[400]">۳۴۳۴***-۰۹۱۳۴۲****</span>
+                      <Link href={`tel:${phone}`} className="font-[400]">{phone}</Link>
                     </p>
                   </div>
                   <div className="w-full flex justify-start gap-2">

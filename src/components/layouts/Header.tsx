@@ -63,7 +63,7 @@ const Header = () => {
                     variant='contained'
                     width='min-w-[7rem]'
                   >
-                    جستجو پزشکان
+                    جستجوی پزشکان
                   </ButtonElement>
                 </LinkElement>
               </li>

@@ -24,6 +24,13 @@ const urls = {
         url: "physicianProfileUrl",
       },
     },
+    checkNewPatient: {
+      url: "/PublicServices/PhysicianProfileCalendar/CheckNewPatient",
+      method: "POST",
+      parametrs: {
+        physicianProfileId: "string",
+      },
+    },
   },
   //login
   login: {
@@ -76,6 +83,22 @@ const urls = {
     getUser: {
       url: "/User/UserInfo",
       method: "GET",
+    },
+    createPeople: {
+      url: "/User/UserInfo",
+      method: "POST",
+      parametrs: {
+        firstName: "string",
+        lastName: "string",
+        nationalNumber: "string",
+      },
+    },
+    deletePeople: {
+      url: "/User/UserInfo/",
+      method: "DELETE",
+      query: {
+        id: "string",
+      },
     },
     editUser: {
       url: "/User/UserInfo",
@@ -407,7 +430,20 @@ const urls = {
       },
     },
   },
+  //error
+  error: {
+    create: {
+      url: "/PublicServices/ApplicationError/Create",
+      method: "POST",
+      parametrs: {
+        errorMessage: "string",
+        deviceModel: "string",
+        route: "string",
+      },
+    },
+  },
 };
+
 export const baseUrlSite = "https://arenap.ir";
 
 export default urls;

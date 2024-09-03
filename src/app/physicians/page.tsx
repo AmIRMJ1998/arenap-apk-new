@@ -7,10 +7,11 @@ import { useQuery } from '@tanstack/react-query'
 import { getAllSpecialities } from '@/services/specialities/specialties'
 import axios from 'axios'
 import { apiDomainNobat } from '@/services/getApiUrl'
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import LoadingPage from '../loading'
 import { PhysicianDataSearch } from '@/types/search'
 import Toastify from '@/components/elements/toasts/Toastify'
+import generateUrlSearchPage from '@/utils/generateUrlSearchPage'
 
 
 
@@ -47,6 +48,7 @@ const Doctors = () => {
     cityName: "",
   })
   const [hasMore, setHasMore] = useState(false)
+  const [totalPages, setTotalPages] = useState(1)
 
   const specialtyParam = useSearchParams().get("specialty")
   const consultingPlanParam = useSearchParams().get("consultingPlan")
@@ -57,7 +59,6 @@ const Doctors = () => {
   const serviceParam = useSearchParams().get("service")
   const search_keyParam = useSearchParams().get("search_key")
   const cityParam = useSearchParams().get("city")
-
 
   const specialitiesQuery = useQuery(["specialities"], async () => {
     const res = await getAllSpecialities()
@@ -84,6 +85,7 @@ const Doctors = () => {
     const res = await axios(`${apiDomainNobat}${urls.advanceSearch.serach.url}?Filter=${search_keyParam ? search_keyParam : ""}&CityName=${cityParam ? cityParam : ""}&Gender=${genderParam ? genderParam : "0"}&Specialty=${specialtyParam ? specialtyParam : ""}&Disease=${diseaseParam ? diseaseParam : ""}&Sign=${signParam ? signParam : ""}&Service=${serviceParam ? serviceParam : ""}&ConsultingPlan=${consultingPlanParam ? consultingPlanParam : "All"}&PageNumber=${pageParam ? pageParam : 1}&ItemsCountPerPage=10`)
 
     if (res.data.resultCode === 200 && res.data.value !== null) {
+      setTotalPages(res.data?.value?.totalPages)
       setInfoPage({
         specialtyName: res.data?.value?.value?.specialtyName,
         diseaseName: res.data?.value?.value?.diseaseName,
@@ -117,37 +119,51 @@ const Doctors = () => {
     search_keyParam,
     cityParam,
   ])
+  const router = useRouter()
 
 
 
+  const fetchMoreData = (number: number) => {
 
-  const fetchMoreData = () => {
-    setFetchMoreLoading(true)
-    fetch
-      (
-        `${apiDomainNobat}${urls.advanceSearch.serach.url}?Filter=${search_keyParam ? search_keyParam : ""}&CityName=${cityParam ? cityParam : ""}&Gender=${genderParam ? genderParam : "0"}&Specialty=${specialtyParam ? specialtyParam : ""}&Disease=${diseaseParam ? diseaseParam : ""}&Sign=${signParam ? signParam : ""}&Service=${serviceParam ? serviceParam : ""}&ConsultingPlan=${consultingPlanParam ? consultingPlanParam : "All"}&PageNumber=${page + 1}&ItemsCountPerPage=10`,
-      )
-      .then((res) => res.json()).then(data => {
+    // setFetchMoreLoading(true)
+    // fetch
+    //   (
+    //     `${apiDomainNobat}${urls.advanceSearch.serach.url}?Filter=${search_keyParam ? search_keyParam : ""}&CityName=${cityParam ? cityParam : ""}&Gender=${genderParam ? genderParam : "0"}&Specialty=${specialtyParam ? specialtyParam : ""}&Disease=${diseaseParam ? diseaseParam : ""}&Sign=${signParam ? signParam : ""}&Service=${serviceParam ? serviceParam : ""}&ConsultingPlan=${consultingPlanParam ? consultingPlanParam : "All"}&PageNumber=${number + 1}&ItemsCountPerPage=10`,
+    //   )
+    //   .then((res) => res.json()).then(data => {
 
-        if (data?.value === null) {
-          setSearchData([...searchData]);
-          setHasMore(false);
-          return;
-        }
-        setSearchData([...searchData, ...data.value?.value?.physcians]);
-        setHasMore(
-          data.value.currentPage === data.value.totalPages
-            ? false
-            : true
-        );
-        setPage(data.value.currentPage);
-      })
-      .catch((error) => {
-        console.log(error);
+    //     if (data?.value === null) {
+    //       setSearchData([...searchData]);
+    //       setHasMore(false);
+    //       return;
+    //     }
+    //     setSearchData([...searchData]);
+    //     setHasMore(
+    //       data.value.currentPage === data.value.totalPages
+    //         ? false
+    //         : true
+    //     );
+    //     setPage(data.value.currentPage);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
 
-        Toastify("error", "خطایی رخ داده است");
-      });
-    setFetchMoreLoading(false)
+    //     Toastify("error", "خطایی رخ داده است");
+    //   });
+    // setFetchMoreLoading(false)
+    const url = generateUrlSearchPage({
+      consultingPlan: consultingPlanParam ? consultingPlanParam : "",
+      specialty: specialtyParam ? specialtyParam : "",
+      city: cityParam ? cityParam : "",
+      disease: diseaseParam ? diseaseParam : "",
+      gender: genderParam ? genderParam : "",
+      page: (number + 1).toString(),
+      search_key: search_keyParam ? search_keyParam : "",
+      service: serviceParam ? serviceParam : "",
+      sign: signParam ? signParam : "",
+    })
+    
+    router.push(`/physicians${url}`)
   }
 
   return (
@@ -164,7 +180,7 @@ const Doctors = () => {
               specialty: specialtyParam ? specialtyParam : "",
               consultingPlan: consultingPlanParam ? consultingPlanParam : "",
               gender: genderParam ? genderParam : "",
-              page: pageParam ? pageParam : "",
+              page: pageParam ? pageParam : "1",
               disease: diseaseParam ? diseaseParam : "",
               sign: signParam ? signParam : "",
               service: serviceParam ? serviceParam : "",
@@ -176,6 +192,7 @@ const Doctors = () => {
             services={servicesQuery.data}
             searchData={searchData}
             infoPage={infoPage}
+            pageCount={totalPages}
           />
 
       }

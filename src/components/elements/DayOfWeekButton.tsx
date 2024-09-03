@@ -1,4 +1,5 @@
 import cn from "@/utils/clsxFun"
+import convertMonthOfYear from "@/utils/convertMonthOfYear"
 
 export type DayOfWeekButtonType = {
     selected: boolean,
@@ -6,10 +7,11 @@ export type DayOfWeekButtonType = {
     dayOfMonth: string,
     disabled: boolean,
     isAppointment: boolean,
-    isComplete: boolean
+    isComplete: boolean,
+    month: number
 }
 
-const DayOfWeekButton = ({ selected, dayOfWeek, dayOfMonth, disabled, isAppointment, isComplete }: DayOfWeekButtonType) => {
+const DayOfWeekButton = ({ selected, dayOfWeek, dayOfMonth, disabled, isAppointment, isComplete, month }: DayOfWeekButtonType) => {
 
     return (
         <div className={cn(`group overflow-hidden relative flex flex-shrink-0 flex-col justify-center items-center rounded-[2.5625rem] cursor-pointer h-[6.25rem] w-[4.375rem] text-md p-2 transition-all duration-300`, {
@@ -24,6 +26,7 @@ const DayOfWeekButton = ({ selected, dayOfWeek, dayOfMonth, disabled, isAppointm
                 <p>{dayOfWeek}</p>
                 <p>{dayOfMonth}</p>
                 {isComplete && disabled ? <p className="text-sm text-white">تکمیل ظرفیت </p> : null}
+                {isComplete === false  ? <p>{convertMonthOfYear(month)}</p> : null}
             </div>
         </div>
     )

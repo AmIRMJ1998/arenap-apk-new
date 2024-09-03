@@ -16,6 +16,12 @@ export interface MyAppointmentType {
   immediateConsultation: boolean;
   calendar: CalendarType;
   specialities: Speciality[];
+  family: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    nationalName: string;
+  } | null;
   [key: string]: any;
 }
 
@@ -45,7 +51,25 @@ export interface PhysicianCalendarType {
   physicianProfileCalendars: PhysicianProfileCalendar[];
   specialityTags: SpecialityTag[];
   firstppointment: Firstppointment | null;
+  relatedPhysicians: RelatedPhysicianType[];
+  appointmentPrice: number;
   isServerAppointmentActive: boolean;
+}
+export interface RelatedPhysicianType {
+  id: string;
+  firstName: string;
+  lastName: string;
+  provinceName: string;
+  cityName: string;
+  hasImage: boolean;
+  physicianProfileUrl: string;
+  onlineAppointment: boolean;
+  textConsultation: boolean;
+  voiceConsultation: boolean;
+  immediateConsultation: boolean;
+  rate: number;
+  physicianSpecialities: PhysicianSpeciality[];
+  bg?: string;
 }
 
 export interface Firstppointment {
@@ -71,7 +95,6 @@ export interface PhysicianProfileCalendar {
   available: boolean;
 }
 
-
 export interface PhysicianProfile {
   id: string;
   firstName: string;
@@ -88,7 +111,7 @@ export interface PhysicianProfile {
   doNotShowMyCalendar: boolean;
   hasImage: boolean;
   appointmentPrice: number;
-  appointmentTimeLimition?: boolean
+  appointmentTimeLimition?: boolean;
   oldPatienOnly: boolean;
   rate: number;
   city: City;
@@ -97,7 +120,7 @@ export interface PhysicianProfile {
   longitude: number;
   aboutDr?: any;
   specialties: Specialty[];
-  physicianSpecialities?: PhysicianSpeciality[]
+  physicianSpecialities?: PhysicianSpeciality[];
 }
 
 export interface Specialty {
@@ -135,6 +158,11 @@ export interface OneAppointmentType {
   passedOrFuture: string;
   hour: string;
   minute: string;
+  family: null | {
+    firstName: string;
+    lastName: string;
+    nationalNumber: string;
+  };
 }
 
 export interface Calendar {

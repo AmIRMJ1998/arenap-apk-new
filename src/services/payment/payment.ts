@@ -23,12 +23,16 @@ import urls from "../urls";
 const createAppointment = async (
   physicianProfileId: string,
   calendarId: string,
-  index: number
+  index: number,
+  isForFamily: boolean,
+  familyId: string
 ) => {
   const obj = {
     physicianProfileId,
     calendarId,
     index,
+    isForFamily,
+    familyId,
   };
   try {
     const res = await http.post(
@@ -44,13 +48,17 @@ const createAppointment = async (
 const createPayment = async (
   id: number | string,
   amount: number,
-  paymentType: number = 1
+  paymentType: number = 1,
+  isForFamily: boolean,
+  familyId: string
 ) => {
   try {
     const data = {
       id,
       amount,
       paymentType,
+      isForFamily,
+      familyId,
     };
     const res = await http.post(
       `${apiDomainNobat}${urls.payment.payment.url}`,
@@ -77,12 +85,12 @@ const paymentConsutationText = async (
       physicianProfileId,
       paymentType,
     };
-    
+
     const res = await http.post(
       `${apiDomainNobat}${urls.payment.payment.url}`,
       data
     );
-    
+
     return res?.data;
   } catch (error: any) {
     if (error.response?.status === 400) {

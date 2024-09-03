@@ -24,6 +24,7 @@ const initialState: InitialStateType = {
     provinceId: 0,
     provinceName: "",
     accountBalance: 0,
+    families: [],
   },
   error: "",
 };
@@ -68,6 +69,7 @@ const userInfoSlice = createSlice({
         provinceId: 0,
         provinceName: "",
         accountBalance: 0,
+        families: [],
       };
       state.error = "مشکلی رخ داده است";
     });

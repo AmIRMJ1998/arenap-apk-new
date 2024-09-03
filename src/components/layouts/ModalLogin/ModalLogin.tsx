@@ -18,7 +18,8 @@ export type SetpLoginType = {
 export type PropsType = {
     callbacks?: Function[],
     callbacksIndex?: number,
-    isCallback?: boolean
+    isCallback?: boolean,
+    isClose?: boolean
 }
 
 
@@ -30,12 +31,17 @@ const ModalLogin = (props: PropsType) => {
     const { isShow, closeModalLogin } = useModalLogin()
 
     const changeStepHandler = (nextStep: number) => {
-        setStepLogin(nextStep)
+
+        setStepLogin(prev => {
+            return nextStep;
+        })
     }
 
 
     return (
-        <Modal show={isShow} closeHandler={closeModalLogin}>
+        <Modal show={isShow} closeHandler={() => {
+            closeModalLogin()
+        }}>
             <BottomSheetAndCenterContent show={isShow}>
                 <div className='grid grid-cols-3'>
                     <span ></span>
@@ -43,12 +49,14 @@ const ModalLogin = (props: PropsType) => {
                         ورود / ثبت نام
                     </p>
                     <div className='flex justify-end items-center'>
-                        <CloseButton closeHanlder={closeModalLogin} />
+                        <CloseButton closeHanlder={() => {
+                            closeModalLogin()
+                        }} />
                     </div>
                 </div>
                 <div className='mt-4'>
                     {
-                        stepLogin === 1 ? <SendPhone  changeStep={changeStepHandler} /> : null
+                        stepLogin === 1 ? <SendPhone changeStep={changeStepHandler} /> : null
                     }
                     {
                         stepLogin === 2 ? <VerifyCodeOpt isCallback={props.isCallback} callbacks={props.callbacks} callbacksIndex={props.callbacksIndex} changeStep={changeStepHandler} /> : null

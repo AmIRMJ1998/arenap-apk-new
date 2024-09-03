@@ -11,19 +11,21 @@ import { useQuery } from '@tanstack/react-query'
 
 import React from 'react'
 import LoadingPage from '../loading'
+import { useSearchParams } from 'next/navigation'
 
 
 
 const OnlineConsultation = async () => {
-      
+      const pageParam = useSearchParams().get("page")
+
 
       const { data, isLoading, isError } = useQuery(["onlineCounseling"], async () => {
-            const physicians = await fetch(`${apiDomainNobat}${urls.advanceSearch.serach.url}?Gender=0&ConsultingPlan=TextConsultation&PageNumber=1&ItemsCountPerPage=15`)
+            const physicians = await fetch(`${apiDomainNobat}${urls.advanceSearch.serach.url}?Gender=0&ConsultingPlan=TextConsultation&PageNumber=${pageParam ? pageParam : 1}&ItemsCountPerPage=15`, { cache: "no-store" })
 
             const physiciansData = await physicians.json()
-            
+
             if (physiciansData.resultCode === 200) {
-                 
+
                   return physiciansData
             }
             return {
@@ -39,18 +41,18 @@ const OnlineConsultation = async () => {
             }
       })
 
-      
-      
 
 
-      if(isError) return <ServerErrorPage /> 
-      if(isLoading) return <LoadingPage /> 
+
+
+      if (isError) return <ServerErrorPage />
+      if (isLoading) return <LoadingPage />
 
 
       return (
             <OnlineCounselingPage physicians={data?.value.value.physcians} currentPage={data?.value.currentPage} pageSize={data?.value.pageSize} totalCount={data?.value.totalCount} totalPages={data?.value.totalPages} hasMore={data?.value?.totalPages === data?.value?.currentPage ? false : true}
-            
-             />
+                  pageNumber={pageParam ? pageParam : "1"}
+            />
       )
 }
 

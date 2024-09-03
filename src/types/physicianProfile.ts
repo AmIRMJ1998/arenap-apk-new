@@ -28,6 +28,8 @@ export interface PhysicainProfileType {
   physicianSpecialities: PhysicianSpeciality[];
   comments: any[];
   extraImages: ExtraImageType[];
+  appointmentPrice: number;
+
   // relatedPhysicians: RelatedPhysicianType[];
   today: string;
   physicianProfileSetting: {
@@ -92,7 +94,8 @@ export interface ExtraImageType {
   id: string;
   physicianProfileId: string;
   createdAt: string;
-  clickHandler : () => void
+  clickHandler: () => void;
+  alt: string;
 }
 
 // ------------------------------------------------------------------------------------//

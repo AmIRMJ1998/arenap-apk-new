@@ -19,10 +19,12 @@ export type ConsultationPlanItemCardType = {
       active: boolean,
       status: boolean | null,
       firstAppointment: Firstppointment
+      showPrice: boolean
 }
 
 
-const ConsultationPlanItemCard = ({ icon, title, price, firstDescription, secondDescription, selected, active, status , firstAppointment }: ConsultationPlanItemCardType) => {
+const ConsultationPlanItemCard = ({ icon, title, price, firstDescription, secondDescription, selected, active, status, firstAppointment, showPrice }: ConsultationPlanItemCardType) => {
+
       return (
             <div className={cn(
                   `flex flex-col gap-5 rounded-sm border-2 border-gray-100 p-3 `,
@@ -67,6 +69,14 @@ const ConsultationPlanItemCard = ({ icon, title, price, firstDescription, second
                                     <span className="font-bold">
                                           {firstAppointment?.dayOfMonth}
                                           {convertMonthOfYear(firstAppointment?.month)}
+                                    </span>
+                              </p>
+                        }
+                        {active && showPrice &&
+                              <p className="text-md">
+                                    مبلغ نوبت:
+                                    <span className="font-bold">
+                                          {priceSplitter(price ? +price : 0)} تومان
                                     </span>
                               </p>
                         }

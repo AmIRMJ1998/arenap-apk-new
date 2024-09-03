@@ -4,6 +4,7 @@
 import cn from "@/utils/clsxFun";
 import React, { useState } from "react";
 import { PhysicainProfileType } from '@/types/physicianProfile'
+import Link from "next/link";
 
 
 
@@ -40,20 +41,29 @@ const ProfileSummaryCard = (props: ProfileSummaryCardType) => {
           }
         )}
       >
-
         <p>
-          {`دکتر ${physician.firstName} ${physician.lastName} متخصص ${physician.physicianSpecialities[0]?.specialityTitle} فعال در حوزه سلامت در شهر   ${physician.cityName} در استان ${physician.provinceName} میباشد`}
+          {physician.firstName.startsWith("مرکز") ? "" : "دکتر"} <span className="text-primary">{physician.firstName} {physician.lastName}، </span> {physician.firstName.startsWith("مرکز") ? "مرکز" : "متخصص"}   <span className="text-primary">{physician.physicianSpecialities?.[0].specialityTitle} </span>در <span className="text-primary">{physician.cityName} </span>است. {physician.firstName.startsWith("مرکز") ? "آدرس مرکز " : "آدرس مطب ایشان"} در <span className="text-primary">{physician.address}</span> قرار دارد. برای تماس با {physician.firstName.startsWith("مرکز") ? "مرکز" : "مطب دکتر"} <span className="text-primary">{physician.lastName}</span>، می‌توانید از شماره‌ <Link className="text-primary" href={`tel:${physician.telePhoneNumber}`}>{`${physician.telePhoneNumber}`}</Link> استفاده کنید.
         </p>
-        <p>
-          {`آدرس مطب  دکتر ${physician.firstName} ${physician.lastName} : `} <strong className="font-bold">{physician.address}</strong>
+        {/* <p>
+          {`آدرس ${physician.firstName.startsWith("مرکز") ? "" : "مطب"}  ${physician.firstName.startsWith("مرکز") ? "" : "دکتر"} ${physician.firstName} ${physician.lastName} : `} <strong className="font-bold">{physician.address}</strong>
         </p>
         {
           physician.telePhoneNumber ? (
             <p>
-              {`شماره تماس مطب  دکتر ${physician.firstName} ${physician.lastName} : `} <strong className="font-bold">{physician?.telePhoneNumber}</strong>
+              {`شماره تماس ${physician.firstName.startsWith("مرکز") ? "" : "مطب"}  ${physician.firstName.startsWith("مرکز") ? "" : "دکتر"} ${physician.firstName} ${physician.lastName} : `}
+              <Link className="font-bold" href={`tel:${physician?.telePhoneNumber}`}>{physician?.telePhoneNumber}</Link>
             </p>
           ) : null
-        }
+        } */}
+        <p>
+          آرناپ به شما این امکان را می‌دهد که به راحتی از دکترهای متخصص مختلف در سراسر ایران نوبت بگیرید. در ارناپ، می‌توانید نوبت خود را به صورت آنلاین، تلفنی، یا متنی دریافت کنید. علاوه بر این، امکان دسترسی به اطلاعات تماس، آدرس مطب، و مطالب نوشته شده توسط دکتر نیز برای شما فراهم شده است. همچنین می‌توانید نظرات بیماران دیگر را درباره هر پزشک مشاهده کرده و بر اساس تجربه دیگران، بهترین تصمیم را بگیرید.
+        </p>
+        <p>
+          با اجرایی شدن کامل قانون نسخه‌نویسی الکترونیک، ارناپ این امکان را برای پزشکان فراهم کرده تا نسخه‌های الکترونیکی صادر کنند. از این رو، می‌توانید از خدماتی نظیر مشاوره تلفنی و آنلاین بهره‌مند شوید و نیاز به مراجعه حضوری را کاهش دهید.
+        </p>
+        <p>
+          ارناپ با همکاری با بیش از 8000 پزشک و متخصص درمانی در سراسر ایران، فرآیند نوبت‌دهی را برای شما آسان‌تر کرده و به بهبود سطح سلامت جامعه کمک می‌کند. به راحتی از طریق ارناپ نوبت دکتر خود را تنظیم کرده و تجربه بهتری از مراجعه به پزشک داشته باشید.
+        </p>
 
       </div>
 

@@ -39,9 +39,11 @@ const deleteAppointment = async (
 const lockedAppointment = async (
   calendarId: string,
   physicianProfileId: string,
-  index: number | null
+  index: number | null,
+  isForFamily: boolean,
+  familyId: string
 ) => {
-  const obj = { calendarId, physicianProfileId, index };
+  const obj = { calendarId, physicianProfileId, index , isForFamily , familyId};
 
   try {
     const res = await http.post(
@@ -51,6 +53,7 @@ const lockedAppointment = async (
     return res.data;
   } catch (error: any) {
     Toastify("error", error?.response?.data?.resultMessage);
+    return error?.response?.data;
   }
 };
 
@@ -61,26 +64,25 @@ const getFirstForce = async (physicianId: string) => {
     );
     return res.data.value;
   } catch (error: any) {
-    console.log(error)
-    Toastify("error", error.response?.data?.resultMessage)
+    Toastify("error", error.response?.data?.resultMessage);
   }
 };
 
-const getInfoAppointment = async (appointmentId : string) => {
+const getInfoAppointment = async (appointmentId: string) => {
   try {
-    const res = await http.get(`${apiDomainNobat}${urls.appointment.getOneAppointment.url}${appointmentId}`)
-    return res?.data
-  } catch (error : any) {
-    console.log(error)
-    Toastify("error", error.response?.data?.resultMessage)
+    const res = await http.get(
+      `${apiDomainNobat}${urls.appointment.getOneAppointment.url}${appointmentId}`
+    );
+    return res?.data;
+  } catch (error: any) {
+    Toastify("error", error.response?.data?.resultMessage);
   }
-}
-
+};
 
 export {
   getMyAppointment,
   deleteAppointment,
   lockedAppointment,
   getFirstForce,
-  getInfoAppointment
+  getInfoAppointment,
 };
